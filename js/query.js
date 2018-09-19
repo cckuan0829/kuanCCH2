@@ -1,13 +1,22 @@
+/*
+FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1    1. 兵七進一  卒７進１    2. 炮二平三  炮８平５   3. 兵三進一  炮５進４    4. 馬八進七  炮５退２   5. 兵三進一  馬８進７    6. 馬二進一  炮２進４   7. 帥五進一  車９平８    8. 車一平二  車８進９   9. 馬一退二  車１進１   10. 炮八進七  炮２平５  11. 帥五平四  車１平６   12. 炮三平四  車６平８  13. 仕四進五  前炮平６   14. 炮四平五  車８進７  15. 帥四退一  車８進１
+*/
+
 var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
+var clearBtn = document.getElementById("clearBtn");
 var chess_str = "";
-queryBtn.addEventListener("click", showResult);
+queryBtn.addEventListener("click", query);
 
 function showResult(){
-	
+
+	document.getElementById("output").innerHTML = chess_str;
+}
+
+function query() {
 	var mytext   = document.getElementById("input").value;
 	query_move_list(mytext);
-	document.getElementById("output").innerHTML = chess_str;
+	showResult();
 }
 
 function httpGet(theUrl)
