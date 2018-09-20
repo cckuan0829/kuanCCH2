@@ -10,23 +10,31 @@ var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var chess_str = "";
+var status_str = "";
+var move_total = 0;
+var move_curr  = 0;
 queryBtn.addEventListener("click", query);
 copyBtn.addEventListener("click", copy);
 clearBtn.addEventListener("click", clear);
 
 function showResult(){
 
-	document.getElementById("output").innerHTML = chess_str;
+	document.getElementById("output").innerHTML = status_str + chess_str;
 }
 
-function query() {
+async function query() {
+	
+	move_total = 0;
+    move_curr  = 0;
+	status_str = "";
+	chess_str = "";
 	var mytext   = document.getElementById("input").value;
-	query_move_list(mytext);
+	await query_move_list(mytext);
 	showResult();
 }
 
 function copy() {
-
+    
     var textfrom = document.getElementById("output");
     var range = document.createRange();
     window.getSelection().removeAllRanges();
@@ -34,14 +42,31 @@ function copy() {
     window.getSelection().addRange(range);
     document.execCommand('copy');
     window.getSelection().removeAllRanges();
-	if(document.getElementById("output").innerHTML != "")
+	if(document.getElementById("output").innerHTML != "")		
 		alert("copy success!");
 	else
 		alert("text is empty")
+	
+	/*
+	const el = document.createElement('textarea');
+    el.value = chess_str;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+	
+	if(chess_str != "")		
+		alert("copy success!");
+	else
+		alert("text is empty");
+	*/
 }
 
 function clear() {
 	
+	move_total = 0;
+    move_curr  = 0;
+	status_str = "";
 	chess_str = "";
 	document.getElementById("input").value = "";
 	document.getElementById("output").innerHTML = chess_str;
@@ -49,10 +74,21 @@ function clear() {
 
 function httpGet(theUrl)
 {
-    var xmlHttp = new XMLHttpRequest();
+    /*
+	var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
     return xmlHttp.responseText;
+	*/
+	
+	return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", theUrl);
+      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send(null);
+    });
+	
 }
 
 function Board_to_FEN(board)
@@ -1008,14 +1044,14 @@ function parsing_text(chess_manual)
     return [fen, result];
 }
 
-function query_move_list(chess_manual)
+async function query_move_list(chess_manual)
 {
 	var list      = parsing_text(chess_manual);
 	var fen       = list[0];
 	var move_list = list[1];
 	
 	var prev_fen = fen;
-	var recommend_list = query_cloud(fen);
+	var recommend_list = await query_cloud(fen);
 	var prev_recommend_list = recommend_list;
 
 	var score_diff = 0;
@@ -1028,15 +1064,18 @@ function query_move_list(chess_manual)
 
 	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
 
+	move_total = move_list.length;
+	
 	for (var i = 0; i < move_list.length; i++)
 	{
-		chess_str = chess_str + i + "." + move_list[i] + "<br />";
-		console.log(i, ".", move_list[i]);
+		move_curr = i+1;
+		chess_str = chess_str + move_curr + "." + move_list[i] + "<br />";
+		console.log(i+1, ".", move_list[i]);
 		prev_fen = fen;
 		fen = Update_FEN(fen, move_list[i]);
-		global_score = query_score(fen);
+		global_score = await query_score(fen);
 		global_score = is_red ? global_score*(-1) : global_score;
-		recommend_list = query_cloud(fen);
+		recommend_list = await query_cloud(fen);
 		is_red  = (fen.indexOf('w') >= 0);
 
 		show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
@@ -1058,7 +1097,7 @@ function query_move_list(chess_manual)
 			else
 			{
 				var move = get_move_text(prev_fen, qurey_list[1]);
-				var score = query_score(Update_FEN(prev_fen, move));
+				var score = await query_score(Update_FEN(prev_fen, move));
 				score     = is_red ? score : score*(-1);
 				if (j == 0)
 				{
@@ -1082,27 +1121,29 @@ function query_move_list(chess_manual)
 				console.log("-", move," ,score = ",score);
 			}
 		}
+		status_str = "query status : " + move_curr + "/" + move_total + "<br />" + "<br />";
+		showResult();
 		prev_recommend_list = recommend_list;
 		
     } 
-	chess_str = chess_str + "end " + "<br />";
+	chess_str = chess_str + "end " + "<br />" + "<br />";
 	console.log("end ")
 }
 
-function query_cloud(fen)
+async function query_cloud(fen)
 {
-    var url='http://api.chessdb.cn:81/chessdb.php?action=queryall&board='+fen
-    var data = httpGet(url);
+    var url='http://api.chessdb.cn:81/chessdb.php?action=queryall&board='+fen;
+    var data = await httpGet(url);
 	var my_list = data.split(/\|/);
     //var new_list = list(filter(lambda x: x.find('??')==-1, my_list));
 	var new_list = my_list.filter(move => (move.indexOf('??') == -1 ));
     return new_list;
 }
 
-function query_score(fen)
+async function query_score(fen)
 {
     var url  = "http://api.chessdb.cn:81/chessdb.php?action=queryscore&board="+fen;
-    var data = httpGet(url);
+    var data = await httpGet(url);
 	var qurey_list = data.split(/:/); 
     
 	if(qurey_list.length > 1)
