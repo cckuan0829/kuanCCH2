@@ -43,6 +43,7 @@ function copy() {
 function clear() {
 	
 	chess_str = "";
+	document.getElementById("input").value = "";
 	document.getElementById("output").innerHTML = chess_str;
 }
 
@@ -1048,7 +1049,12 @@ function query_move_list(chess_manual)
 			qurey_list = prev_recommend_list[j].split(/:|,/);       
 			
 			if (prev_recommend_list[j].indexOf('invalid') >= 0 || prev_recommend_list[j].length < 10)
-				break;
+			{
+				console.log('Red score   = ', NaN);
+				console.log('score bias  = ', NaN);
+				chess_str = chess_str + 'Red score   = ' + NaN + "<br />";
+				chess_str = chess_str + 'score bias  = ' + NaN + "<br />";
+			}
 			else
 			{
 				var move = get_move_text(prev_fen, qurey_list[1]);
