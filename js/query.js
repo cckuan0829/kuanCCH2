@@ -10,6 +10,7 @@ var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var chess_str = "";
+var copy_str = "";
 var status_str = "";
 var move_total = 0;
 var move_curr  = 0;
@@ -28,13 +29,45 @@ async function query() {
     move_curr  = 0;
 	status_str = "";
 	chess_str = "";
+	copy_str = "";
 	var mytext   = document.getElementById("input").value;
-	await query_move_list(mytext);
+	
+	
+	queryBtn.disabled = true;
+	copyBtn.disabled = true;
+	clearBtn.disabled = true;
+	
+	if (mytext == "")
+	{
+		chess_str = "請輸入棋譜!";
+	}
+	else
+	{
+		var list     = check_text_valid(mytext);
+		var result   = list[0];
+		var list_num = list[1];
+	
+		if (result)
+		{
+			status_str = "query status : " + 0 + "/" + list_num + "<br />" + "<br />";
+			showResult();
+			await query_move_list(mytext);
+		}
+		else
+		{
+			chess_str = "輸入格式有誤!";
+		}
+	}
 	showResult();
+	
+	queryBtn.disabled = false;
+	copyBtn.disabled = false;
+	clearBtn.disabled = false;
 }
 
 function copy() {
     
+	/*
     var textfrom = document.getElementById("output");
     var range = document.createRange();
     window.getSelection().removeAllRanges();
@@ -46,20 +79,20 @@ function copy() {
 		alert("copy success!");
 	else
 		alert("text is empty")
+	*/
 	
-	/*
 	const el = document.createElement('textarea');
-    el.value = chess_str;
+    el.value = copy_str;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
 	
-	if(chess_str != "")		
-		alert("copy success!");
+	if(copy_str != "")		
+		alert("複製成功!");
 	else
-		alert("text is empty");
-	*/
+		alert("沒有可複製的文字!");
+	
 }
 
 function clear() {
@@ -68,9 +101,17 @@ function clear() {
     move_curr  = 0;
 	status_str = "";
 	chess_str = "";
+	copy_str = "";
 	document.getElementById("input").value = "";
 	document.getElementById("output").innerHTML = chess_str;
 }
+
+function addStr(newstr) {
+
+	console.log(newstr);
+	chess_str += newstr + "<br />";
+	copy_str  += newstr + "\n";
+}	
 
 function httpGet(theUrl)
 {
@@ -1044,6 +1085,17 @@ function parsing_text(chess_manual)
     return [fen, result];
 }
 
+function check_text_valid(chess_text)
+{
+	var list      = parsing_text(chess_text);
+	var fen       = list[0];
+	var move_list = list[1];
+	if (fen == 'none' || move_list.length == 0)
+		return [false, 0];
+	else
+		return [true, move_list.length];
+}
+
 async function query_move_list(chess_manual)
 {
 	var list      = parsing_text(chess_manual);
@@ -1059,8 +1111,7 @@ async function query_move_list(chess_manual)
 	var is_red = (fen.indexOf('w') >= 0);
 	var global_score = 0;
 
-	chess_str = chess_str + "FEN : " + fen + "<br />";
-	console.log("FEN : ", fen);
+	addStr("FEN : " + fen);
 
 	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
 
@@ -1069,8 +1120,8 @@ async function query_move_list(chess_manual)
 	for (var i = 0; i < move_list.length; i++)
 	{
 		move_curr = i+1;
-		chess_str = chess_str + move_curr + "." + move_list[i] + "<br />";
-		console.log(i+1, ".", move_list[i]);
+		addStr(move_curr + "." + move_list[i]);
+
 		prev_fen = fen;
 		fen = Update_FEN(fen, move_list[i]);
 		global_score = await query_score(fen);
@@ -1089,10 +1140,8 @@ async function query_move_list(chess_manual)
 			
 			if (prev_recommend_list[j].indexOf('invalid') >= 0 || prev_recommend_list[j].length < 10)
 			{
-				console.log('Red score   = ', NaN);
-				console.log('score bias  = ', NaN);
-				chess_str = chess_str + 'Red score   = ' + NaN + "<br />";
-				chess_str = chess_str + 'score bias  = ' + NaN + "<br />";
+				addStr('Red score   = '+ NaN);
+				addStr('score bias  = '+ NaN);
 			}
 			else
 			{
@@ -1102,23 +1151,18 @@ async function query_move_list(chess_manual)
 				if (j == 0)
 				{
 					score_diff = score - global_score;
-					chess_str = chess_str + 'Red score   = ' + global_score + "<br />";
-					console.log('Red score   = ', global_score);
+					addStr('Red score   = ' + global_score);
 					if (Math.abs(score_diff) < 10)
 					{
-						chess_str = chess_str + 'score bias  = ' + 0 + "<br />";
-						console.log('score bias  = ', 0);
+						addStr('score bias  = ' + 0);
 					}
 					else
 					{
-						chess_str = chess_str + 'score bias  = ' + Math.abs(score_diff) + "<br />";
-						console.log('score bias  = ', Math.abs(score_diff));
+						addStr('score bias  = ' + Math.abs(score_diff));
 					}
-					chess_str = chess_str + 'recommend :' + "<br />";
-					console.log('recommend :');
+					addStr('recommend :');
 				}
-				chess_str = chess_str + "-" + move + " ,score = " + score + "<br />";
-				console.log("-", move," ,score = ",score);
+				addStr("-" + move + " ,score = " + score);
 			}
 		}
 		status_str = "query status : " + move_curr + "/" + move_total + "<br />" + "<br />";
@@ -1127,7 +1171,6 @@ async function query_move_list(chess_manual)
 		
     } 
 	chess_str = chess_str + "end " + "<br />" + "<br />";
-	console.log("end ")
 }
 
 async function query_cloud(fen)
