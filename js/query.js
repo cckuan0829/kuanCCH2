@@ -113,7 +113,7 @@ function clear() {
 function info() {
 
 	alert("1. 在象棋橋打譜(註解盡量空白)，完成後按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
-	     \n2. 將步驟1所複製內容貼到本網頁上，在按下雲庫查詢。\
+	     \n2. 將步驟1所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
 		 \n3. 查詢完成後，按下本網頁上的'複製結果'。\
 		 \n4. 回到象棋橋，按'匯入'=>'文字棋譜'。");
 }
@@ -929,7 +929,7 @@ function apply_move(fen, chess_pos, str_move)
                 return [false, fen];
             else
 			{
-                if (val > 0)
+                if (p_val > 0)
                     end_row = end_row + 2;
                 else
                     end_row = end_row - 2;
@@ -1142,41 +1142,50 @@ async function query_move_list(chess_manual)
 		is_red  = (fen.indexOf('w') >= 0);
 
 		show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
-	   
-		var qurey_list = prev_recommend_list[0].split(/:|,/);  
-			
-		show_len = prev_recommend_list.length <= 5 ? prev_recommend_list.length : 5;
-		for ( var j = 0; j < show_len; j++)
+	    
+		if( prev_recommend_list[0] != undefined)
 		{
-			qurey_list = prev_recommend_list[j].split(/:|,/);       
-			
-			if (prev_recommend_list[j].indexOf('invalid') >= 0 || prev_recommend_list[j].length < 10)
+			var qurey_list = prev_recommend_list[0].split(/:|,/);  
+				
+			show_len = prev_recommend_list.length <= 5 ? prev_recommend_list.length : 5;
+			for ( var j = 0; j < show_len; j++)
 			{
-				addStr('Red score   = '+ NaN);
-				addStr('score bias  = '+ NaN);
-			}
-			else
-			{
-				var move = get_move_text(prev_fen, qurey_list[1]);
-				var score = await query_score(Update_FEN(prev_fen, move));
-				score     = is_red ? score : score*(-1);
-				if (j == 0)
+				qurey_list = prev_recommend_list[j].split(/:|,/);       
+				
+				if (prev_recommend_list[j].indexOf('invalid') >= 0 || prev_recommend_list[j].length < 10)
 				{
-					score_diff = score - global_score;
-					addStr('Red score   = ' + global_score);
-					if (Math.abs(score_diff) < 10)
-					{
-						addStr('score bias  = ' + 0);
-					}
-					else
-					{
-						addStr('score bias  = ' + Math.abs(score_diff));
-					}
-					addStr('recommend :');
+					addStr('Red score   = '+ NaN);
+					addStr('score bias  = '+ NaN);
 				}
-				addStr("-" + move + " ,score = " + score);
+				else
+				{
+					var move = get_move_text(prev_fen, qurey_list[1]);
+					var score = await query_score(Update_FEN(prev_fen, move));
+					score     = is_red ? score : score*(-1);
+					if (j == 0)
+					{
+						score_diff = score - global_score;
+						addStr('Red score   = ' + global_score);
+						if (Math.abs(score_diff) < 10)
+						{
+							addStr('score bias  = ' + 0);
+						}
+						else
+						{
+							addStr('score bias  = ' + Math.abs(score_diff));
+						}
+						addStr('recommend :');
+					}
+					addStr("-" + move + " ,score = " + score);
+				}
 			}
 		}
+		else
+		{
+			//addStr('Red score   = '+ NaN);
+			//addStr('score bias  = '+ NaN);
+		}
+		
 		status_str = "query status : " + move_curr + "/" + move_total + "<br />" + "<br />";
 		showResult();
 		prev_recommend_list = recommend_list;
