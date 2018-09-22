@@ -1084,7 +1084,7 @@ function parsing_text(chess_manual)
 			fen = fen + '%20b';
     
 		var move_list = part_list[3].split(/ |\n/);
-		result  = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0));
+		result  = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
 	}
     return [fen, result];
 }
