@@ -1187,7 +1187,7 @@ async function query_move_list(chess_manual)
 
 async function query_cloud(fen)
 {
-    var url='http://api.chessdb.cn:81/chessdb.php?action=queryall&board='+fen;
+    var url='http://api.chessdb.cn:81/chessdb.php?action=queryall&learn=1&showall=1&egtbmetric=dtc&board='+fen;
     var data = await httpGet(url);
 	var my_list = data.split(/\|/);
     //var new_list = list(filter(lambda x: x.find('??')==-1, my_list));
