@@ -9,6 +9,7 @@ FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1
 var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
+var infoBtn = document.getElementById("infoBtn");
 var chess_str = "";
 var copy_str = "";
 var status_str = "";
@@ -17,6 +18,7 @@ var move_curr  = 0;
 queryBtn.addEventListener("click", query);
 copyBtn.addEventListener("click", copy);
 clearBtn.addEventListener("click", clear);
+infoBtn.addEventListener("click", info);
 
 function showResult(){
 
@@ -36,6 +38,7 @@ async function query() {
 	queryBtn.disabled = true;
 	copyBtn.disabled = true;
 	clearBtn.disabled = true;
+	infoBtn.disabled = true;
 	
 	if (mytext == "")
 	{
@@ -63,6 +66,7 @@ async function query() {
 	queryBtn.disabled = false;
 	copyBtn.disabled = false;
 	clearBtn.disabled = false;
+	infoBtn.disabled = false;
 }
 
 function copy() {
@@ -104,6 +108,14 @@ function clear() {
 	copy_str = "";
 	document.getElementById("input").value = "";
 	document.getElementById("output").innerHTML = chess_str;
+}
+
+function info() {
+
+	alert("1. 在象棋橋打譜(註解盡量空白)，完成後按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
+	     \n2. 將步驟1所複製內容貼到本網頁上，在按下雲庫查詢。\
+		 \n3. 查詢完成後，按下本網頁上的'複製結果'。\
+		 \n4. 回到象棋橋，按'匯入'=>'文字棋譜'。");
 }
 
 function addStr(newstr) {
