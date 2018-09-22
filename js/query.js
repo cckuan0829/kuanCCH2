@@ -34,7 +34,6 @@ async function query() {
 	copy_str = "";
 	var mytext   = document.getElementById("input").value;
 	
-	
 	queryBtn.disabled = true;
 	copyBtn.disabled = true;
 	clearBtn.disabled = true;
@@ -101,21 +100,21 @@ function copy() {
 
 function clear() {
 	
-	move_total = 0;
-    move_curr  = 0;
-	status_str = "";
-	chess_str = "";
-	copy_str = "";
 	document.getElementById("input").value = "";
-	document.getElementById("output").innerHTML = chess_str;
 }
 
 function info() {
 
-	alert("1. 在象棋橋打譜(註解盡量空白)，完成後按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
-	     \n2. 將步驟1所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
-		 \n3. 查詢完成後，按下本網頁上的'複製結果'。\
-		 \n4. 回到象棋橋，按'匯入'=>'文字棋譜'。");
+	alert("操作步驟:\
+	     \n\t1. 在象棋橋打譜，註解盡量保持空白。\
+		 \n\t2. 完成後在工具列按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
+	     \n\t3. 將步驟2所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
+		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
+		 \n\t5. 回到象棋橋，按'匯入'=>'文字棋譜'。\
+		 \n輸出說明:\
+		 \n\t1. Red score代表該盤面的分數。正分代表紅優，負分則為黑優。\
+		 \n\t2. score bias代表該步和官著的分數差異，0分即為官著。\
+		 \n\t3. 如出現NaN則代表無法查到相關分數或是著法。");
 }
 
 function addStr(newstr) {
@@ -127,13 +126,6 @@ function addStr(newstr) {
 
 function httpGet(theUrl)
 {
-    /*
-	var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-    xmlHttp.send( null );
-    return xmlHttp.responseText;
-	*/
-	
 	return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open("GET", theUrl);
