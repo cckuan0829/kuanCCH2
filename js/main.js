@@ -20,4 +20,4 @@ function loadScript(url, callback)
     head.appendChild(script);
 }
 
-loadScript("query/query.js", null);
+loadScript("js/query/query.js", null);
