@@ -26,9 +26,12 @@ var score_bias = [];
 
 $(document).ready(function() {
     queryBtn.addEventListener("click", query);
+    $("#queryBtn").val($("#queryBtn").html());
+
     copyBtn.addEventListener("click", copy);
     clearBtn.addEventListener("click", clear);
     infoBtn.addEventListener("click", info);
+
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("copyEgBtn");
     });
@@ -77,8 +80,10 @@ function copyToClipboard(elementId) {
 
 
 function showResult(){
+    if(status_str == "") status_str = $("#queryBtn").val();
+    document.getElementById("queryBtn").innerHTML = status_str;
 
-	document.getElementById("chessBookOutput").innerHTML = status_str + chess_str;
+	document.getElementById("chessBookOutput").innerHTML = chess_str;
 }
 
 async function query() {
@@ -109,7 +114,7 @@ async function query() {
 	
 		if (result)
 		{
-			status_str = "query status : " + 0 + "/" + list_num + "\n\n";
+			status_str = "進度: " + 0 + "/" + list_num;
 			showResult();
 			await query_move_list(mytext);
 		}
@@ -125,6 +130,7 @@ async function query() {
 	clearBtn.disabled = false;
     infoBtn.disabled = false;
     $("#copyEgBtn").attr("disabled", false);
+    $("#queryBtn").html($("#queryBtn").val());
 }
 
 function copy() {
@@ -1224,7 +1230,7 @@ async function query_move_list(chess_manual)
 			score_bias.push(NaN);
 		}
 		
-		status_str = "query status : " + move_curr + "/" + move_total + "\n\n";
+        status_str = "進度: " + move_curr + "/" + move_total ;
 		showResult();
 		prev_recommend_list = recommend_list;
 		
