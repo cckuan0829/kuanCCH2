@@ -15,6 +15,8 @@ var copy_str = "";
 var status_str = "";
 var move_total = 0;
 var move_curr  = 0;
+var red_score = [];
+var score_bias = [];
 queryBtn.addEventListener("click", query);
 copyBtn.addEventListener("click", copy);
 clearBtn.addEventListener("click", clear);
@@ -32,6 +34,8 @@ async function query() {
 	status_str = "";
 	chess_str = "";
 	copy_str = "";
+	red_score = [];
+	score_bias = [];
 	var mytext   = document.getElementById("input").value;
 	
 	queryBtn.disabled = true;
@@ -69,20 +73,6 @@ async function query() {
 }
 
 function copy() {
-    
-	/*
-    var textfrom = document.getElementById("output");
-    var range = document.createRange();
-    window.getSelection().removeAllRanges();
-    range.selectNode(textfrom);
-    window.getSelection().addRange(range);
-    document.execCommand('copy');
-    window.getSelection().removeAllRanges();
-	if(document.getElementById("output").innerHTML != "")		
-		alert("copy success!");
-	else
-		alert("text is empty")
-	*/
 	
 	const el = document.createElement('textarea');
     el.value = copy_str;
@@ -271,14 +261,7 @@ function get_global_col(board, str_move)
             return 9-convert_chinese_num(str_move[1]);
         else
 		{
-			
-			//console.log(str_move[1]);
-			//console.log(str_move[1].toHalfWidth());
-			//console.log(parseInt(str_move[1].replace(/[\uff01-\uff5e]/g, function(ch) { return String.fromCharCode(ch.charCodeAt(0) - 0xfee0))-1);
 			var val = str_move[1].replace(/[\uff01-\uff5e]/g, function(ch) { return String.fromCharCode(ch.charCodeAt(0) - 0xfee0); });
-			//console.log(val);
-			//console.log(parseInt(str_move[1]));
-			//console.log(val-1);
             return parseInt(val-1);
 		}
 	}
@@ -1072,7 +1055,7 @@ function Update_FEN(fen, str_move)
 function parsing_text(chess_manual)
 {
     var is_red_turn  = (chess_manual.indexOf('w - -') >= 0);
-	var part_list    = chess_manual.split(/FEN ：| w - -| b - -| 1\./);
+	var part_list    = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\./);
 	var fen          = 'none';
 	var result       = [];
 	if (part_list.length > 3)
@@ -1148,6 +1131,8 @@ async function query_move_list(chess_manual)
 				{
 					addStr('Red score   = '+ NaN);
 					addStr('score bias  = '+ NaN);
+					red_score.push(NaN);
+					score_bias.push(NaN);
 				}
 				else
 				{
@@ -1158,13 +1143,17 @@ async function query_move_list(chess_manual)
 					{
 						score_diff = score - global_score;
 						addStr('Red score   = ' + global_score);
+						red_score.push(global_score);
+					
 						if (Math.abs(score_diff) < 10)
 						{
 							addStr('score bias  = ' + 0);
+							score_bias.push(0);
 						}
 						else
 						{
 							addStr('score bias  = ' + Math.abs(score_diff));
+							score_bias.push(Math.abs(score_diff));
 						}
 						addStr('recommend :');
 					}
@@ -1174,8 +1163,8 @@ async function query_move_list(chess_manual)
 		}
 		else
 		{
-			//addStr('Red score   = '+ NaN);
-			//addStr('score bias  = '+ NaN);
+			red_score.push(NaN);
+			score_bias.push(NaN);
 		}
 		
 		status_str = "query status : " + move_curr + "/" + move_total + "<br />" + "<br />";
@@ -1191,7 +1180,6 @@ async function query_cloud(fen)
     var url='http://api.chessdb.cn:81/chessdb.php?action=queryall&learn=1&showall=1&egtbmetric=dtc&board='+fen;
     var data = await httpGet(url);
 	var my_list = data.split(/\|/);
-    //var new_list = list(filter(lambda x: x.find('??')==-1, my_list));
 	var new_list = my_list.filter(move => (move.indexOf('??') == -1 ));
     return new_list;
 }
