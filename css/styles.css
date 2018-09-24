@@ -43,9 +43,9 @@
     position: relative;
     display: inline-block;
     margin: 1em;
-    left: 2em;
 }
 
 button {
-    margin: 1em;
+    font-size: 1.5em;
+    margin: 0.5em;
 }
