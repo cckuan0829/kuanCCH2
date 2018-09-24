@@ -27,6 +27,7 @@
 }
 
 .inputArea, .outputArea {
+    font-size: 10px;
     color: gray;
     position: relative;
     width: 90%;
@@ -42,7 +43,7 @@
 .btnList {
     position: relative;
     display: inline-block;
-    margin: 1em;
+    margin-left: 2%;
 }
 
 button {
