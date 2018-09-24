@@ -1,25 +1,37 @@
 <!DOCTYPE html>
 <html>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+
 <body>
-    
-	<form id="input_form">
-        輸入棋譜 <input type="text" id="input" name="input" size="80">
-    </form>
+    <div id="contentSection">
 
-    <button id="queryBtn">雲庫查詢</button>
-	
-	<button id="copyBtn">複製結果</button>
-	
-	<button id="clearBtn">清空輸入</button>
-	
-	<button id="infoBtn">使用說明</button>
+		<div class = "chessBookInputArea">
+			<label for="chessBookInput" class="chessBookLabel">輸入棋譜</label>
+			<textarea id="chessBookInput" class = "inputArea"> </textarea>
+		</div>
 
-	<p id="status"></p>
+		<div id="buttonList" class="btnList">
+				<button id="queryBtn">雲庫查詢</button>
+				
+				<button id="copyBtn">複製結果</button>
+				
+				<button id="clearBtn">清空輸入</button>
+				
+				<button id="infoBtn">使用說明</button>
+			</div>
+		
+		<div class = "chessBookOutptArea">
+			<p id="status"></p>
+			<div id="chessBookOutput"  class = "outputArea"></div>
+		</div>
+
+	</div>
 	
-	<p id="output"></p>
-	
-    <script src="js/query.js"></script>
+    <script src="js/main.js"></script>
 
 </body>
 </html> 

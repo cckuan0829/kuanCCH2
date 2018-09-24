@@ -1,6 +1,6 @@
 /*
 FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1    
-1. 兵七進一  卒７進１    2. 炮二平三  炮８平５   3. 兵三進一  炮５進４    4. 馬八進七  炮５退２   5. 兵三進一  馬８進７    
+ 1. 兵七進一  卒７進１    2. 炮二平三  炮８平５   3. 兵三進一  炮５進４    4. 馬八進七  炮５退２   5. 兵三進一  馬８進７    
 6. 馬二進一  炮２進４   7. 帥五進一  車９平８    8. 車一平二  車８進９   9. 馬一退二  車１進１   10. 炮八進七  炮２平５  
 11. 帥五平四  車１平６   12. 炮三平四  車６平８  13. 仕四進五  前炮平６   14. 炮四平五  車８進７  15. 帥四退一  車８進１
 
@@ -15,16 +15,31 @@ var copy_str = "";
 var status_str = "";
 var move_total = 0;
 var move_curr  = 0;
+
+var exampleInput = 
+    " 在這輸入或貼上棋譜，例如：f\n &#10<br>" +
+    " FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1 " + " <br />" +
+    " 1. 兵七進一  卒７進１    2. 炮二平三  炮８平５   3. 兵三進一  炮５進４    4. 馬八進七  炮５退２   5. 兵三進一  馬８進７ " + "&#10" +
+    " 6. 馬二進一  炮２進４   7. 帥五進一  車９平８    8. 車一平二  車８進９   9. 馬一退二  車１進１   10. 炮八進七  炮２平５ " + "&#10" +
+    " 11. 帥五平四  車１平６   12. 炮三平四  車６平８  13. 仕四進五  前炮平６   14. 炮四平五  車８進７  15. 帥四退一  車８進１ ";
 var red_score = [];
 var score_bias = [];
 queryBtn.addEventListener("click", query);
 copyBtn.addEventListener("click", copy);
 clearBtn.addEventListener("click", clear);
 infoBtn.addEventListener("click", info);
+$(document).ready(function() {
+    queryBtn.addEventListener("click", query);
+    copyBtn.addEventListener("click", copy);
+    clearBtn.addEventListener("click", clear);
+    infoBtn.addEventListener("click", info);
+    $('#chessBookInput').prop('placeholder',"在這裡輸入或貼上棋譜");
+});
+
 
 function showResult(){
 
-	document.getElementById("output").innerHTML = status_str + chess_str;
+	document.getElementById("chessBookOutput").innerHTML = status_str + chess_str;
 }
 
 async function query() {
@@ -36,9 +51,7 @@ async function query() {
 	copy_str = "";
 	red_score = [];
 	score_bias = [];
-	var mytext   = document.getElementById("input").value;
-	
-	queryBtn.disabled = true;
+	var mytext   = document.getElementById("chessBookInput").value;	queryBtn.disabled = true;
 	copyBtn.disabled = true;
 	clearBtn.disabled = true;
 	infoBtn.disabled = true;
@@ -90,7 +103,7 @@ function copy() {
 
 function clear() {
 	
-	document.getElementById("input").value = "";
+	document.getElementById("chessBookInput").value = "";
 }
 
 function info() {
@@ -1056,6 +1069,7 @@ function parsing_text(chess_manual)
 {
     var is_red_turn  = (chess_manual.indexOf('w - -') >= 0);
 	var part_list    = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\./);
+
 	var fen          = 'none';
 	var result       = [];
 	if (part_list.length > 3)
