@@ -3,8 +3,21 @@ var scripts = [
     "test/testLoding.js"
 ]
 
-for(var i=0; i<scripts.length; ++i) {
-    $.getScript(scripts[i], function() {
-        console.log(scripts[i]+" loaded but not necessarily executed.");
-     });
+function loadScript(url, callback)
+{
+    // Adding the script tag to the head as suggested before
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
+
+    // Fire the loading
+    head.appendChild(script);
 }
+
+loadScript("query/query.js", null);
