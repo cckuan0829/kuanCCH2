@@ -109,7 +109,7 @@ function clear() {
 function info() {
 
 	alert("操作步驟:\
-	     \n\t1. 在象棋橋打譜，不要設定支變，註解盡量保持空白。\
+	     \n\t1. 在象棋橋打譜，註解盡量保持空白。\
 		 \n\t2. 完成後在工具列按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
 	     \n\t3. 將步驟2所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
 		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
@@ -1102,19 +1102,14 @@ async function query_move_list(chess_manual)
 	var list      = parsing_text(chess_manual);
 	var fen       = list[0];
 	var move_list = list[1];
-	
 	var prev_fen = fen;
 	var recommend_list = await query_cloud(fen);
 	var prev_recommend_list = recommend_list;
-
 	var score_diff = 0;
-
 	var is_red = (fen.indexOf('w') >= 0);
-	var global_score = 0;
-
-	addStr("FEN : " + fen);
-
+	var curr_score = 0;
 	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
+	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
 
 	move_total = move_list.length;
 	
@@ -1125,21 +1120,23 @@ async function query_move_list(chess_manual)
 
 		prev_fen = fen;
 		fen = Update_FEN(fen, move_list[i]);
-		global_score = await query_score(fen);
-		global_score = is_red ? global_score*(-1) : global_score;
+		curr_score = await query_score(fen);
+		curr_score = is_red ? curr_score*(-1) : curr_score;
 		recommend_list = await query_cloud(fen);
 		is_red  = (fen.indexOf('w') >= 0);
-
+        red_score_list = [];
+		recommend_text = [];
 		show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
-	    
+	    search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
+		
 		if( prev_recommend_list[0] != undefined)
 		{
 			var qurey_list = prev_recommend_list[0].split(/:|,/);  
-				
-			show_len = prev_recommend_list.length <= 5 ? prev_recommend_list.length : 5;
-			for ( var j = 0; j < show_len; j++)
+			var score_list = [];	
+			search_len = prev_recommend_list.length <= 10 ? prev_recommend_list.length : 10;
+			for ( var j = 0; j < search_len; j++)
 			{
-				qurey_list = prev_recommend_list[j].split(/:|,/);       
+				qurey_list = prev_recommend_list[j].split(/:|,|\(/);       
 				
 				if (prev_recommend_list[j].indexOf('invalid') >= 0 || prev_recommend_list[j].length < 10)
 				{
@@ -1151,8 +1148,17 @@ async function query_move_list(chess_manual)
 				else
 				{
 					var move = get_move_text(prev_fen, qurey_list[1]);
-					var score = await query_score(Update_FEN(prev_fen, move));
-					score     = is_red ? score : score*(-1);
+					//var score = await query_score(Update_FEN(prev_fen, move));
+					var score = qurey_list[3];
+					score     = is_red ? score*(-1) : score;
+					score_list.push(score);
+					if(fen == Update_FEN(prev_fen, move))
+					{
+						curr_score = score;
+						if(j > 3)
+							break;
+					}
+					/*
 					if (j == 0)
 					{
 						score_diff = score - global_score;
@@ -1171,9 +1177,27 @@ async function query_move_list(chess_manual)
 						}
 						addStr('recommend :');
 					}
-					addStr("-" + move + " ,score = " + score);
+					*/
+					recommend_text.push("-" + move + " ,score = " + score)
+					//addStr("-" + move + " ,score = " + score);
 				}
 			}
+			addStr('Red score   = '+ curr_score);
+			red_score.push(curr_score);
+			if(is_red)
+				score_diff = Math.min(...score_list)-curr_score;
+		    else
+				score_diff = Math.max(...score_list)-curr_score
+
+			addStr('score bias  = ' + Math.abs(score_diff));
+			score_bias.push(Math.abs(score_diff));
+			
+			addStr('recommend :');
+			for ( var j = 0; j < show_len; j++)
+			{
+				addStr(recommend_text[j]);
+			}
+			
 		}
 		else
 		{
@@ -1200,7 +1224,7 @@ async function query_cloud(fen)
 
 async function query_score(fen)
 {
-    var url  = "http://api.chessdb.cn:81/chessdb.php?action=queryscore&board="+fen;
+    var url  = "http://api.chessdb.cn:81/chessdb.php?action=queryscore&learn=1&showall=1&egtbmetric=dtc&board="+fen;
     var data = await httpGet(url);
 	var qurey_list = data.split(/:/); 
     
