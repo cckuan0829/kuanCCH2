@@ -1,14 +1,25 @@
 /*
-FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1    
- 1. 兵七進一  卒７進１    2. 炮二平三  炮８平５   3. 兵三進一  炮５進４    4. 馬八進七  炮５退２   5. 兵三進一  馬８進７    
-6. 馬二進一  炮２進４   7. 帥五進一  車９平８    8. 車一平二  車８進９   9. 馬一退二  車１進１   10. 炮八進七  炮２平５  
-11. 帥五平四  車１平６   12. 炮三平四  車６平８  13. 仕四進五  前炮平６   14. 炮四平五  車８進７  15. 帥四退一  車８進１
+FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1
 
+  1. 炮二平五  馬８進７    2. 馬二進三  車９平８
+  3. 車一平二  馬２進３    4. 兵七進一  卒７進１
+  5. 車二進六  炮８平９    6. 車二平三  炮９退１
+  7. 兵五進一  士４進５    8. 兵五進一  炮９平７
+  9. 車三平四  卒７進１   10. 馬三進五  車８進８
+ 11. 馬八進七  卒７進１   12. 馬五進六  象３進５
+ 13. 馬六進七
 */
-var inputExample = "FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1 " +
-" 1. 兵七進一  卒７進１    2. 炮二平三  炮８平５   3. 兵三進一  炮５進４    4. 馬八進七  炮５退２   5. 兵三進一  馬８進７ " + 
-" 6. 馬二進一  炮２進４   7. 帥五進一  車９平８    8. 車一平二  車８進９   9. 馬一退二  車１進１   10. 炮八進七  炮２平５ " + 
-" 11. 帥五平四  車１平６   12. 炮三平四  車６平８  13. 仕四進五  前炮平６   14. 炮四平五  車８進７  15. 帥四退一  車８進１ ";
+
+var inputExample = 
+"FEN ：rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR w - - 0 1\
+\
+  1. 炮二平五  馬８進７    2. 馬二進三  車９平８\
+  3. 車一平二  馬２進３    4. 兵七進一  卒７進１\
+  5. 車二進六  炮８平９    6. 車二平三  炮９退１\
+  7. 兵五進一  士４進５    8. 兵五進一  炮９平７\
+  9. 車三平四  卒７進１   10. 馬三進五  車８進８\
+ 11. 馬八進七  卒７進１   12. 馬五進六  象３進５\
+ 13. 馬六進七"
 
 var placeholder = "在這輸入或貼上棋譜，例如：\n\n\n" + inputExample;
 
@@ -1163,7 +1174,6 @@ async function query_move_list(chess_manual)
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
-        addStr('\n');
 		move_curr = i+1;
 		addStr(move_curr + "." + move_list[i]);
 
@@ -1244,7 +1254,8 @@ async function query_move_list(chess_manual)
 			addStr('recommend :');
 			for ( var j = 0; j < show_len; j++)
 			{
-				addStr(recommend_text[j]);
+				if(recommend_text[j] != undefined)
+					addStr(recommend_text[j]);
 			}
 			
 		}
@@ -1255,6 +1266,7 @@ async function query_move_list(chess_manual)
 		}
 		
         status_str = "進度: " + move_curr + "/" + move_total ;
+		addStr('\n');
 		showResult();
 		prev_recommend_list = recommend_list;
 		
