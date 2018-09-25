@@ -10,43 +10,43 @@
     width: 90%;
 }
 
-.chessBookInputArea {
+.chessBookOutptArea, .chessBookInputArea {
     position: relative;
-    width: 80%;
-    height: 30%;
     margin: 2%;
+    width: 80%;
+    height: 20%;
 }
 
 .chessBookOutptArea {
-    background-color: lightblue;
-
-    position: relative;
-    margin: 2%;
-    width: 80%;
-
-   
+    height: 60%;
 }
 
 .chessBookLabel {
     display: block;
-    margin: 10px;
+    margin: 1em;
 }
 
-.inputArea {
-    position: relative;
+.inputArea, .outputArea {
+    font-size: 10px;
     color: gray;
-    width: 100%;
+    position: relative;
+    width: 90%;
     height: 90%;
     overflow:auto;
+    padding: 1em;
 }
 
 .outputArea {
-
+    color: black;
 }
 
 .btnList {
     position: relative;
     display: inline-block;
-    margin: 10px;
-    left: 20px;
+    margin-left: 2%;
+}
+
+button {
+    font-size: 1.5em;
+    margin: 0.5em;
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -10,8 +10,7 @@
     <div id="contentSection">
 
 		<div class = "chessBookInputArea">
-			<label for="chessBookInput" class="chessBookLabel">輸入棋譜</label>
-			<textarea id="chessBookInput" class = "inputArea"> </textarea>
+			<textarea id="chessBookInput" class = "inputArea"></textarea>
 		</div>
 
 		<div id="buttonList" class="btnList">
@@ -22,11 +21,12 @@
 				<button id="clearBtn">清空輸入</button>
 				
 				<button id="infoBtn">使用說明</button>
-			</div>
+
+				<button id="copyEgBtn">複製範例棋譜</button>
+		</div>
 		
 		<div class = "chessBookOutptArea">
-			<p id="status"></p>
-			<div id="chessBookOutput"  class = "outputArea"></div>
+			<textarea id="chessBookOutput"  class = "outputArea"></textarea>
 		</div>
 
 	</div>
