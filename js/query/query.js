@@ -1169,8 +1169,9 @@ async function query_move_list(chess_manual)
 	var curr_score = 0;
 	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
 	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
-
+    
 	move_total = move_list.length;
+	copy_str  += "FEN：" + fen + "\n";
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
