@@ -19,6 +19,8 @@
 
 .chessBookOutptArea {
     height: 60%;
+    width: 40%;
+    display: inline-block;
 }
 
 .chessBookLabel {
@@ -40,9 +42,17 @@
     color: black;
 }
 
-.btnList {
+.chartArea {
     position: relative;
     display: inline-block;
+    height: 50%;
+    width: 40%;
+    margin:  2%;
+    background-color: bisque;
+}
+
+.btnList {
+    position: relative;
     margin-left: 2%;
 }
 

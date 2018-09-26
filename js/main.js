@@ -3,12 +3,13 @@ var scripts = [
     "test/testLoding.js"
 ]
 
-function loadScript(url, callback)
+function loadScript(url, callback, type)
 {
     // Adding the script tag to the head as suggested before
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
-    script.type = 'text/javascript';
+    script.type = type;
+    //'text/javascript'
     script.src = url;
 
     // Then bind the event to the callback function.
@@ -20,4 +21,5 @@ function loadScript(url, callback)
     head.appendChild(script);
 }
 
-loadScript("js/query/query.js", null);
+loadScript("js/query/query.js", null, 'text/javascript');
+loadScript("js/chart/chartDrawer.js", null, 'text/javascript');
