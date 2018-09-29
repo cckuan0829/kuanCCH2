@@ -277,7 +277,7 @@ function conver_chinese_chess(str_move)
 function check_pos(fen, row, col, is_red)
 {
     var board  = FEN_to_Board(fen);
-    if (row < 0 || row > 9 || col < 1 || col > 9)
+    if (row < 0 || row > 9 || col < 1 || col > 9 || isNaN(row) || isNaN(col))
         return -1;
     else
 	{
