@@ -17,6 +17,19 @@ window.onload = function() {
     });
 }
 
+function drawScore(score_list) {
+	dataAry = [];
+	for(var i = 0; i<score_list.length; i++)
+	{
+		var point = new Object();
+		point.x = i+1;
+		point.y = score_list[i];
+		dataAry.push(point);
+	}
+    drawChart();
+}
+
+
 function drawChart() {
     //console.log(query_red_score);
     var chart = new CanvasJS.Chart("chartContainer", {
@@ -41,7 +54,8 @@ function drawChart() {
           //  xValueFormatString: "DD MMM hh:mm TT",
           //  yValueFormatString: "#,##0.##\"%\"",
             dataPoints: dataAry
-        }]
+        }],
+		
     });
     chart.render();
 }

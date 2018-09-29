@@ -21,5 +21,6 @@ function loadScript(url, callback, type)
     head.appendChild(script);
 }
 
-loadScript("js/query/query.js", null, 'text/javascript');
+loadScript("js/console/console.js", null, 'text/javascript');
 loadScript("js/chart/chartDrawer.js", null, 'text/javascript');
+loadScript("js/query/queryData.js", null, 'text/javascript');

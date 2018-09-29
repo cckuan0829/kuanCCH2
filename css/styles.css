@@ -18,8 +18,8 @@
 }
 
 .chessBookOutptArea {
-    height: 60%;
-    width: 40%;
+    height: 50%;
+    width: 28%;
     display: inline-block;
 }
 
@@ -47,8 +47,8 @@
     display: inline-block;
     height: 50%;
     width: 40%;
-    margin:  2%;
-    background-color: bisque;
+    margin:  1%;
+    background-color: white;
 }
 
 .btnList {
