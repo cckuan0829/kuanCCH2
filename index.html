@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div id="contentSection">
+
+		<div class = "chessBookInputArea">
+			<textarea id="chessBookInput" class = "inputArea" style="font-size: 12pt"></textarea>
+		</div>
+
+		<div id="buttonList" class="btnList">
+				<button id="queryBtn">雲庫查詢</button>
+				
+				<button id="copyBtn">複製結果</button>
+				
+				<button id="clearBtn">清空輸入</button>
+				
+				<button id="infoBtn">使用說明</button>
+
+				<button id="copyEgBtn">複製範例棋譜</button>
+
+				<button id="drawChartBtn">看看分數走勢</button>
+		</div>
+		
+		<div class = "chessBookOutptArea">
+			<textarea id="chessBookOutput"  class = "outputArea" style="font-size: 12pt"></textarea>
+		</div>
+
+		<div id = "chartContainer" class="chartArea">
+			
+		</div>
+
+	</div>
+	<script src="js/library/require.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html> 

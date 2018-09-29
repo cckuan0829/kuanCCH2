@@ -1,0 +1,62 @@
+#contentSection {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+#showUpArea {
+    position: relative;
+    height: 70%;
+    width: 90%;
+}
+
+.chessBookOutptArea, .chessBookInputArea {
+    position: relative;
+    margin: 2%;
+    width: 80%;
+    height: 20%;
+}
+
+.chessBookOutptArea {
+    height: 50%;
+    width: 28%;
+    display: inline-block;
+}
+
+.chessBookLabel {
+    display: block;
+    margin: 1em;
+}
+
+.inputArea, .outputArea {
+    font-size: 10px;
+    color: gray;
+    position: relative;
+    width: 90%;
+    height: 90%;
+    overflow:auto;
+    padding: 1em;
+}
+
+.outputArea {
+    color: black;
+}
+
+.chartArea {
+    position: relative;
+    display: inline-block;
+    height: 50%;
+    width: 40%;
+    margin:  1%;
+    background-color: white;
+}
+
+.btnList {
+    position: relative;
+    margin-left: 2%;
+}
+
+button {
+    font-size: 1.5em;
+    margin: 0.5em;
+}
