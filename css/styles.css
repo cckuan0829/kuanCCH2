@@ -19,6 +19,7 @@
 }
 
 .chessBookOutptArea, .chessBookInputArea {
+    display: inline-block;
     position: relative;
     margin: 2%;
     width: 80%;
@@ -28,7 +29,6 @@
 .chessBookOutptArea {
     height: 50%;
     width: 28%;
-    display: inline-block;
 }
 
 .chessBookLabel {
@@ -74,4 +74,13 @@ button {
 
 .opacity9 {
     opacity: 0.9;
+}
+
+#audioPlayer {
+    position: fixed;
+    opacity: 0.6;
+    width: 100px;
+    height: 50px;
+    bottom: 1px;
+    right: 1px;
 }

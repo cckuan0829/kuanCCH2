@@ -11,12 +11,12 @@ var dataAry = [
     { x: 10, y: 120 },
 ];
 
-window.onload = function() {
+$(document).ready(function() {
     $("#drawChartBtn").bind("click", function() {
-        $('.chartArea').css('opacity', '0.9');
+        $('.chartArea').addClass('opacity9');
         drawChart();
     });
-}
+});
 
 function drawScore(score_list) {
 	dataAry = [];

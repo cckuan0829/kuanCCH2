@@ -1,7 +1,3 @@
-var scripts = [
-    "query/query.js",
-    "test/testLoding.js"
-]
 
 function loadScript(url, callback, type)
 {
@@ -24,3 +20,4 @@ function loadScript(url, callback, type)
 loadScript("js/console/console.js", null, 'text/javascript');
 loadScript("js/chart/chartDrawer.js", null, 'text/javascript');
 loadScript("js/query/queryData.js", null, 'text/javascript');
+
