@@ -13,6 +13,7 @@ var dataAry = [
 
 window.onload = function() {
     $("#drawChartBtn").bind("click", function() {
+        $('.chartArea').css('opacity', '0.9');
         drawChart();
     });
 }

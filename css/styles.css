@@ -4,6 +4,14 @@
     width: 100vw;
 }
 
+#bgVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+}
+
 #showUpArea {
     position: relative;
     height: 70%;
@@ -29,6 +37,7 @@
 }
 
 .inputArea, .outputArea {
+    opacity: 0.9;
     font-size: 10px;
     color: gray;
     position: relative;
@@ -39,10 +48,12 @@
 }
 
 .outputArea {
+    
     color: black;
 }
 
 .chartArea {
+    opacity: 0;
     position: relative;
     display: inline-block;
     height: 50%;
@@ -59,4 +70,8 @@
 button {
     font-size: 1.5em;
     margin: 0.5em;
+}
+
+.opacity9 {
+    opacity: 0.9;
 }
