@@ -17,10 +17,22 @@ var inputExample =
 
 var placeholder = "在這輸入或貼上棋譜，例如：\n\n" + inputExample;
 
+// should put all buttons to consoleConfig file
 var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
+var drawChartBtn = document.getElementById("drawChartBtn");
+
+var buttonList = [
+	queryBtn,
+	copyBtn,
+	clearBtn,
+	infoBtn,
+	drawChartBtn
+];
+
+
 var chess_str = "";
 var copy_str = "";
 var status_str = "";
@@ -100,10 +112,8 @@ async function query() {
 	red_score = [];
 	score_bias = [];
     var mytext   = document.getElementById("chessBookInput").value;	
-    queryBtn.disabled = true;
-	copyBtn.disabled = true;
-	clearBtn.disabled = true;
-    infoBtn.disabled = true;
+	disableButtons();
+
     $("#copyEgBtn").attr("disabled", true);
 	
 	if (mytext == "" || mytext ===  placeholder)
@@ -132,13 +142,22 @@ async function query() {
 	}
 	showResult();
 	drawScore(red_score);
-	
-	queryBtn.disabled = false;
-	copyBtn.disabled = false;
-	clearBtn.disabled = false;
-    infoBtn.disabled = false;
+	enableButtons();
+
     $("#copyEgBtn").attr("disabled", false);
     $("#queryBtn").html($("#queryBtn").val());
+}
+
+function disableButtons(){
+	for(var i=0; i<buttonList.length; ++i) {
+		buttonList[i].disabled = true;
+	}
+}
+
+function enableButtons() {
+	for(var i=0; i<buttonList.length; ++i) {
+		buttonList[i].disabled = false;
+	}
 }
 
 async function query_move_list(chess_manual)
