@@ -29,7 +29,7 @@ var buttonList = [
 	copyBtn,
 	clearBtn,
 	infoBtn,
-	drawChartBtn
+	//drawChartBtn
 ];
 
 
@@ -141,6 +141,7 @@ async function query() {
 		}
 	}
 	showResult();
+	$('.chartArea').addClass('opacity9');
 	drawScore(red_score);
 	enableButtons();
 
