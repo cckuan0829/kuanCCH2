@@ -13,7 +13,6 @@ var dataAry = [
 
 $(document).ready(function() {
     $("#drawChartBtn").bind("click", function() {
-        $('.chartArea').addClass('opacity9');
         drawChart();
     });
 });
@@ -32,7 +31,7 @@ function drawScore(score_list) {
 
 
 function drawChart() {
-    //console.log(query_red_score);
+    $('.chartArea').addClass('opacity9');
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         title: {
