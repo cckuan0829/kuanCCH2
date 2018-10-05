@@ -24,6 +24,9 @@ function drawScore(score_list) {
 	{
 		var point = new Object();
 		point.x = i+1;
+		if(isNaN(score_list[i]))
+			break;
+		
 		if (score_list[i] > upperbound)
 			point.y = upperbound;
 		else if (score_list[i] < -1*upperbound)
