@@ -19,11 +19,18 @@ $(document).ready(function() {
 
 function drawScore(score_list) {
 	dataAry = [];
+	var upperbound = 2000;
 	for(var i = 0; i<score_list.length; i++)
 	{
 		var point = new Object();
 		point.x = i+1;
-		point.y = score_list[i];
+		if (score_list[i] > upperbound)
+			point.y = upperbound;
+		else if (score_list[i] < -1*upperbound)
+			point.y = -1*upperbound;
+		else
+			point.y = score_list[i];
+		
 		dataAry.push(point);
 	}
     drawChart();
