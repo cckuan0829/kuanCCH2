@@ -113,7 +113,8 @@ async function query() {
 	score_bias = [];
     var mytext   = document.getElementById("chessBookInput").value;	
 	disableButtons();
-
+    var is_not_complete = false;
+	
     $("#copyEgBtn").attr("disabled", true);
 	
 	if (mytext == "" || mytext ===  placeholder)
@@ -134,6 +135,8 @@ async function query() {
 			query_result = await query_move_list(mytext);
 			red_score  = query_result[0];
 			score_bias = query_result[1];
+			if(red_score.findIndex(Number.isNaN) >= 0)
+				is_not_complete = true;
 		}
 		else
 		{
@@ -144,7 +147,9 @@ async function query() {
 	$('.chartArea').addClass('opacity9');
 	drawScore(red_score);
 	enableButtons();
-
+	if(is_not_complete)
+		alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
+	
     $("#copyEgBtn").attr("disabled", false);
     $("#queryBtn").html($("#queryBtn").val());
 }
