@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 function drawScore(score_list) {
 	dataAry = [];
-	var upperbound = 3000;
+	var upperbound = 1999;
 	for(var i = 0; i<score_list.length; i++)
 	{
 		var point = new Object();
