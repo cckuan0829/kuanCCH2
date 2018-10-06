@@ -99,7 +99,7 @@ function showResult(){
     if(status_str == "") status_str = $("#queryBtn").val();
     document.getElementById("queryBtn").innerHTML = status_str;
 
-	document.getElementById("chessBookOutput").innerHTML = chess_str;
+	//document.getElementById("chessBookOutput").innerHTML = chess_str;
 }
 
 async function query() {
@@ -114,6 +114,8 @@ async function query() {
     var mytext   = document.getElementById("chessBookInput").value;	
 	disableButtons();
     var is_not_complete = false;
+	
+	removeDisplayRow();
 	
     $("#copyEgBtn").attr("disabled", true);
 	
@@ -179,9 +181,12 @@ async function query_move_list(chess_manual)
 	var curr_score = 0;
 	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
 	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
-    
+    var fisrt_recommend_move_text = "";
+	
 	move_total = move_list.length;
 	copy_str  += "FEN：" + fen + "\n";
+	
+	addDisplayRow(["回合", "棋步", "紅方分數", "分數偏差", "推薦著法"]);
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
@@ -196,6 +201,7 @@ async function query_move_list(chess_manual)
 		is_red  = (fen.indexOf('w') >= 0);
         red_score_list = [];
 		recommend_text = [];
+		fisrt_recommend_move_text = "";
 		show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
 	    search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
 		
@@ -227,6 +233,9 @@ async function query_move_list(chess_manual)
 						if(j > 3) break;
 					}
 					recommend_text.push("-" + move + " ,score = " + score)
+					
+					if( j == 0)
+						fisrt_recommend_move_text = move;
 				}
 			}
 			addStr('Red score   = '+ curr_score);
@@ -246,7 +255,9 @@ async function query_move_list(chess_manual)
 			}		
 		}
 		else
-		{
+		{	
+			curr_score = NaN;
+			score_diff = NaN;
 			red_score.push(NaN);
 			score_bias.push(NaN);
 		}
@@ -254,8 +265,18 @@ async function query_move_list(chess_manual)
 		showResult();
 		prev_recommend_list = recommend_list;
 		addStr("\n");
+		
+		if ( Math.abs(score_diff) > 20 && recommend_list.length > 0)
+		{
+			addDisplayRow([move_curr, move_list[i], curr_score, score_diff, fisrt_recommend_move_text]);
+		}
+		else
+		{
+			addDisplayRow([move_curr, move_list[i], curr_score, score_diff, ""]);
+		}
     } 
 	chess_str = chess_str + "end " + "\n\n";
+	
 	return [red_score, score_bias];
 }
 
@@ -301,3 +322,23 @@ function addStr(newstr) {
 	copy_str  += newstr + "\n";
 }	
 
+function addDisplayRow(info_list) {
+    var table = document.getElementById("moveListTable");
+    var row = table.insertRow(-1);
+	row.classList.add("moveListTable")
+    var cell_round = row.insertCell(0);
+    var cell_move = row.insertCell(1);
+	var cell_score = row.insertCell(2);
+	var cell_bias = row.insertCell(3);
+	var cell_recommend = row.insertCell(4);
+    cell_round.innerHTML = info_list[0];
+    cell_move.innerHTML = info_list[1];
+	cell_score.innerHTML = info_list[2];
+	cell_bias.innerHTML = info_list[3];
+	cell_recommend.innerHTML = info_list[4];
+}
+
+function removeDisplayRow() {
+	var table = document.getElementById("moveListTable");
+	table.innerHTML = "";
+}

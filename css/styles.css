@@ -31,7 +31,8 @@
 
 .chessBookOutptArea {
     height: 50%;
-    width: 28%;
+    width: 32%;
+    overflow:auto;
 }
 
 .chessBookLabel {
@@ -77,6 +78,11 @@ button {
 
 .opacity9 {
     opacity: 0.9;
+}
+
+.moveListTable {
+  color: white;
+  text-align: center
 }
 
 #audioPlayer {
