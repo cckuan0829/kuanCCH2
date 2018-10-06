@@ -268,11 +268,11 @@ async function query_move_list(chess_manual)
 		
 		if ( Math.abs(score_diff) > 20 && recommend_list.length > 0)
 		{
-			addDisplayRow([move_curr, move_list[i], curr_score, score_diff, fisrt_recommend_move_text]);
+			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text]);
 		}
 		else
 		{
-			addDisplayRow([move_curr, move_list[i], curr_score, score_diff, ""]);
+			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), ""]);
 		}
     } 
 	chess_str = chess_str + "end " + "\n\n";
