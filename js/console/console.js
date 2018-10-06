@@ -153,8 +153,8 @@ async function query() {
 	$('.chartArea').addClass('opacity9');
 	drawScore(red_score);
 	enableButtons();
-	if(is_not_complete)
-		alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
+	//if(is_not_complete)
+	//	alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
 	
     $("#copyEgBtn").attr("disabled", false);
     $("#queryBtn").html($("#queryBtn").val());
