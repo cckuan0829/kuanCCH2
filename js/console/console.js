@@ -111,11 +111,13 @@ async function query() {
 	copy_str = "";
 	red_score = [];
 	score_bias = [];
+	badRateCount = [0,0,0,0];
     var mytext   = document.getElementById("chessBookInput").value;	
 	disableButtons();
     var is_not_complete = false;
 	
 	removeDisplayRow();
+	resetBadRate();
 	
     $("#copyEgBtn").attr("disabled", true);
 	
@@ -146,6 +148,8 @@ async function query() {
 		}
 	}
 	showResult();
+    
+	updateBadRate(calBadRate(score_bias, true));
 	$('.chartArea').addClass('opacity9');
 	drawScore(red_score);
 	enableButtons();
@@ -325,7 +329,13 @@ function addStr(newstr) {
 function addDisplayRow(info_list) {
     var table = document.getElementById("moveListTable");
     var row = table.insertRow(-1);
-	row.classList.add("moveListTable")
+	if(info_list[3]>=200)
+		row.classList.add("moveListTable_bad");
+	else if(info_list[3]>=50)
+		row.classList.add("moveListTable_not_good");
+	else
+		row.classList.add("moveListTable_normal");
+	
     var cell_round = row.insertCell(0);
     var cell_move = row.insertCell(1);
 	var cell_score = row.insertCell(2);
@@ -341,4 +351,71 @@ function addDisplayRow(info_list) {
 function removeDisplayRow() {
 	var table = document.getElementById("moveListTable");
 	table.innerHTML = "";
+}
+
+function updateBadRate(badrate) {
+	var badratetext = document.getElementById("badRate");
+	badratetext.classList.add("rateArea");
+	badratetext.innerHTML = "紅方 緩著率"+badrate[0]+"%\t\t 失著率"+badrate[1]+"%<br>"+
+	                        "黑方 緩著率"+badrate[2]+"%\t\t 失著率"+badrate[3]+"%";
+}
+
+function resetBadRate()
+{
+	var badratetext = document.getElementById("badRate");
+	badratetext.innerHTML = "";
+}
+
+function calBadRate(score_bias, first_is_Red)
+{
+	var badRate = [NaN,NaN,NaN,NaN];
+	var badRateCount = [0,0,0,0,0,0];
+	var not_good = 50;
+	var bad = 200;
+	var offset = 0;
+	
+	for(var i = 0; i<score_bias.length; i++)
+	{
+		offset = (i%2)*3;
+		if(!score_bias[i].isNaN)
+		{
+			badRateCount[0+offset]++;
+			if(Math.abs(score_bias[i]) >= not_good)
+			{
+				badRateCount[1+offset]++;
+				if(Math.abs(score_bias[i]) >= bad)
+					badRateCount[2+offset]++;
+			}
+		}
+	}
+	
+	if(first_is_Red)
+	{
+		if(badRateCount[0]>0)
+		{
+			badRate[0] = parseInt(100*badRateCount[1]/badRateCount[0]);
+			badRate[1] = parseInt(100*badRateCount[2]/badRateCount[0]);
+		}
+		
+		if(badRateCount[3]>0)
+		{
+			badRate[2] = parseInt(100*badRateCount[4]/badRateCount[3]);
+			badRate[3] = parseInt(100*badRateCount[5]/badRateCount[3]);
+		}
+	}
+	else
+	{
+		if(badRateCount[3]>0)
+		{
+			badRate[0] = parseInt(100*badRateCount[4]/badRateCount[3]);
+			badRate[1] = parseInt(100*badRateCount[5]/badRateCount[3]);
+		}
+		
+		if(badRateCount[0]>0)
+		{
+			badRate[2] = parseInt(100*badRateCount[1]/badRateCount[0]);
+			badRate[3] = parseInt(100*badRateCount[2]/badRateCount[0]);
+		}
+	}
+	return badRate;
 }
