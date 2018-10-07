@@ -754,7 +754,7 @@ function apply_move(fen, chess_pos, str_move)
 				{
                     for (var i = move; i > p_val; i--)
 					{
-                        if (check_pos(fen, row+j, col, is_red) > 0)
+                        if (check_pos(fen, row+i, col, is_red) > 0)
                             num = num + 1;
 					}
 				}
