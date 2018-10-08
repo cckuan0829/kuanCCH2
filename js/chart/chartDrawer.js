@@ -45,7 +45,15 @@ function drawChart() {
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         title: {
-            text: "盤面分數走勢"
+            text:　$('#badRate').html(),
+            fontSize: 20,
+            maxWidth: 300,
+            padding: 10,
+            margin:20,
+            //borderThickness: 1,
+            //backgroundColor: "#f4d5a6",
+            //verticalAlign: "bottom",
+            //horizontalAlign: "left",
         },
         axisX: {
             title: "回合"

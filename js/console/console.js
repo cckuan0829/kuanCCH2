@@ -357,8 +357,8 @@ function removeDisplayRow() {
 function updateBadRate(badrate) {
 	var badratetext = document.getElementById("badRate");
 	badratetext.classList.add("rateArea");
-	badratetext.innerHTML = "紅方 緩著率"+badrate[0]+"%\t\t 失著率"+badrate[1]+"%<br>"+
-	                        "黑方 緩著率"+badrate[2]+"%\t\t 失著率"+badrate[3]+"%";
+	badratetext.innerHTML = "紅方 緩著率："+badrate[0]+"%， 失著率："+badrate[1]+"% \n"+
+	                        "黑方 緩著率："+badrate[2]+"%， 失著率："+badrate[3]+"%";
 }
 
 function resetBadRate()

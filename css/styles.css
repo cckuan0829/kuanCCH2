@@ -67,12 +67,7 @@
 }
 
 .rateArea {
-	color: white;
-	position: relative;
-	display: inline-block;
-	height: 4%;
-    width: 40%;
-	margin-left: 3%;
+	display: none;
 }
 
 .btnList {
