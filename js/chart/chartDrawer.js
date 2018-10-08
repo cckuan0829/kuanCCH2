@@ -47,7 +47,7 @@ function drawChart() {
         title: {
             text:　$('#badRate').html(),
             fontSize: 20,
-            maxWidth: 300,
+            maxWidth: 320,
             padding: 10,
             margin:20,
             //borderThickness: 1,
