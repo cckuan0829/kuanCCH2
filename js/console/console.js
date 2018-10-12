@@ -41,12 +41,12 @@ var move_curr  = 0;
 
 
 $(document).ready(function() {
-    queryBtn.addEventListener("click", query);
+    queryBtn.addEventListener("click", queryCloudDB);
     $("#queryBtn").val($("#queryBtn").html());
 
-    copyBtn.addEventListener("click", copy);
-    clearBtn.addEventListener("click", clear);
-    infoBtn.addEventListener("click", info);
+    copyBtn.addEventListener("click", copyQueryResult);
+    clearBtn.addEventListener("click", clearInputText);
+    infoBtn.addEventListener("click", showInfo);
 
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("copyEgBtn");
@@ -54,6 +54,104 @@ $(document).ready(function() {
     
     initPlaceholder();
 });
+
+async function queryCloudDB() {
+	
+	move_total = 0;
+    move_curr  = 0;
+	status_str = "";
+	chess_str = "";
+	copy_str = "";
+	red_score = [];
+	score_bias = [];
+	badRateCount = [0,0,0,0];
+    var mytext   = document.getElementById("chessBookInput").value;	
+	disableButtons();
+    var is_not_complete = false;
+	var is_got_result   = false;
+	
+	removeDisplayRow();
+	resetBadRate();
+	
+    $("#copyEgBtn").attr("disabled", true);
+	
+	if (mytext == "" || mytext ===  placeholder)
+	{
+		alert("請輸入棋譜!");
+	}
+	else
+	{
+		var list     = check_text_valid(mytext);
+		var result   = list[0];
+		var list_num = list[1];
+	
+		if (result)
+		{
+			var query_result = [];
+			is_got_result   = true;
+			status_str = "進度: " + 0 + "/" + list_num;
+			showResult();
+			query_result = await queryByMoveList(mytext);
+			red_score  = query_result[0];
+			score_bias = query_result[1];
+			if(red_score.findIndex(Number.isNaN) >= 0)
+				is_not_complete = true;
+		}
+		else
+		{
+			alert("輸入格式有誤!");
+		}
+	}
+	if(is_got_result)
+	{
+		showResult();  
+		updateBadRate(calBadRate(score_bias, true));
+		$('.chartArea').addClass('opacity9');
+		drawScore(red_score);
+	}
+	enableButtons();
+	
+	//if(is_not_complete)
+	//	alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
+	
+    $("#copyEgBtn").attr("disabled", false);
+    $("#queryBtn").html($("#queryBtn").val());
+}
+
+function copyQueryResult() {
+	
+	const el = document.createElement('textarea');
+    el.value = copy_str;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+	
+	if(copy_str != "")		
+		alert("複製成功!");
+	else
+		alert("沒有可複製的文字!");
+	
+}
+
+function clearInputText() {
+	
+	document.getElementById("chessBookInput").value = "";
+}
+
+function showInfo() {
+
+	alert("操作步驟:\
+	     \n\t1. 在象棋橋打譜，註解盡量保持空白。\
+		 \n\t2. 完成後在工具列按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
+	     \n\t3. 將步驟2所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
+		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
+		 \n\t5. 回到象棋橋，按'匯入'=>'文字棋譜'。\
+		 \n輸出說明:\
+		 \n\t1. Red score代表該盤面的分數。正分代表紅優，負分則黑優。\
+		 \n\t2. score bias代表該步和官著的分數差異，0分即為官著。\
+		 \n\t3. 如出現NaN則代表無法查到相關分數或是著法。");
+}
 
 function initPlaceholder() {
     
@@ -94,71 +192,11 @@ function copyToClipboard(elementId) {
     alert("已複製輸入格式範例至你的剪貼本: \n" + inputExample);
 }
 
-
 function showResult(){
     if(status_str == "") status_str = $("#queryBtn").val();
     document.getElementById("queryBtn").innerHTML = status_str;
 
 	//document.getElementById("chessBookOutput").innerHTML = chess_str;
-}
-
-async function query() {
-	
-	move_total = 0;
-    move_curr  = 0;
-	status_str = "";
-	chess_str = "";
-	copy_str = "";
-	red_score = [];
-	score_bias = [];
-	badRateCount = [0,0,0,0];
-    var mytext   = document.getElementById("chessBookInput").value;	
-	disableButtons();
-    var is_not_complete = false;
-	
-	removeDisplayRow();
-	resetBadRate();
-	
-    $("#copyEgBtn").attr("disabled", true);
-	
-	if (mytext == "" || mytext ===  placeholder)
-	{
-		chess_str = "請輸入棋譜!";
-	}
-	else
-	{
-		var list     = check_text_valid(mytext);
-		var result   = list[0];
-		var list_num = list[1];
-	
-		if (result)
-		{
-			var query_result = [];
-			status_str = "進度: " + 0 + "/" + list_num;
-			showResult();
-			query_result = await query_move_list(mytext);
-			red_score  = query_result[0];
-			score_bias = query_result[1];
-			if(red_score.findIndex(Number.isNaN) >= 0)
-				is_not_complete = true;
-		}
-		else
-		{
-			chess_str = "輸入格式有誤!";
-		}
-	}
-	showResult();
-    
-	updateBadRate(calBadRate(score_bias, true));
-	$('.chartArea').addClass('opacity9');
-	drawScore(red_score);
-	enableButtons();
-	
-	//if(is_not_complete)
-	//	alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
-	
-    $("#copyEgBtn").attr("disabled", false);
-    $("#queryBtn").html($("#queryBtn").val());
 }
 
 function disableButtons(){
@@ -173,7 +211,7 @@ function enableButtons() {
 	}
 }
 
-async function query_move_list(chess_manual)
+async function queryByMoveList(chess_manual)
 {
 	var list      = parsing_text(chess_manual);
 	var fen       = list[0];
@@ -191,7 +229,7 @@ async function query_move_list(chess_manual)
 	move_total = move_list.length;
 	copy_str  += "FEN：" + fen + "\n";
 	
-	addDisplayRow(["回合", "棋步", "紅方分數", "分數偏差", "推薦著法"]);
+	addDisplayRow(["回合", "棋步", "紅方分數", "分數偏差", "推薦著法", ""]);
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
@@ -273,51 +311,16 @@ async function query_move_list(chess_manual)
 		
 		if ( Math.abs(score_diff) > 20 && recommend_list.length > 0)
 		{
-			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text]);
+			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen]);
 		}
 		else
 		{
-			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), ""]);
+			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen]);
 		}
     } 
 	chess_str = chess_str + "end " + "\n\n";
 	
 	return [red_score, score_bias];
-}
-
-function copy() {
-	
-	const el = document.createElement('textarea');
-    el.value = copy_str;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-	
-	if(copy_str != "")		
-		alert("複製成功!");
-	else
-		alert("沒有可複製的文字!");
-	
-}
-
-function clear() {
-	
-	document.getElementById("chessBookInput").value = "";
-}
-
-function info() {
-
-	alert("操作步驟:\
-	     \n\t1. 在象棋橋打譜，註解盡量保持空白。\
-		 \n\t2. 完成後在工具列按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
-	     \n\t3. 將步驟2所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
-		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
-		 \n\t5. 回到象棋橋，按'匯入'=>'文字棋譜'。\
-		 \n輸出說明:\
-		 \n\t1. Red score代表該盤面的分數。正分代表紅優，負分則黑優。\
-		 \n\t2. score bias代表該步和官著的分數差異，0分即為官著。\
-		 \n\t3. 如出現NaN則代表無法查到相關分數或是著法。");
 }
 
 function addStr(newstr) {
@@ -330,9 +333,9 @@ function addStr(newstr) {
 function addDisplayRow(info_list) {
     var table = document.getElementById("moveListTable");
     var row = table.insertRow(-1);
-	if(info_list[3]>=200)
+	if(info_list[4]>=200)
 		row.classList.add("moveListTable_bad");
-	else if(info_list[3]>=50)
+	else if(info_list[4]>=50)
 		row.classList.add("moveListTable_not_good");
 	else
 		row.classList.add("moveListTable_normal");
@@ -342,8 +345,13 @@ function addDisplayRow(info_list) {
 	var cell_score = row.insertCell(2);
 	var cell_bias = row.insertCell(3);
 	var cell_recommend = row.insertCell(4);
+	var move_str = info_list[1];
+    var result = move_str.link("http://www.chessdb.cn/query/?"+info_list[5]);
     cell_round.innerHTML = info_list[0];
-    cell_move.innerHTML = info_list[1];
+	if(info_list[5]!="")
+		cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:#b7c8f4">'+move_str+'</a>';
+	else
+		cell_move.innerHTML = move_str;
 	cell_score.innerHTML = info_list[2];
 	cell_bias.innerHTML = info_list[3];
 	cell_recommend.innerHTML = info_list[4];

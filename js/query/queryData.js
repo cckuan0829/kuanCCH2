@@ -95,7 +95,7 @@ function get_front(str_move)
 {
     if (str_move.indexOf('前') >= 0)
         return 1;
-    else if (str_move.indexOf('後') >= 0)
+    else if (str_move.indexOf('後') >= 0 || str_move.indexOf('后') >= 0)
         return -1;
     else
         return 0;
@@ -116,7 +116,7 @@ function convert_direction(num)
 
 function get_direction(str_move)
 {
-    if (str_move.indexOf('進')>=0)
+    if (str_move.indexOf('進')>=0 || str_move.indexOf('进')>=0)
         return 1;
     else if (str_move.indexOf('退')>=0)
         return -1;
@@ -233,9 +233,9 @@ function conver_chinese_chess(str_move)
 {
     var is_red = check_red(str_move);
         
-    if(str_move.indexOf('帥')>=0)
+    if(str_move.indexOf('帥')>=0 || str_move.indexOf('帅')>=0)
         return 'K';
-    else if (str_move.indexOf('將')>=0)
+    else if (str_move.indexOf('將')>=0 || str_move.indexOf('将')>=0)
         return 'k';
     else if (str_move.indexOf('仕')>=0)
         return 'A';
@@ -245,14 +245,14 @@ function conver_chinese_chess(str_move)
         return 'B';
     else if (str_move.indexOf('象')>=0)
         return 'b';
-    else if (str_move.indexOf('車')>=0)
+    else if (str_move.indexOf('車')>=0 || str_move.indexOf('车')>=0)
 	{
         if (is_red)
             return 'R';
         else
             return 'r';
 	}
-    else if (str_move.indexOf('馬')>=0)
+    else if (str_move.indexOf('馬')>=0 || str_move.indexOf('马')>=0)
 	{
         if (is_red)
             return 'N';
@@ -945,7 +945,7 @@ function parsing_text(chess_manual)
 	{
 		fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
 		var move_list = chess_manual.split(/ |\n/);
-		result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
+		result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
 	}
 	else
 	{	
@@ -959,7 +959,7 @@ function parsing_text(chess_manual)
 				fen = fen + '%20b';
     
 			var move_list = part_list[3].split(/ |\n/);
-			result  = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
+			result  = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
 		}
 	}
     return [fen, result];

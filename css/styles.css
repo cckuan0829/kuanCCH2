@@ -30,7 +30,7 @@
 }
 
 .chessBookOutptArea {
-    height: 42%;
+    height: 52%;
     width: 32%;
     overflow:auto;
 }
@@ -60,7 +60,7 @@
     opacity: 0;
     position: relative;
     display: inline-block;
-    height: 45%;
+    height: 52%;
     width: 40%;
     margin:  1%;
     background-color: white;
