@@ -229,7 +229,7 @@ async function queryByMoveList(chess_manual)
 	move_total = move_list.length;
 	copy_str  += "FEN：" + fen + "\n";
 	
-	addDisplayRow(["回合", "棋步", "紅方分數", "分數偏差", "推薦著法", ""]);
+	addDisplayRow(["步數", "棋譜", "紅方分數", "分數偏差", "推薦著法", ""]);
 	
 	for (var i = 0; i < move_list.length; i++)
 	{

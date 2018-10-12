@@ -56,7 +56,7 @@ function drawChart() {
             //horizontalAlign: "left",
         },
         axisX: {
-            title: "回合"
+            title: "步數"
         },
         axisY: {
             title: "分數",
