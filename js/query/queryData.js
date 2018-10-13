@@ -731,7 +731,7 @@ function apply_move(fen, chess_pos, str_move)
 				{
                     for (var i = move; i < p_val; i++)
 					{
-                        if (check_pos(fen, row+p_val, col, is_red) != 0)
+                        if (check_pos(fen, row+i, col, is_red) != 0)
                             return [false, fen];
 					}
 				}
@@ -739,7 +739,7 @@ function apply_move(fen, chess_pos, str_move)
 				{
                     for (var i = move; i > p_val; i--)
 					{
-                        if (check_pos(fen, row+p_val, col, is_red) != 0)
+                        if (check_pos(fen, row+i, col, is_red) != 0)
                             return [false, fen];
 					}
 				}
