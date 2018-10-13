@@ -240,7 +240,12 @@ function conver_chinese_chess(str_move)
     else if (str_move.indexOf('仕')>=0)
         return 'A';
     else if (str_move.indexOf('士')>=0)
-        return 'a';
+	{
+		if (is_red)
+            return 'A';
+        else
+            return 'a';
+	}
     else if (str_move.indexOf('相')>=0)
         return 'B';
     else if (str_move.indexOf('象')>=0)
@@ -774,9 +779,9 @@ function apply_move(fen, chess_pos, str_move)
             else
 			{
                 if (p_val > 0)    
-                    end_row = end_row + 1;
+                    end_row = row + 1;
                 else
-                    end_row = end_row - 1;
+                    end_row = row - 1;
                 end_col = Math.abs(val);
 			}
 		}
@@ -789,9 +794,9 @@ function apply_move(fen, chess_pos, str_move)
             else
 			{
                 if (p_val > 0)
-                    end_row = end_row + 2;
+                    end_row = row + 2;
                 else
-                    end_row = end_row - 2;
+                    end_row = row - 2;
                 end_col = Math.abs(val);
 			}
 		}
@@ -944,7 +949,7 @@ function parsing_text(chess_manual)
 	if (chess_manual.indexOf('FEN') < 0 ) 
 	{
 		fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
-		var move_list = chess_manual.split(/ |\n/);
+		var move_list = chess_manual.split(/ |\n|\./);
 		result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
 	}
 	else
