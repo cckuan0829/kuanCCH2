@@ -22,6 +22,7 @@ var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
+var stopBtn = document.getElementById("stopBtn");
 var drawChartBtn = document.getElementById("drawChartBtn");
 
 var buttonList = [
@@ -29,6 +30,7 @@ var buttonList = [
 	copyBtn,
 	clearBtn,
 	infoBtn,
+	stopBtn
 	//drawChartBtn
 ];
 
@@ -38,6 +40,7 @@ var copy_str = "";
 var status_str = "";
 var move_total = 0;
 var move_curr  = 0;
+var _toStop = false;
 
 
 $(document).ready(function() {
@@ -46,7 +49,8 @@ $(document).ready(function() {
 
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
-    infoBtn.addEventListener("click", showInfo);
+	infoBtn.addEventListener("click", showInfo);
+	stopBtn.addEventListener("click", stopQuery);
 
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("copyEgBtn");
@@ -55,8 +59,12 @@ $(document).ready(function() {
     initPlaceholder();
 });
 
+function stopQuery() {
+	_toStop = true;
+}
+
 async function queryCloudDB() {
-	
+	_toStop = false;
 	move_total = 0;
     move_curr  = 0;
 	status_str = "";
@@ -201,7 +209,8 @@ function showResult(){
 
 function disableButtons(){
 	for(var i=0; i<buttonList.length; ++i) {
-		buttonList[i].disabled = true;
+		if(buttonList[i]!=stopBtn)
+			buttonList[i].disabled = true;
 	}
 }
 
@@ -317,6 +326,7 @@ async function queryByMoveList(chess_manual)
 		{
 			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen]);
 		}
+		if(_toStop) break;
     } 
 	chess_str = chess_str + "end " + "\n\n";
 	
