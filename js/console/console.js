@@ -35,11 +35,11 @@ var buttonList = [
 ];
 
 
-var chess_str = "";
-var copy_str = "";
-var status_str = "";
-var move_total = 0;
-var move_curr  = 0;
+var _chess_str = "";
+var _copy_str = "";
+var _status_str = "";
+var _move_total = 0;
+var _move_curr  = 0;
 var _toStop = false;
 
 
@@ -65,11 +65,11 @@ function stopQuery() {
 
 async function queryCloudDB() {
 	_toStop = false;
-	move_total = 0;
-    move_curr  = 0;
-	status_str = "";
-	chess_str = "";
-	copy_str = "";
+	_move_total = 0;
+    _move_curr  = 0;
+	_status_str = "";
+	_chess_str = "";
+	_copy_str = "";
 	red_score = [];
 	score_bias = [];
 	badRateCount = [0,0,0,0];
@@ -97,7 +97,7 @@ async function queryCloudDB() {
 		{
 			var query_result = [];
 			is_got_result   = true;
-			status_str = "進度: " + 0 + "/" + list_num;
+			_status_str = "進度: " + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
 			red_score  = query_result[0];
@@ -129,13 +129,13 @@ async function queryCloudDB() {
 function copyQueryResult() {
 	
 	const el = document.createElement('textarea');
-    el.value = copy_str;
+    el.value = _copy_str;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
 	
-	if(copy_str != "")		
+	if(_copy_str != "")		
 		alert("複製成功!");
 	else
 		alert("沒有可複製的文字!");
@@ -201,10 +201,10 @@ function copyToClipboard(elementId) {
 }
 
 function showResult(){
-    if(status_str == "") status_str = $("#queryBtn").val();
-    document.getElementById("queryBtn").innerHTML = status_str;
+    if(_status_str == "") _status_str = $("#queryBtn").val();
+    document.getElementById("queryBtn").innerHTML = _status_str;
 
-	//document.getElementById("chessBookOutput").innerHTML = chess_str;
+	//document.getElementById("chessBookOutput").innerHTML = _chess_str;
 }
 
 function disableButtons(){
@@ -235,15 +235,15 @@ async function queryByMoveList(chess_manual)
 	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
     var fisrt_recommend_move_text = "";
 	
-	move_total = move_list.length;
-	copy_str  += "FEN：" + fen + "\n";
+	_move_total = move_list.length;
+	_copy_str  += "FEN：" + fen + "\n";
 	
 	addDisplayRow(["步數", "棋譜", "紅方分數", "分數偏差", "推薦著法", ""]);
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
-		move_curr = i+1;
-		addStr(move_curr + "." + move_list[i]);
+		_move_curr = i+1;
+		addStr(_move_curr + "." + move_list[i]);
 
 		prev_fen = fen;
 		fen = Update_FEN(fen, move_list[i]);
@@ -313,22 +313,22 @@ async function queryByMoveList(chess_manual)
 			red_score.push(NaN);
 			score_bias.push(NaN);
 		}
-        status_str = "進度: " + move_curr + "/" + move_total ;
+        _status_str = "進度: " + _move_curr + "/" + _move_total ;
 		showResult();
 		prev_recommend_list = recommend_list;
 		addStr("\n");
 		
-		if ( Math.abs(score_diff) > 20 && recommend_list.length > 0)
+		if ( Math.abs(score_diff) > 20 || Number.isNaN(score_diff))
 		{
-			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen]);
+			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen]);
 		}
 		else
 		{
-			addDisplayRow([move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen]);
+			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen]);
 		}
 		if(_toStop) break;
     } 
-	chess_str = chess_str + "end " + "\n\n";
+	_chess_str = _chess_str + "end " + "\n\n";
 	
 	return [red_score, score_bias];
 }
@@ -336,8 +336,8 @@ async function queryByMoveList(chess_manual)
 function addStr(newstr) {
 
 	console.log(newstr);
-	chess_str += newstr + "\n";
-	copy_str  += newstr + "\n";
+	_chess_str += newstr + "\n";
+	_copy_str  += newstr + "\n";
 }	
 
 function addDisplayRow(info_list) {
@@ -396,7 +396,7 @@ function calBadRate(score_bias, first_is_Red)
 	for(var i = 0; i<score_bias.length; i++)
 	{
 		offset = (i%2)*3;
-		if(!score_bias[i].isNaN)
+		if(!Number.isNaN(score_bias[i]))
 		{
 			badRateCount[0+offset]++;
 			if(Math.abs(score_bias[i]) >= not_good)

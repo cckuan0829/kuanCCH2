@@ -282,7 +282,7 @@ function conver_chinese_chess(str_move)
 function check_pos(fen, row, col, is_red)
 {
     var board  = FEN_to_Board(fen);
-    if (row < 0 || row > 9 || col < 1 || col > 9 || isNaN(row) || isNaN(col))
+    if (row < 0 || row > 9 || col < 1 || col > 9 || Number.isNaN(row) || Number.isNaN(col))
         return -1;
     else
 	{
@@ -521,11 +521,14 @@ function get_move_text(fen, move_pos)
 			}
             else
                 second_val = col_after;
-        
+            
+			var f_col_before = col_before.toString()[0].replace(/[A-Za-z0-9]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);});
+			var f_second_val = second_val.toString()[0].replace(/[A-Za-z0-9]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);});
+			
             move_text = conver_english_chess(chess);
-            move_text = move_text + col_before;
+            move_text = move_text + f_col_before;
             move_text = move_text + convert_direction(direction);
-            move_text = move_text + second_val;
+            move_text = move_text + f_second_val;
 		}
 	}
     else
@@ -564,11 +567,13 @@ function get_move_text(fen, move_pos)
 			}
             else
                 second_val = col_after;
-        
+            
+			var f_second_val = second_val.toString()[0].replace(/[A-Za-z0-9]/g, function(s) {return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);});
+		   
             move_text = convert_front(pos_ind);
             move_text = move_text + conver_english_chess(chess);
             move_text = move_text + convert_direction(direction);
-            move_text = move_text + second_val;
+            move_text = move_text + f_second_val;
 		}
             
     }    
