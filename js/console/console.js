@@ -229,7 +229,7 @@ async function queryByMoveList(chess_manual)
 	var recommend_list = await query_cloud(fen);
 	var prev_recommend_list = recommend_list;
 	var score_diff = 0;
-	var is_red = (fen.indexOf('w') >= 0);
+	var is_red_before = (fen.indexOf('w') >= 0);
 	var curr_score = 0;
 	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
 	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
@@ -248,9 +248,9 @@ async function queryByMoveList(chess_manual)
 		prev_fen = fen;
 		fen = Update_FEN(fen, move_list[i]);
 		curr_score = await query_score(fen);
-		curr_score = is_red ? curr_score*(-1) : curr_score;
+		curr_score = is_red_before ? curr_score*(-1) : curr_score;
 		recommend_list = await query_cloud(fen);
-		is_red  = (fen.indexOf('w') >= 0);
+		is_red_before  = (fen.indexOf('w') >= 0);
         red_score_list = [];
 		recommend_text = [];
 		fisrt_recommend_move_text = "";
@@ -277,7 +277,7 @@ async function queryByMoveList(chess_manual)
 				{
 					var move = get_move_text(prev_fen, qurey_list[1]);
 					var score = qurey_list[3];
-					score     = is_red ? score*(-1) : score;
+					score     = is_red_before ? score*(-1) : score;
 					score_list.push(score);
 					if(fen == Update_FEN(prev_fen, move))
 					{
@@ -292,7 +292,7 @@ async function queryByMoveList(chess_manual)
 			}
 			addStr('Red score   = '+ curr_score);
 			red_score.push(curr_score);
-			if(is_red)
+			if(is_red_before)
 				score_diff = Math.min(...score_list)-curr_score;
 		    else
 				score_diff = Math.max(...score_list)-curr_score
@@ -320,11 +320,11 @@ async function queryByMoveList(chess_manual)
 		
 		if ( Math.abs(score_diff) > 20 || Number.isNaN(score_diff))
 		{
-			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen]);
+			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen, !is_red_before]);
 		}
 		else
 		{
-			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen]);
+			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen, !is_red_before]);
 		}
 		if(_toStop) break;
     } 
@@ -343,12 +343,7 @@ function addStr(newstr) {
 function addDisplayRow(info_list) {
     var table = document.getElementById("moveListTable");
     var row = table.insertRow(-1);
-	if(info_list[4]>=200)
-		row.classList.add("moveListTable_bad");
-	else if(info_list[4]>=50)
-		row.classList.add("moveListTable_not_good");
-	else
-		row.classList.add("moveListTable_normal");
+	row.classList.add("moveListTable_normal");
 	
     var cell_round = row.insertCell(0);
     var cell_move = row.insertCell(1);
@@ -359,7 +354,12 @@ function addDisplayRow(info_list) {
     var result = move_str.link("http://www.chessdb.cn/query/?"+info_list[5]);
     cell_round.innerHTML = info_list[0];
 	if(info_list[5]!="")
-		cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:#b7c8f4">'+move_str+'</a>';
+	{
+		if(info_list[6] == true)
+			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:#f08080">'+move_str+'</a>';
+		else
+			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:#b7c8f4">'+move_str+'</a>';
+	}
 	else
 		cell_move.innerHTML = move_str;
 	cell_score.innerHTML = info_list[2];
