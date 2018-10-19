@@ -42,7 +42,7 @@
 
 .inputArea, .outputArea {
     opacity: 0.7;
-    font-size: 12px;
+    font-size: 10px;
     color: gray;
     position: relative;
     width: 90%;
@@ -80,14 +80,15 @@ button {
     margin: 0.5em;
 }
 
-.opacity7 {
-    opacity: 0.7;
+.opacity9 {
+    opacity: 0.9;
 }
 
 .moveListTable_normal {
   color: black;
   text-align: center;
   font-weight:bold;
+  overflow:auto;
 }
 
 .moveListTable_not_good {

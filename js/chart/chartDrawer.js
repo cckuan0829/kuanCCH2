@@ -1,14 +1,14 @@
 var dataAry = [                
-    { x: 1, y: 0 },
-    { x: 2, y: 400 },
-    { x: 3, y: 100 },
-    { x: 4, y: 60 },
-    { x: 5, y: -120 },
-    { x: 6, y: 35 },
-    { x: 7, y: 400 },
-    { x: 8, y: -100 },
-    { x: 9, y: 60 },
-    { x: 10, y: 120 },
+    { label: 1, y: 0 },
+    { label: 2, y: 400 },
+    { label: 3, y: 100 },
+    { label: 4, y: 60 },
+    { label: 5, y: -120 },
+    { label: 6, y: 35 },
+    { label: 7, y: 400 },
+    { label: 8, y: -100 },
+    { label: 9, y: 60 },
+    { label: 10, y: 120 },
 ];
 
 $(document).ready(function() {
@@ -17,22 +17,25 @@ $(document).ready(function() {
     });
 });
 
-function drawScore(score_list) {
+function drawScore(move_list, score_list, score_bias) {
 	dataAry = [];
-	var upperbound = 1999;
+	
 	for(var i = 0; i<score_list.length; i++)
 	{
 		var point = new Object();
 		point.x = i+1;
+		point.indexLabel = move_list[i];
+		if(score_bias[i]>200)
+		{
+			point.markerColor = "red";
+			point.markerType = "cross";
+			point.markerSize = 12;
+		}
+		
 		if(isNaN(score_list[i]))
 			break;
 		
-		if (score_list[i] > upperbound)
-			point.y = upperbound;
-		else if (score_list[i] < -1*upperbound)
-			point.y = -1*upperbound;
-		else
-			point.y = score_list[i];
+		point.y = score_list[i];
 		
 		dataAry.push(point);
 	}
@@ -44,6 +47,8 @@ function drawChart() {
     $('.chartArea').addClass('opacity9');
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
+		theme: "light1",
+		zoomEnabled: true,
         title: {
             text:　$('#badRate').html(),
             fontSize: 20,
@@ -55,15 +60,31 @@ function drawChart() {
             //verticalAlign: "bottom",
             //horizontalAlign: "left",
         },
+		toolTip:{   
+			content: "{indexLabel}: {y}"      
+		},
         axisX: {
             title: "步數"
         },
         axisY: {
             title: "分數",
-            valueFormatString:"#"
+            valueFormatString:"#",
+			scaleBreaks: {
+				customBreaks: [
+					{
+						startValue: 1500,
+						endValue: 30000,
+						},
+					{
+						startValue: -1500,
+						endValue: -30000,
+						}
+				]
+			}
         // suffix: "points"
         },
         data: [{
+			lineColor: "black",
             type: "line",
             name: "盤面絕對分數圖",
             connectNullData: false,

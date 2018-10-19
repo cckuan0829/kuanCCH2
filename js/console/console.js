@@ -78,6 +78,7 @@ async function queryCloudDB() {
 	_status_str = "";
 	_chess_str = "";
 	_copy_str = "";
+	move_list = [];
 	red_score = [];
 	score_bias = [];
 	badRateCount = [0,0,0,0];
@@ -109,8 +110,9 @@ async function queryCloudDB() {
 			_status_str = "進度: " + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
-			red_score  = query_result[0];
-			score_bias = query_result[1];
+			move_list  = query_result[0];
+			red_score  = query_result[1];
+			score_bias = query_result[2];
 			if(red_score.findIndex(Number.isNaN) >= 0)
 				is_not_complete = true;
 		}
@@ -123,8 +125,8 @@ async function queryCloudDB() {
 	{
 		showResult();  
 		updateBadRate(calBadRate(score_bias, true));
-		$('.chartArea').addClass('opacity7');
-		drawScore(red_score);
+		$('.chartArea').addClass('opacity9');
+		drawScore(move_list ,red_score, score_bias);
 	}
 	enableButtons();
 	_inQuety = false;
@@ -340,7 +342,7 @@ async function queryByMoveList(chess_manual)
     } 
 	_chess_str = _chess_str + "end " + "\n\n";
 	
-	return [red_score, score_bias];
+	return [move_list, red_score, score_bias];
 }
 
 function addStr(newstr) {
@@ -360,6 +362,7 @@ function addDisplayRow(info_list) {
 	var cell_score = row.insertCell(2);
 	var cell_bias = row.insertCell(3);
 	var cell_recommend = row.insertCell(4);
+	var fen            = row.insertCell(5);
 	var move_str = info_list[1];
     var result = move_str.link("http://www.chessdb.cn/query/?"+info_list[5]);
     cell_round.innerHTML = info_list[0];
@@ -369,9 +372,14 @@ function addDisplayRow(info_list) {
 			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
 		else
 			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:blue">'+move_str+'</a>';
+		
+		fen.innerHTML = "<button id='fen'>fen</button>";
 	}
 	else
+	{
 		cell_move.innerHTML = move_str;
+		fen.innerHTML = "FEN";
+	}
 	cell_score.innerHTML = info_list[2];
 	cell_bias.innerHTML = info_list[3];
 	cell_recommend.innerHTML = info_list[4];
