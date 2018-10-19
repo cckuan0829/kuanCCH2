@@ -22,15 +22,15 @@ var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
-var stopBtn = document.getElementById("stopBtn");
-var drawChartBtn = document.getElementById("drawChartBtn");
+//var stopBtn = document.getElementById("stopBtn");
+//var drawChartBtn = document.getElementById("drawChartBtn");
 
 var buttonList = [
 	queryBtn,
 	copyBtn,
 	clearBtn,
 	infoBtn,
-	stopBtn
+	//stopBtn
 	//drawChartBtn
 ];
 
@@ -41,6 +41,7 @@ var _status_str = "";
 var _move_total = 0;
 var _move_curr  = 0;
 var _toStop = false;
+var _inQuety = false;
 
 
 $(document).ready(function() {
@@ -50,11 +51,11 @@ $(document).ready(function() {
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
 	infoBtn.addEventListener("click", showInfo);
-	stopBtn.addEventListener("click", stopQuery);
+	/*stopBtn.addEventListener("click", stopQuery);*/
 
-    $("#copyEgBtn").bind("click", function() {
+    /*$("#copyEgBtn").bind("click", function() {
         copyToClipboard("copyEgBtn");
-    });
+    });*/
     
     initPlaceholder();
 });
@@ -64,6 +65,13 @@ function stopQuery() {
 }
 
 async function queryCloudDB() {
+	
+	if(_inQuety)
+	{
+		_inQuety = false;
+		stopQuery();
+		return;
+	}
 	_toStop = false;
 	_move_total = 0;
     _move_curr  = 0;
@@ -96,6 +104,7 @@ async function queryCloudDB() {
 		if (result)
 		{
 			var query_result = [];
+			_inQuety = true;
 			is_got_result   = true;
 			_status_str = "進度: " + 0 + "/" + list_num;
 			showResult();
@@ -114,10 +123,11 @@ async function queryCloudDB() {
 	{
 		showResult();  
 		updateBadRate(calBadRate(score_bias, true));
-		$('.chartArea').addClass('opacity9');
+		$('.chartArea').addClass('opacity7');
 		drawScore(red_score);
 	}
 	enableButtons();
+	_inQuety = false;
 	
 	//if(is_not_complete)
 	//	alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
@@ -150,15 +160,15 @@ function clearInputText() {
 function showInfo() {
 
 	alert("操作步驟:\
-	     \n\t1. 在象棋橋打譜，註解盡量保持空白。\
-		 \n\t2. 完成後在工具列按'匯出'=>'文字棋譜'=>'複製到剪貼簿'。\
-	     \n\t3. 將步驟2所複製內容貼到本網頁上，然後按下'雲庫查詢'。\
-		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
-		 \n\t5. 回到象棋橋，按'匯入'=>'文字棋譜'。\
+	     \n\t1. 從象棋橋或是東萍匯出文字棋譜。\
+	     \n\t2. 將文字棋譜貼至本網頁上，然後按下'雲庫查詢'。\
+		 \n\t3. 查詢完成後，按下本網頁上的'複製結果'。\
+		 \n\t4. 可將複製結果匯入象棋橋：在象棋橋按'匯入'=>'文字棋譜'。\
 		 \n輸出說明:\
-		 \n\t1. Red score代表該盤面的分數。正分代表紅優，負分則黑優。\
-		 \n\t2. score bias代表該步和官著的分數差異，0分即為官著。\
-		 \n\t3. 如出現NaN則代表無法查到相關分數或是著法。");
+		 \n\t1. 盤面分數正分代表紅優，負分則為黑優。\
+		 \n\t2. 分數偏差是指和最佳應著之間的偏差絕對值，越小越好。\
+		 \n\t3. 分數偏差大於50記為緩著，大於200記為失著。\
+		 \n\t4. NaN代表雲庫查無資料。");
 }
 
 function initPlaceholder() {
@@ -209,7 +219,7 @@ function showResult(){
 
 function disableButtons(){
 	for(var i=0; i<buttonList.length; ++i) {
-		if(buttonList[i]!=stopBtn)
+		if(buttonList[i]!=queryBtn)
 			buttonList[i].disabled = true;
 	}
 }
@@ -356,9 +366,9 @@ function addDisplayRow(info_list) {
 	if(info_list[5]!="")
 	{
 		if(info_list[6] == true)
-			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:#f08080">'+move_str+'</a>';
+			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
 		else
-			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:#b7c8f4">'+move_str+'</a>';
+			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:blue">'+move_str+'</a>';
 	}
 	else
 		cell_move.innerHTML = move_str;
