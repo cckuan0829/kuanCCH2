@@ -11,6 +11,9 @@ var dataAry = [
     { label: 10, y: 120 },
 ];
 
+var _max = 0;
+var _min = 0;
+
 $(document).ready(function() {
     $("#drawChartBtn").bind("click", function() {
         drawChart();
@@ -19,17 +22,33 @@ $(document).ready(function() {
 
 function drawScore(move_list, score_list, score_bias) {
 	dataAry = [];
+	_max = Math.max(...score_list);
+	_min = Math.min(...score_list);
 	
 	for(var i = 0; i<score_list.length; i++)
 	{
 		var point = new Object();
 		point.x = i+1;
-		point.indexLabel = move_list[i];
+		point.label2 = move_list[i];
 		if(score_bias[i]>200)
 		{
 			point.markerColor = "red";
 			point.markerType = "cross";
 			point.markerSize = 12;
+		}
+		else if(score_bias[i]>50)
+		{
+			point.markerColor = "yellow";
+			point.markerType = "triangle";
+			point.markerBorderColor = "black"; //change color here
+            point.markerBorderThickness = 1;
+			point.markerSize = 10;
+		}
+		else
+		{
+			point.markerColor = "black";
+			point.markerType = "circle";
+			point.markerSize = 6;
 		}
 		
 		if(isNaN(score_list[i]))
@@ -45,6 +64,12 @@ function drawScore(move_list, score_list, score_bias) {
 
 function drawChart() {
     $('.chartArea').addClass('opacity9');
+
+	var end_positive = 30000;
+	var end_negative = -30000;
+	if(_max > 1700)  end_positive = _max-200;
+	if(_min < -1700) end_negative = _min+200;
+	
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
 		theme: "light1",
@@ -61,7 +86,7 @@ function drawChart() {
             //horizontalAlign: "left",
         },
 		toolTip:{   
-			content: "{indexLabel}: {y}"      
+			content: "{label2}: {y}"      
 		},
         axisX: {
             title: "步數"
@@ -73,11 +98,11 @@ function drawChart() {
 				customBreaks: [
 					{
 						startValue: 1500,
-						endValue: 30000,
+						endValue: end_positive,
 						},
 					{
 						startValue: -1500,
-						endValue: -30000,
+						endValue: end_negative,
 						}
 				]
 			}
