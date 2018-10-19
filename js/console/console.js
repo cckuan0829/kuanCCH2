@@ -188,12 +188,12 @@ function initPlaceholder() {
     });
 }
 
-function copyToClipboard(elementId) {
+function copyToClipboard(infoString, copiedContent ) {
     // Create a "hidden" input
     var aux = document.createElement("input");
   
     // Assign it the value of the specified element
-    aux.setAttribute("value", inputExample);
+    aux.setAttribute("value", copiedContent);
   
     // Append it to the body
     document.body.appendChild(aux);
@@ -207,7 +207,7 @@ function copyToClipboard(elementId) {
     // Remove it from the body
     document.body.removeChild(aux);
 
-    alert("已複製輸入格式範例至你的剪貼本: \n" + inputExample);
+    alert("已複製"+infoString+"至你的剪貼本: \n" + copiedContent);
 }
 
 function showResult(){
@@ -362,16 +362,24 @@ function addDisplayRow(info_list) {
 	var cell_recommend = row.insertCell(4);
 	var move_str = info_list[1];
     var result = move_str.link("http://www.chessdb.cn/query/?"+info_list[5]);
-    cell_round.innerHTML = info_list[0];
+    
 	if(info_list[5]!="")
 	{
+		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
+		$('#infoList'+info_list[0]).bind("click", function() {
+			 copyToClipboard("此盤面FEN碼", decodeURI(info_list[5]) ); 
+		});
+
 		if(info_list[6] == true)
 			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
 		else
 			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:blue">'+move_str+'</a>';
 	}
-	else
+	else{
 		cell_move.innerHTML = move_str;
+		cell_round.innerHTML = info_list[0];
+	}
+		
 	cell_score.innerHTML = info_list[2];
 	cell_bias.innerHTML = info_list[3];
 	cell_recommend.innerHTML = info_list[4];
