@@ -54,7 +54,7 @@ $(document).ready(function() {
 	/*stopBtn.addEventListener("click", stopQuery);*/
 
     $("#copyEgBtn").bind("click", function() {
-        copyEG("copyEgBtn");
+        copyToClipboard("範例棋譜",inputExample);
     });
     
     initPlaceholder();
@@ -188,28 +188,6 @@ function initPlaceholder() {
             $(this).val(placeholder);
         }    
     });
-}
-
-function copyEG(elementId) {
-    // Create a "hidden" input
-    var aux = document.createElement("input");
-  
-    // Assign it the value of the specified element
-    aux.setAttribute("value", inputExample);
-  
-    // Append it to the body
-    document.body.appendChild(aux);
-  
-    // Highlight its content
-    aux.select();
-  
-    // Copy the highlighted text
-    document.execCommand("copy");
-  
-    // Remove it from the body
-    document.body.removeChild(aux);
-
-    alert("已複製輸入格式範例至你的剪貼本: \n" + inputExample);
 }
 
 function copyToClipboard(infoString, copiedContent ) {
