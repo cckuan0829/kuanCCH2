@@ -36,6 +36,7 @@ var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
+var uploadBtn =  document.getElementById("uploadBtn");
 //var stopBtn = document.getElementById("stopBtn");
 //var drawChartBtn = document.getElementById("drawChartBtn");
 
@@ -44,6 +45,7 @@ var buttonList = [
 	copyBtn,
 	clearBtn,
 	infoBtn,
+	uploadBtn
 	//stopBtn
 	//drawChartBtn
 ];
@@ -65,6 +67,8 @@ $(document).ready(function() {
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
 	infoBtn.addEventListener("click", showInfo);
+	uploadBtn.addEventListener('change', handleFileSelect, false);
+
 	/*stopBtn.addEventListener("click", stopQuery);*/
 
     $("#copyEgBtn").bind("click", function() {
@@ -73,6 +77,20 @@ $(document).ready(function() {
     
     initPlaceholder();
 });
+
+function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    // use the 1st file from the list
+    f = files[0];
+    var reader = new FileReader();
+    // Closure to capture the file information.
+    reader.onload = (function() {
+        return function(e) {
+          $( '#chessBookInput' ).val( e.target.result );
+        };
+    })(f);
+	reader.readAsText(f,'Big5');
+}
 
 function stopQuery() {
 	_toStop = true;
@@ -171,6 +189,7 @@ function copyQueryResult() {
 function clearInputText() {
 	
 	document.getElementById("chessBookInput").value = "";
+	uploadBtn.value = '';
 }
 
 function showInfo() {
