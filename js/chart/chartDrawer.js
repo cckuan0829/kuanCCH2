@@ -86,7 +86,7 @@ function drawChart() {
             //horizontalAlign: "left",
         },
 		toolTip:{   
-			content: "{label2}: {y}"      
+			content: "{x}-{label2}: {y}"      
 		},
         axisX: {
             title: "步數"

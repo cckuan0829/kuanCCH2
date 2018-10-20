@@ -64,6 +64,7 @@
     width: 55%;
     margin:  1%;
     background-color: white;
+	border: 3px solid #222222;
 }
 
 .rateArea {

@@ -951,15 +951,16 @@ function parsing_text(chess_manual)
     var is_red_turn  = (chess_manual.indexOf('w - -') >= 0);
 	var fen          = 'none';
 	var result       = [];
+	
 	if (chess_manual.indexOf('FEN') < 0 ) 
 	{
 		fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
-		var move_list = chess_manual.split(/ |\n|\./);
+		var move_list = chess_manual.split(/ |\n|\.|\*m|\*/);
 		result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
 	}
 	else
 	{	
-		var part_list = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\./);
+		var part_list = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\.|\*m|\*/);
 		if (part_list.length > 3)
 		{
 			fen = part_list[1];
