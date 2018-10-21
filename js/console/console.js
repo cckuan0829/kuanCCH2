@@ -89,7 +89,7 @@ function handleFileSelect(evt) {
           $( '#chessBookInput' ).val( e.target.result );
         };
     })(f);
-	reader.readAsText(f);
+	reader.readAsText(f,"gbk");
 }
 
 function stopQuery() {
