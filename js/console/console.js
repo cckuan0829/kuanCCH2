@@ -89,7 +89,7 @@ function handleFileSelect(evt) {
           $( '#chessBookInput' ).val( e.target.result );
         };
     })(f);
-	reader.readAsText(f,'Big5');
+	reader.readAsText(f);
 }
 
 function stopQuery() {
