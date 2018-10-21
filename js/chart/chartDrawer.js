@@ -115,7 +115,7 @@ function drawChart() {
         // suffix: "points"
         },
         data: [{
-			lineColor: "gray",
+			lineColor: "black",
 			lineThickness: 2,
             type: "line",
             name: "盤面絕對分數圖",
