@@ -33,7 +33,7 @@ function drawScore(move_list, score_list, score_bias) {
 		if(score_bias[i]>200)
 		{
 			if(point.x%2 == 1) point.markerColor = "red";
-			else point.markerColor = "blue";
+			else point.markerColor = "#1a75ff";
 			
 			point.markerType = "cross";	
 			point.markerBorderColor = "black"; //change color here
@@ -43,7 +43,7 @@ function drawScore(move_list, score_list, score_bias) {
 		else if(score_bias[i]>50)
 		{
 			if(point.x%2 == 1) point.markerColor = "red";
-			else point.markerColor = "blue";
+			else point.markerColor = "#1a75ff";
 			
 			point.markerType = "triangle";
 			point.markerBorderColor = "black"; //change color here
