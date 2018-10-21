@@ -32,17 +32,23 @@ function drawScore(move_list, score_list, score_bias) {
 		point.label2 = move_list[i];
 		if(score_bias[i]>200)
 		{
-			point.markerColor = "red";
-			point.markerType = "cross";
-			point.markerSize = 12;
+			if(point.x%2 == 1) point.markerColor = "red";
+			else point.markerColor = "blue";
+			
+			point.markerType = "cross";	
+			point.markerBorderColor = "black"; //change color here
+			point.markerBorderThickness = 1;
+			point.markerSize = 14;
 		}
 		else if(score_bias[i]>50)
 		{
-			point.markerColor = "yellow";
+			if(point.x%2 == 1) point.markerColor = "red";
+			else point.markerColor = "blue";
+			
 			point.markerType = "triangle";
 			point.markerBorderColor = "black"; //change color here
             point.markerBorderThickness = 1;
-			point.markerSize = 10;
+			point.markerSize = 14;
 		}
 		else
 		{
@@ -109,7 +115,8 @@ function drawChart() {
         // suffix: "points"
         },
         data: [{
-			lineColor: "black",
+			lineColor: "gray",
+			lineThickness: 2,
             type: "line",
             name: "盤面絕對分數圖",
             connectNullData: false,
