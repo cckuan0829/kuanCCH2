@@ -62,9 +62,10 @@
 	font-size: 18px;
 	margin-left: 2%;
     position: center;
-	border: 0;
+	border: 0px;
 	border-color: white;
     width: 90%;	
+    margin: auto;
 }
 
 .chartArea {
