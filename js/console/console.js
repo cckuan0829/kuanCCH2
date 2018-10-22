@@ -403,6 +403,7 @@ function addStr(newstr) {
 
 function addDisplayRow(info_list) {
     var table = document.getElementById("moveListTable");
+	table.classList.add("outputTable");
     var row = table.insertRow(-1);
 	row.classList.add("moveListTable_normal");
 	
