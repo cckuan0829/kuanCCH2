@@ -225,17 +225,33 @@ function initPlaceholder() {
 
 function copyToClipboard(infoString, copiedContent ) {
     // Create a "hidden" input
-    var aux = document.createElement("input");
-  
-    // Assign it the value of the specified element
-    aux.setAttribute("value", copiedContent);
-  
-    // Append it to the body
-    document.body.appendChild(aux);
-  
-    // Highlight its content
-    aux.select();
-  
+	var aux = document.createElement("input");
+
+	// Assign it the value of the specified element
+	aux.setAttribute("value", copiedContent);
+
+	// Append it to the body
+	document.body.appendChild(aux);
+	
+	if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+ 
+        // convert to editable with readonly to stop iOS keyboard opening
+        aux.contentEditable = true;
+        aux.readOnly = true;
+
+        // create a selectable range
+        var range = document.createRange();
+        range.selectNodeContents(aux);
+
+        // select the range
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        aux.setSelectionRange(0, 999999);
+	} else {
+		aux.select();
+	}
+    
     // Copy the highlighted text
     document.execCommand("copy");
   
