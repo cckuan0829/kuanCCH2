@@ -257,6 +257,10 @@ function conver_chinese_chess(str_move)
         else
             return 'r';
 	}
+	else if (str_move.indexOf('傌')>=0)
+	{
+		return 'N';
+	}
     else if (str_move.indexOf('馬')>=0 || str_move.indexOf('马')>=0)
 	{
         if (is_red)
@@ -264,7 +268,7 @@ function conver_chinese_chess(str_move)
         else
             return 'n';
 	}
-    else if (str_move.indexOf('炮')>=0)
+    else if (str_move.indexOf('炮')>=0 || str_move.indexOf('包')>=0)
 	{
         if (is_red)
             return 'C';
@@ -955,12 +959,12 @@ function parsing_text(chess_manual)
 	if (chess_manual.indexOf('FEN') < 0 ) 
 	{
 		fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
-		var move_list = chess_manual.split(/ |\n|\.|\*m|\*/);
+		var move_list = chess_manual.split(/ |\n|\.|\*m|\*|\u3000/);
 		result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
 	}
 	else
 	{	
-		var part_list = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\.|\*m|\*/);
+		var part_list = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\.|\*m|\*|\u3000/);
 		if (part_list.length > 3)
 		{
 			fen = part_list[1];
