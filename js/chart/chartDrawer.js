@@ -13,7 +13,7 @@ var dataAry = [
 
 var _max = 0;
 var _min = 0;
-
+var _size = 0;
 $(document).ready(function() {
     $("#drawChartBtn").bind("click", function() {
         drawChart();
@@ -24,8 +24,15 @@ function drawScore(move_list, score_list, score_bias) {
 	dataAry = [];
 	_max = Math.max(...score_list);
 	_min = Math.min(...score_list);
+	_size = 0
 	
 	for(var i = 0; i<score_list.length; i++)
+	{
+		if(!isNaN(score_list[i]))
+			_size = i;
+	}
+	
+	for(var i = 0; i<=_size; i++)
 	{
 		var point = new Object();
 		point.x = i+1;
@@ -58,9 +65,13 @@ function drawScore(move_list, score_list, score_bias) {
 		}
 		
 		if(isNaN(score_list[i]))
-			break;
-		
-		point.y = score_list[i];
+		{
+			point.y = null;
+		}
+		else
+		{
+			point.y = score_list[i];
+		}
 		
 		dataAry.push(point);
 	}
@@ -119,8 +130,8 @@ function drawChart() {
 			lineThickness: 2,
             type: "line",
             name: "盤面絕對分數圖",
-            connectNullData: false,
-            //nullDataLineDashType: "solid",
+            connectNullData: true,
+            nullDataLineDashType:"dot",
             xValueType: "int",
           //  xValueFormatString: "DD MMM hh:mm TT",
           //  yValueFormatString: "#,##0.##\"%\"",
