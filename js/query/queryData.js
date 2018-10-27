@@ -1,3 +1,79 @@
+//define chess set
+var KING_E_S     = ['K', 'k'];
+var KING_C_S     = ['帥', '將', '帅','将'];
+var KING_S       = KING_E_S + KING_C_S;
+
+var ADVISOR_E_S  = ['A', 'a'];
+var ADVISOR_C_S  = ['仕', '士'];
+var ADVISOR_S    = ADVISOR_E_S + ADVISOR_C_S;
+
+var BISHOP_E_S   = ['B', 'b', 'E', 'e'];
+var BISHOP_C_S   = ['相', '象'];
+var BISHOP_S     = BISHOP_E_S + BISHOP_C_S;
+
+var KNIGHT_E_S   = ['N', 'n', 'H', 'h'];
+var KNIGHT_C_S   = ['傌', '馬', '马'];
+var KNIGHT_S     = KNIGHT_E_S + KNIGHT_C_S;
+
+var ROOK_E_S     = ['R', 'r'];
+var ROOK_C_S     = ['俥', '車', '车'];
+var ROOK_S       = ROOK_E_S + ROOK_C_S;
+
+var CANNON_E_S   = ['C', 'c'];
+var CANNON_C_S   = ['炮', '砲', '包'];
+var CANNON_S     = CANNON_E_S + CANNON_C_S;
+
+var PAWN_E_S     = ['P', 'p'];
+var PAWN_C_S     = ['兵', '卒'];
+var PAWN_S       = PAWN_E_S + PAWN_C_S;
+
+//define chess position set 
+var FRONT_S      = ['+', '前'];
+var REAR_S       = ['-', '後', '后'];
+
+//define move direction set
+var FORWARD_S    = ['+', '進', '进'];
+var BACKWARD_S   = ['-', '退'];
+var HORIZONTAL_S = ['=', '.', '平'];
+
+//define red move set
+var RED_S 　　   = ['K', 'A', 'B', 'E', 'N', 'H', 'R', 'C', 'P',
+					'一', '二', '三', '四', '五', '六', '七', '八', '九'];
+
+//Enum
+var Chess_E = {
+  KING:0,
+  ADVISOR:1,
+  BISHOP:2,
+  KNIGHT:3,
+  ROOK:4,
+  CANNON:5,
+  PAWN:6
+};
+
+var Pos_E = {
+  FRONT:1,
+  REAR:-1,
+  NONRMAL:0
+};
+
+var Dir_E = {
+  FORWARD:1,
+  BACKWARD:-1,
+  HORIZONTAL:0
+};
+
+var Lang_E = {
+  English:0,
+  Chinese:1,
+  Unknown:2
+};
+
+//Global variable
+var score_list = [];
+var score_bias = [];
+
+
 function httpGet(theUrl)
 {
 	return new Promise((resolve, reject) => {
@@ -69,66 +145,126 @@ function FEN_to_Board(fen)
     return board;
 }
 
-function check_red(str_move)
+function check_lang(chessStr)
 {
-    if ( str_move.indexOf('一')>0 || str_move.indexOf('二')>0 || str_move.indexOf('三')>0 ||
-         str_move.indexOf('四')>0 || str_move.indexOf('五')>0 || str_move.indexOf('六')>0 ||
-         str_move.indexOf('七')>0 || str_move.indexOf('八')>0 || str_move.indexOf('九')>0)
-        return true;
-    else
-        return false;
-
+	if(chessStr.indexOf('PlayOK')>=0)
+	{
+		return Lang_E.English;
+	}
+	else 
+	{
+		for(x in RED_C_S)
+		{
+			if(chessStr.indexOf(RED_C_S[x]) >= 0)
+			{
+				return Lang_E.Chinese;
+			}
+		}
+		return Lang_E.Unknown;
+	}
 }
 
-function convert_front(num)
+function check_str_lang(str)
 {
-    var front_str = '無';
-    if (num == 1)
-        front_str = '前';
-    else if (num == -1)
-        front_str = '後';
+	if((str[0]>='a' && str[0]<='z') || (str[0]>='A' && str[0]<='Z'))
+		return Lang_E.English
+	else
+		return Lang_E.Chinese;	
+}
 
+function check_red(str_move)
+{
+	for(x in RED_S)
+	{
+		if(str_move.indexOf(RED_S[x])>=0)
+			return true;
+	}
+    return false;
+}
+
+function convert_front(pos)
+{     
+	var front_str = '？';
+	switch(pos)
+	{
+		case Pos_E.FRONT:
+			front_str = '前';
+			break;
+		case Pos_E.REAR:
+			front_str = '後';
+			break;
+		case Pos_E.NONRMAL:
+			front_str = '無';
+			break;
+		default:
+			front_str = '？';
+	};
     return front_str;
 }
     
 function get_front(str_move)
 {
-    if (str_move.indexOf('前') >= 0)
-        return 1;
-    else if (str_move.indexOf('後') >= 0 || str_move.indexOf('后') >= 0)
-        return -1;
-    else
-        return 0;
+	var subStr = str_move.substring(0, 2);
+	
+	for(x in FRONT_S)
+	{
+		if(subStr.indexOf(FRONT_S[x])>=0)
+			return Pos_E.FRONT;
+	}
+	
+	for(x in REAR_S)
+	{
+		if(subStr.indexOf(REAR_S[x])>=0)
+			return Pos_E.REAR;
+	}
+	
+    return Pos_E.NONRMAL;
 }
 
-function convert_direction(num)
+function convert_direction(dir)
 {
-    var dir_str = '無';
-    if (num == 1)
-        dir_str = '進';
-    else if (num == -1)
-        dir_str = '退';
-    else if (num == 0)
-        dir_str = '平';
-    
+    dir_str = '平';
+	switch(dir)
+	{
+		case Dir_E.FORWARD:
+			dir_str = '進';
+			break;
+		case Dir_E.BACKWARD:
+			dir_str = '退';
+			break;
+		case Dir_E.HORIZONTAL:
+			dir_str = '平';
+			break;
+		default:
+			dir_str = '？';
+	};
     return dir_str;
 }
 
 function get_direction(str_move)
 {
-    if (str_move.indexOf('進')>=0 || str_move.indexOf('进')>=0)
-        return 1;
-    else if (str_move.indexOf('退')>=0)
-        return -1;
-    else
-        return 0;
+	var subStr = str_move.substring(2, 4);
+	
+	for(x in FORWARD_S)
+	{
+		if(subStr.indexOf(FORWARD_S[x])>=0)
+			return Dir_E.FORWARD;
+	}
+	
+	for(x in BACKWARD_S)
+	{
+		if(subStr.indexOf(BACKWARD_S[x])>=0)
+			return Dir_E.BACKWARD;
+	}
+	
+    return Dir_E.HORIZONTAL;
 }
 
 function get_global_col(board, str_move)
 {
-    if (get_front(str_move) != 0)
+    if (get_front(str_move) != Pos_E.NONRMAL)
 	{
-        var chess = conver_chinese_chess(str_move);
+        var chess = conver_text_to_chess(str_move);
         for (var col = 0; col < 9; col++)
 		{
             for(var row = 0; row < 10; row++)
@@ -142,12 +278,24 @@ function get_global_col(board, str_move)
     else
 	{
         if (check_red(str_move))
-            return 9-convert_chinese_num(str_move[1]);
+            return 9-convert_text_to_num(str_move[1]);
         else
 		{
 			var val = str_move[1].replace(/[\uff01-\uff5e]/g, function(ch) { return String.fromCharCode(ch.charCodeAt(0) - 0xfee0); });
             return parseInt(val-1);
 		}
+	}
+}
+
+function convert_text_to_num(str)
+{
+	if(str[0]<=10 && str[0]>=0)
+	{
+		return parseInt(str);
+	}
+	else
+	{
+		return convert_chinese_num(str);
 	}
 }
 
@@ -175,7 +323,7 @@ function convert_english_num(num)
     else
         return '零';
 }
-    
+    	
 function convert_chinese_num(str_num)
 {
     if(str_num == '一')
@@ -211,13 +359,13 @@ function conver_english_chess(chess)
         chinese ='仕';
     else if (chess == 'a')
         chinese ='士';
-    else if (chess == 'B')
+    else if (chess == 'B' || chess == 'E')
         chinese ='相';
-    else if (chess == 'b')
+    else if (chess == 'b' || chess == 'e')
         chinese ='象';
     else if (chess == 'R' || chess == 'r')
         chinese ='車';
-	else if (chess == 'N' || chess == 'n')
+	else if (chess == 'N' || chess == 'n' || chess == 'H' || chess == 'h')
         chinese ='馬';
     else if (chess == 'C' || chess == 'c')
         chinese ='炮';
@@ -229,58 +377,76 @@ function conver_english_chess(chess)
     return chinese;
 }
 
-function conver_chinese_chess(str_move)
+function conver_text_to_chess(str_move)
 {
-    var is_red = check_red(str_move);
-        
-    if(str_move.indexOf('帥')>=0 || str_move.indexOf('帅')>=0)
-        return 'K';
-    else if (str_move.indexOf('將')>=0 || str_move.indexOf('将')>=0)
-        return 'k';
-    else if (str_move.indexOf('仕')>=0)
-        return 'A';
-    else if (str_move.indexOf('士')>=0)
+	var is_red = check_red(str_move);
+	var subStr = str_move.substring(0, 2);
+	
+	for(x in KING_S)
 	{
-		if (is_red)
-            return 'A';
-        else
-            return 'a';
+		if(subStr.indexOf(KING_S[x])>=0) 
+		{
+			if(is_red) return 'K';
+			else return 'k';
+		}
 	}
-    else if (str_move.indexOf('相')>=0)
-        return 'B';
-    else if (str_move.indexOf('象')>=0)
-        return 'b';
-    else if (str_move.indexOf('車')>=0 || str_move.indexOf('车')>=0)
+	
+	for(x in ADVISOR_S)
 	{
-        if (is_red)
-            return 'R';
-        else
-            return 'r';
+		if(subStr.indexOf(ADVISOR_S[x])>=0) 
+		{
+			if(is_red) return 'A';
+			else return 'a';
+		}
 	}
-	else if (str_move.indexOf('傌')>=0)
+	
+	for(x in BISHOP_S)
 	{
-		return 'N';
+		if(subStr.indexOf(BISHOP_S[x])>=0) 
+		{
+			if(is_red) return 'B';
+			else return 'b';
+		}
 	}
-    else if (str_move.indexOf('馬')>=0 || str_move.indexOf('马')>=0)
+	
+	for(x in KNIGHT_S)
 	{
-        if (is_red)
-            return 'N';
-        else
-            return 'n';
+		if(subStr.indexOf(KNIGHT_S[x])>=0) 
+		{
+			if(is_red) return 'N';
+			else return 'n';
+		}
 	}
-    else if (str_move.indexOf('炮')>=0 || str_move.indexOf('包')>=0)
+	
+	for(x in ROOK_S)
 	{
-        if (is_red)
-            return 'C';
-        else
-            return 'c';
+		if(subStr.indexOf(ROOK_S[x])>=0) 
+		{
+			if(is_red) return 'R';
+			else return 'r';
+		}
 	}
-    else if (str_move.indexOf('兵')>=0)
-        return 'P';
-    else if (str_move.indexOf('卒')>=0)
-        return 'p';
-    else
-        return '0';
+	
+	for(x in CANNON_S)
+	{
+		if(subStr.indexOf(CANNON_S[x])>=0) 
+		{
+			if(is_red) return 'C';
+			else return 'c';
+		}
+	}
+	
+	for(x in PAWN_S)
+	{
+		if(subStr.indexOf(PAWN_S[x])>=0) 
+		{
+			if(is_red) return 'P';
+			else return 'p';
+		}
+	}
+	
+	return '0';
+	
 }
 
 function check_pos(fen, row, col, is_red)
@@ -590,7 +756,7 @@ function apply_move(fen, chess_pos, str_move)
     var is_red_turn = (fen.indexOf('%20w') >= 0);
     var board   = FEN_to_Board(fen);
     var is_red  = check_red(str_move);
-    var chess   = conver_chinese_chess(str_move);
+    var chess   = conver_text_to_chess(str_move);
     var l_chess = chess.toLowerCase();
     var row     = chess_pos[0];
     var col     = chess_pos[1];
@@ -598,7 +764,7 @@ function apply_move(fen, chess_pos, str_move)
 	var val_temp = str_move[3].replace(/[\uff01-\uff5e]/g, function(ch) { return String.fromCharCode(ch.charCodeAt(0) - 0xfee0); });
 	
     if (is_red)
-        val = convert_chinese_num(val_temp);
+        val = convert_text_to_num(val_temp);
     else
         val = parseInt(val_temp);
 		
@@ -883,10 +1049,10 @@ function Update_FEN(fen, str_move)
 {
     var board       = FEN_to_Board(fen);
     var is_red      = check_red(str_move);
-    var chess       = conver_chinese_chess(str_move);
+    var chess       = conver_text_to_chess(str_move);
     var global_col  = get_global_col(board, str_move);
     var global_row  = 0;
-	var val         = convert_chinese_num(str_move[3]);
+	var val         = convert_text_to_num(str_move[3]);
     var front       = get_front(str_move);
     var move        = get_direction(str_move);
     var index_list  = [];
@@ -956,25 +1122,38 @@ function parsing_text(chess_manual)
 	var fen          = 'none';
 	var result       = [];
 	
-	if (chess_manual.indexOf('FEN') < 0 ) 
+	if(chess_manual.indexOf('PlayOK') >= 0)
 	{
 		fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
-		var move_list = chess_manual.split(/ |\n|\.|\*m|\*|\u3000/);
-		result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
+		var move_list = chess_manual.split("START");
+		if(move_list.length >= 1) 
+		{
+			var part_list = move_list[1].split(/ |\n/);
+			result = part_list.filter(move => (move.indexOf('+') >= 0 || move.indexOf('-') >= 0 || move.indexOf('.') >= 0 || move.indexOf('=') >= 0 ) && move.length == 4);
+		}
 	}
 	else
-	{	
-		var part_list = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\.|\*m|\*|\u3000/);
-		if (part_list.length > 3)
+	{
+		if (chess_manual.indexOf('FEN') < 0 ) 
 		{
-			fen = part_list[1];
-			if (is_red_turn)
-				fen = fen + '%20w';
-			else
-				fen = fen + '%20b';
-    
-			var move_list = part_list[3].split(/ |\n/);
-			result  = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
+			fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
+			var move_list = chess_manual.split(/ |\n|\.|\*m|\*|\u3000/);
+			result = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
+		}
+		else
+		{	
+			var part_list = chess_manual.split(/FEN ：| w - -| b - -| 1\.|\n1\.|\*m|\*/);
+			if (part_list.length > 3)
+			{
+				fen = part_list[1];
+				if (is_red_turn)
+					fen = fen + '%20w';
+				else
+					fen = fen + '%20b';
+		
+				var move_list = part_list[3].split(/ |\n/);
+				result  = move_list.filter(move => (move.indexOf('進') >= 0 || move.indexOf('进') >= 0 || move.indexOf('退') >= 0 || move.indexOf('平') >= 0) && move.length == 4);
+			}
 		}
 	}
     return [fen, result];
@@ -985,6 +1164,7 @@ function check_text_valid(chess_text)
 	var list      = parsing_text(chess_text);
 	var fen       = list[0];
 	var move_list = list[1];
+	
 	if (fen == 'none' || move_list.length == 0)
 		return [false, 0];
 	else
