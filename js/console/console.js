@@ -84,7 +84,8 @@ $(document).ready(function() {
 function onDownloadBtnClick() {
 	if($("#moveListTable")[0].innerText === "") {
 		alert('沒東東可下載哦～');
-	} else {
+	}
+	else {
 		downloadFile('result.txt', $("#moveListTable")[0].innerText);
 	}
 	
