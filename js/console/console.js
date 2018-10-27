@@ -45,6 +45,7 @@ var buttonList = [
 	copyBtn,
 	clearBtn,
 	infoBtn,
+	downloadBtn,
 	uploadBtn
 	//stopBtn
 	//drawChartBtn
@@ -67,6 +68,7 @@ $(document).ready(function() {
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
 	infoBtn.addEventListener("click", showInfo);
+	downloadBtn.addEventListener("click", onDownloadBtnClick);
 	uploadBtn.addEventListener('change', handleFileSelect, false);
 
 	/*stopBtn.addEventListener("click", stopQuery);*/
@@ -77,6 +79,33 @@ $(document).ready(function() {
     
     initPlaceholder();
 });
+
+
+function onDownloadBtnClick() {
+	if($("#moveListTable")[0].innerText === "") {
+		alert('沒東東可下載哦～');
+	} else {
+		downloadFile('result.txt', $("#moveListTable")[0].innerText);
+	}
+	
+}
+
+function downloadFile(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }
+    else {
+        pom.click();
+    }
+}
+
+
 
 function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
