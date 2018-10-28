@@ -1191,3 +1191,42 @@ async function query_score(fen)
     else
         return NaN;
 }
+
+function generate_pgn_file(move_list, red_score, score_bias)
+{
+	var pgn_str = "";
+	var size = move_list.length;
+	if((size>0) && (size == red_score.length) && (size == score_bias.length))
+	{
+		pgn_str =
+'[Game "Chinese Chess"]\n\
+[Date ""]\n\
+[Red ""]\n\
+[Black ""]\n\
+[Result "*"]\n\
+[Time ""]\n';
+		
+		for(var i = 0; i<size; i++)
+		{
+			var score = red_score[i]; 
+			var bias = score_bias[i];
+			var commend = recommend_list[i];
+			
+			pgn_str += "{ Red score \t= "+score+"\n Score bias \t= "+bias+"}\n";
+			
+			if(i%2 == 0)
+			{
+				var num = i/2+1; 
+				pgn_str += num.toString();
+				pgn_str += ". "
+			}
+			
+			pgn_str += move_list[i];
+			pgn_str += "\n";
+			
+		}
+	}
+	
+	return pgn_str;
+	
+}

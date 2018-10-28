@@ -51,7 +51,7 @@ var buttonList = [
 	//drawChartBtn
 ];
 
-
+var _pgn_str = "";
 var _chess_str = "";
 var _copy_str = "";
 var _status_str = "";
@@ -82,18 +82,20 @@ $(document).ready(function() {
 
 
 function onDownloadBtnClick() {
+	console.log($("#uploadBtn").value);
 	if($("#moveListTable")[0].innerText === "") {
-		alert('沒東東可下載哦～');
+		alert('搜尋後才能下載!');
 	}
 	else {
-		downloadFile('result.txt', $("#moveListTable")[0].innerText);
+		var outFileName = 'ChessCloud.pgn'
+		downloadFile(outFileName, _pgn_str);
 	}
 	
 }
 
 function downloadFile(filename, text) {
     var pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('href', 'data:text/plain;charset=gb2312,' + encodeURIComponent(text));
     pom.setAttribute('download', filename);
 
     if (document.createEvent) {
@@ -140,9 +142,11 @@ async function queryCloudDB() {
 	_status_str = "";
 	_chess_str = "";
 	_copy_str = "";
+	_pgn_str = "";
 	move_list = [];
 	red_score = [];
 	score_bias = [];
+	recommend_list = [];
 	badRateCount = [0,0,0,0];
     var mytext   = document.getElementById("chessBookInput").value;	
 	disableButtons();
@@ -175,6 +179,8 @@ async function queryCloudDB() {
 			move_list  = query_result[0];
 			red_score  = query_result[1];
 			score_bias = query_result[2];
+			//recommend_list = query_result[3];
+			_pgn_str = generate_pgn_file(move_list, red_score, score_bias);
 			if(red_score.findIndex(Number.isNaN) >= 0)
 				is_not_complete = true;
 		}
@@ -192,9 +198,6 @@ async function queryCloudDB() {
 	}
 	enableButtons();
 	_inQuety = false;
-	
-	//if(is_not_complete)
-	//	alert('目前雲庫資料不完整，再過幾個小時後查此盤面或許就有結果摟!')
 	
     $("#copyEgBtn").attr("disabled", false);
     $("#queryBtn").html($("#queryBtn").val());
