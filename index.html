@@ -53,7 +53,19 @@
 		</div>
 		
 		<div class = "chessBookOutptArea">
-			<table class = "outputTable" id="moveListTable" >
+			<table class = "outputTable" id="moveListTable" style="visibility:hidden">
+				<thead id="moveListTableHeader">
+					<tr>
+					<th id = "th_num">步數</th>
+					<th id = "th_move">著法</th>
+					<th id = "th_score">局面分數</th>
+					<th id = "th_bias">此著偏差</th>
+					<th id = "th_recom">推薦著法</th>
+					</tr>
+				</thead>
+				<tbody class = "TableBody" id="moveListTableBody">
+
+				</tbody>
 			</table>
 			
 			<!--<textarea id="chessBookOutput"  class = "outputArea" style="font-size: 12pt" readonly>-->

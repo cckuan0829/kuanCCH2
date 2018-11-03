@@ -174,7 +174,7 @@ async function queryCloudDB() {
     _is_not_complete = false;
 	var is_got_result   = false;
 	
-	removeDisplayRow();
+	removeDisplayTable();
 	resetBadRate();
 	
     $("#copyEgBtn").attr("disabled", true);
@@ -354,7 +354,7 @@ async function queryByMoveList(chess_manual)
 	_move_total = move_list.length;
 	_copy_str  += "FEN：" + fen + "\n";
 	
-	addDisplayRow(["步數", "棋譜", "紅方分數", "分數偏差", "推薦著法", ""]);
+	showDisplayHeader();
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
@@ -458,11 +458,29 @@ function addStr(newstr) {
 	_copy_str  += newstr + "\n";
 }	
 
+function showDisplayHeader(){
+	var table = document.getElementById("moveListTable");
+	var th_num = document.getElementById("th_num");
+	var th_move = document.getElementById("th_move");
+	var th_score = document.getElementById("th_score");
+	var th_bias = document.getElementById("th_bias");
+	var th_recom = document.getElementById("th_recom");
+	th_num.classList.add("wid_70");
+	th_move.classList.add("wid_120");
+	th_score.classList.add("wid_120");
+	th_bias.classList.add("wid_120");
+	th_recom.classList.add("wid_180");
+	table.classList.add("outputTable");	
+	table.style.visibility = "visible";
+}
+
+
 function addDisplayRow(info_list) {
     var table = document.getElementById("moveListTable");
-	table.classList.add("outputTable");
-    var row = table.insertRow(-1);
-	row.classList.add("moveListTable_normal");
+	
+	var tbody = document.getElementById("moveListTableBody");
+    tbody.classList.add("TableRow");	
+	var row = tbody.insertRow(-1);
 	
     var cell_round = row.insertCell(0);
     var cell_move = row.insertCell(1);
@@ -494,11 +512,17 @@ function addDisplayRow(info_list) {
 	cell_score.innerHTML = info_list[2];
 	cell_bias.innerHTML = info_list[3];
 	cell_recommend.innerHTML = info_list[4];
+	
+	cell_round.classList.add("wid_70");
+	cell_move.classList.add("wid_120");
+	cell_score.classList.add("wid_120");
+	cell_bias.classList.add("wid_120");
+	cell_recommend.classList.add("wid_180");
 }
 
-function removeDisplayRow() {
-	var table = document.getElementById("moveListTable");
-	table.innerHTML = "";
+function removeDisplayTable() {
+	document.getElementById("moveListTable").style.visibility = "visible";
+	//document.getElementById("moveListTableBody").children().remove();
 }
 
 function updateBadRate(badrate) {
