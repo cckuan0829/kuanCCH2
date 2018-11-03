@@ -90,8 +90,8 @@ function onDownloadBtnClick() {
 	else {	
 		if(_is_not_complete)
 		{
-			var answer = confirm("棋雲分析未完整，是否仍要下載pgn檔?")
-			if (answer) {
+			if (confirm("棋雲分析未完整，是否仍要下載pgn檔?"))
+			{
 				setFilenameandDownload();
 			}
 		}
@@ -106,13 +106,20 @@ function setFilenameandDownload()
 {
 	var outFileName = prompt("請輸入下載檔名", "chess_file");
 
-	if(outFileName == "")	
-		outFileName = 'chess_file.pgn'
+	if(outFileName == null)
+	{
+		return;
+	}
 	else
-		outFileName += ".pgn";
-		
-	var encoded = new TextEncoder("gb18030",{ NONSTANDARD_allowLegacyEncoding: true }).encode(_pgn_str);
-	download(encoded,outFileName);
+	{
+		if(outFileName == "")	
+			outFileName = 'chess_file.pgn'
+		else
+			outFileName += ".pgn";
+			
+		var encoded = new TextEncoder("gb18030",{ NONSTANDARD_allowLegacyEncoding: true }).encode(_pgn_str);
+		download(encoded,outFileName);
+	}
 }
 
 function download (content, filename, contentType) {
