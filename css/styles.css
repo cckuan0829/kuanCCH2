@@ -137,13 +137,19 @@
 @media (orientation: portrait) {
     .chessBookOutptArea {
 		display: block;
-        width: 80%;
+        width: 90%;
 		height: 60%;
-		font-size: 24px;
+		font-size: 26px;
     }
+	.TableBody {
+	text-align: center;
+	max-height: 500px;
+	overflow-y:scroll;
+	display:block;
+	}
     .chartArea {
         display: block;
-        width: 80%;
+        width: 90%;
 		height: 40%;
 		margin-bottom: 30px;
     }
