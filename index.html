@@ -37,16 +37,15 @@
 				<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
 
 				<!--<button id="stopBtn">停止查詢</button>-->
+				<button id="clearBtn" class="consoleBtn">清空輸入</button>
+				
+				<button id="copyEgBtn" class="consoleBtn">範例棋譜</button>
 				
 				<button id="copyBtn" class="consoleBtn">複製結果</button>
 
-				<button id="downloadBtn" class="consoleBtn">下載結果</button>
-				
-				<button id="clearBtn" class="consoleBtn">清空輸入</button>
-				
-				<button id="copyEgBtn" class="consoleBtn">複製範例棋譜</button>
+				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
 
-				<button id="infoBtn" class="consoleBtn">使用說明</button>
+				<!--<button id="infoBtn" class="consoleBtn">使用說明</button>-->
 
 				<input id="uploadBtn" type=file   accept="text/plain" name="files[]" size=30 class="consoleBtn"> 
 
@@ -74,6 +73,12 @@
     <script src="js/main.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-127983579-1"></script>
+    <!-- Required for non-UTF encodings -->
+    <script>
+		window.TextEncoder = window.TextDecoder = null;
+	</script>
+	<script src="js/library/encoding-indexes.js"></script>
+	<script src="js/library/encoding.js"></script> 
 
 </body>
 </html> 

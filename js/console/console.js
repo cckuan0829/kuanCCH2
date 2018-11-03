@@ -35,7 +35,7 @@ var placeholder = "在這輸入或貼上棋譜，例如：\n\n" + inputExample;
 var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
-var infoBtn = document.getElementById("infoBtn");
+//var infoBtn = document.getElementById("infoBtn");
 var uploadBtn =  document.getElementById("uploadBtn");
 //var stopBtn = document.getElementById("stopBtn");
 //var drawChartBtn = document.getElementById("drawChartBtn");
@@ -44,7 +44,7 @@ var buttonList = [
 	queryBtn,
 	copyBtn,
 	clearBtn,
-	infoBtn,
+	//infoBtn,
 	downloadBtn,
 	uploadBtn
 	//stopBtn
@@ -59,7 +59,7 @@ var _move_total = 0;
 var _move_curr  = 0;
 var _toStop = false;
 var _inQuety = false;
-
+var _is_not_complete = false;
 
 $(document).ready(function() {
     queryBtn.addEventListener("click", queryCloudDB);
@@ -67,7 +67,7 @@ $(document).ready(function() {
 
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
-	infoBtn.addEventListener("click", showInfo);
+	//infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
 	uploadBtn.addEventListener('change', handleFileSelect, false);
 
@@ -82,33 +82,47 @@ $(document).ready(function() {
 
 
 function onDownloadBtnClick() {
+	
 	console.log($("#uploadBtn").value);
 	if($("#moveListTable")[0].innerText === "") {
 		alert('搜尋後才能下載!');
 	}
-	else {
-		var outFileName = 'ChessCloud.pgn'
-		downloadFile(outFileName, _pgn_str);
+	else {	
+		if(_is_not_complete)
+		{
+			var answer = confirm("棋雲分析未完整，是否仍要下載pgn檔?")
+			if (answer) {
+				setFilenameandDownload();
+			}
+		}
+		else
+		{
+			setFilenameandDownload();
+		}
 	}
-	
 }
 
-function downloadFile(filename, text) {
-    var pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=gb2312,' + encodeURIComponent(text));
-    pom.setAttribute('download', filename);
+function setFilenameandDownload()
+{
+	var outFileName = prompt("請輸入下載檔名", "chess_file");
 
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        pom.dispatchEvent(event);
-    }
-    else {
-        pom.click();
-    }
+	if(outFileName == "")	
+		outFileName = 'chess_file.pgn'
+	else
+		outFileName += ".pgn";
+		
+	var encoded = new TextEncoder("gb18030",{ NONSTANDARD_allowLegacyEncoding: true }).encode(_pgn_str);
+	download(encoded,outFileName);
 }
 
-
+function download (content, filename, contentType) {
+    if(!contentType) contentType = 'application/octet-stream';
+        var a = document.createElement('a');
+        var blob = new Blob([content], {'type':contentType});
+        a.href = window.URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+}
 
 function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
@@ -150,7 +164,7 @@ async function queryCloudDB() {
 	badRateCount = [0,0,0,0];
     var mytext   = document.getElementById("chessBookInput").value;	
 	disableButtons();
-    var is_not_complete = false;
+    _is_not_complete = false;
 	var is_got_result   = false;
 	
 	removeDisplayRow();
@@ -179,10 +193,10 @@ async function queryCloudDB() {
 			move_list  = query_result[0];
 			red_score  = query_result[1];
 			score_bias = query_result[2];
-			//recommend_list = query_result[3];
-			_pgn_str = generate_pgn_file(move_list, red_score, score_bias);
+			recommend_list = query_result[3];
+			_pgn_str = generate_pgn_file(move_list, red_score, score_bias, recommend_list);
 			if(red_score.findIndex(Number.isNaN) >= 0)
-				is_not_complete = true;
+				_is_not_complete = true;
 		}
 		else
 		{
@@ -319,6 +333,7 @@ async function queryByMoveList(chess_manual)
 	var list      = parsing_text(chess_manual);
 	var fen       = list[0];
 	var move_list = list[1];
+	var first_recommend_list = [];
 	var prev_fen  = fen;
 	var recommend_list = await query_cloud(fen);
 	var prev_recommend_list = recommend_list;
@@ -414,17 +429,19 @@ async function queryByMoveList(chess_manual)
 		
 		if ( Math.abs(score_diff) > 20 || Number.isNaN(score_diff))
 		{
+			first_recommend_list.push(fisrt_recommend_move_text);
 			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen, !is_red_before]);
 		}
 		else
 		{
+			first_recommend_list.push("");
 			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen, !is_red_before]);
 		}
 		if(_toStop) break;
     } 
 	_chess_str = _chess_str + "end " + "\n\n";
 	
-	return [move_list, red_score, score_bias];
+	return [move_list, red_score, score_bias, first_recommend_list];
 }
 
 function addStr(newstr) {
