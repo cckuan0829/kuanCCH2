@@ -137,7 +137,9 @@
 @media (orientation: portrait) {
     .chessBookOutptArea {
 		display: block;
-        width: 70%;
+        width: 80%;
+		height: 60%;
+		font-size: 24px;
     }
     .chartArea {
         display: block;
