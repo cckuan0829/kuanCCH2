@@ -522,7 +522,7 @@ function addDisplayRow(info_list) {
 
 function removeDisplayTable() {
 	document.getElementById("moveListTable").style.visibility = "visible";
-	//document.getElementById("moveListTableBody").children().remove();
+	document.getElementById("moveListTableBody").innerHTML = "";
 }
 
 function updateBadRate(badrate) {
