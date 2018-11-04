@@ -138,17 +138,15 @@
     .chessBookOutptArea {
 		display: block;
         width: 90%;
-		height: 60%;
+		height: 550px;
 		font-size: 26px;
     }
 	.TableBody {
-	text-align: center;
-	max-height: 500px;
-	overflow-y:scroll;
-	display:block;
+		max-height: 500px;
+		display:block;
 	}
     .chartArea {
-        display: block;
+		display: block;
         width: 90%;
 		height: 40%;
 		margin-bottom: 30px;
