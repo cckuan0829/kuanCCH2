@@ -33,8 +33,6 @@
 .chessBookOutptArea {
     height: 60%;
     width: 35%;
-    overflow:auto;
-	
 }
 
 .chessBookLabel {
