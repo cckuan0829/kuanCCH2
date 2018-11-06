@@ -77,9 +77,10 @@
 	
 .TableBody {
 	text-align: center;
-	max-height: 320px;
 	overflow-y:scroll;
-	display:block;
+    display:block;
+    height: 90%;
+    position: absolute;
 }
 
 .wid_70{
@@ -140,6 +141,7 @@
 		font-size: 26px;
     }
 	.TableBody {
+        position: relative;
 		max-height: 500px;
 		display:block;
 	}
