@@ -14,8 +14,60 @@
 </head>
 
 <body>
-    <div id="contentSection">
-		<!-- <video autoplay loop id="bgVideo">
+    <div id="main">
+		<div class = "titleBar">
+				<p class = "titleText">中國象棋雲庫分析</p>
+		</div>
+
+		<div id="buttonList" class="btnList">
+				<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
+
+				<button id="clearBtn" class="consoleBtn">清空輸入</button>
+				
+				<button id="copyEgBtn" class="consoleBtn">範例棋譜</button>
+				
+				<button id="copyBtn" class="consoleBtn">複製結果</button>
+
+				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
+
+				<!--<button id="infoBtn" class="consoleBtn">使用說明</button>-->
+
+				
+		</div>
+
+		<div id = "content">
+				<div class = "chessBookInputArea">
+						<textarea id="chessBookInput" class = "inputArea" style="font-size: 12pt"></textarea>
+						<input id="uploadBtn" type=file   accept="text/plain"> 
+				</div>
+				<div class = "chessBookOutptArea">
+					<table class = "outputTable" id="moveListTable" style="visibility:hidden">
+						<thead id="moveListTableHeader">
+							<tr>
+							<th id = "th_num">步數</th>
+							<th id = "th_move">著法</th>
+							<th id = "th_score">局面分數</th>
+							<th id = "th_bias">此著偏差</th>
+							<th id = "th_recom">推薦著法</th>
+							</tr>
+						</thead>
+						<tbody class = "TableBody" id="moveListTableBody">
+		
+						</tbody>
+					</table>
+				</div>
+
+				<div class="chartArea">
+					<div id = "chartContainer" > </div>
+					<div id = "badRate" class="rateArea">
+							<font color="white"></font>
+					</div>
+				</div>	
+		</div>
+
+
+
+				<!-- <video autoplay loop id="bgVideo">
 				<source src="assets/video/bgVideo.mp4" type="video/mp4">
 				Your browser does not support HTML5 video.
 		</video> -->
@@ -29,56 +81,6 @@
 		-->
 
 		<!-- <iframe width="1" height="1" src="https://www.youtube.com/embed/erlTPDI3s6w?playlist=erlTPDI3s6w&loop=1&autoplay=1"frameborder="0" allow="autoplay"></iframe> -->
-		<div class = "chessBookInputArea">
-			<textarea id="chessBookInput" class = "inputArea" style="font-size: 12pt"></textarea>
-		</div>
-
-		<div id="buttonList" class="btnList">
-				<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
-
-				<!--<button id="stopBtn">停止查詢</button>-->
-				<button id="clearBtn" class="consoleBtn">清空輸入</button>
-				
-				<button id="copyEgBtn" class="consoleBtn">範例棋譜</button>
-				
-				<button id="copyBtn" class="consoleBtn">複製結果</button>
-
-				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
-
-				<!--<button id="infoBtn" class="consoleBtn">使用說明</button>-->
-
-				<input id="uploadBtn" type=file   accept="text/plain" name="files[]" size=30 class="consoleBtn"> 
-
-				<!--<button id="drawChartBtn">看看分數走勢</button>-->
-		</div>
-		
-		<div class = "chessBookOutptArea">
-			<table class = "outputTable" id="moveListTable" style="visibility:hidden">
-				<thead id="moveListTableHeader">
-					<tr>
-					<th id = "th_num">步數</th>
-					<th id = "th_move">著法</th>
-					<th id = "th_score">局面分數</th>
-					<th id = "th_bias">此著偏差</th>
-					<th id = "th_recom">推薦著法</th>
-					</tr>
-				</thead>
-				<tbody class = "TableBody" id="moveListTableBody">
-
-				</tbody>
-			</table>
-			
-			<!--<textarea id="chessBookOutput"  class = "outputArea" style="font-size: 12pt" readonly>-->
-			
-		</div>
-		
-		<div id = "chartContainer" class="chartArea">
-		
-		</div>
-		
-		<div id = "badRate" class="rateArea">
-				<font color="white"></font>
-		</div>	
 
 	</div>
 	<script src="js/library/require.js"></script>
