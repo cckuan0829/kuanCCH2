@@ -149,7 +149,7 @@
     opacity: 0.8;
     display: inline-block;
     position: relative;
-    margin: 3% 1% 0% 0%;
+    margin: 2% 2% 0 0;
     height: 60%;
     width: 45%;
 }
@@ -194,8 +194,8 @@
     .chessBookOutptArea {
 		display: block;
         width: 90%;
-		height: 550px;
-		font-size: 26px;
+        font-size: 26px;
+        margin: 2% 0;
     }
 	.TableBody {
         position: relative;
@@ -205,7 +205,7 @@
     .chartArea {
 		display: block;
         width: 90%;
-		height: 40%;
-		margin-bottom: 30px;
+        height: 40%;
+        margin: 4% 0;
     }
 }
