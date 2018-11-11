@@ -35,7 +35,7 @@
     color: gray;
     position: relative;
     width: 95%;
-    height: 15vw;
+    height: 5vw;
     overflow:auto;
     padding: 1em;
 	border: 3px solid #222222;
@@ -107,7 +107,7 @@
     display: block;
     z-index: 10;
     width: 100%;
-    background-color: #fff0f0;
+    background-color: #d4eaf1;
 }
 
 .titleText {
