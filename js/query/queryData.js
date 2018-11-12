@@ -240,15 +240,33 @@ function get_direction(str_move)
 
 function get_global_col(board, str_move)
 {
-    if (get_front(str_move) != Pos_E.NONRMAL)
+    var num;
+	if (get_front(str_move) != Pos_E.NONRMAL)
 	{
         var chess = conver_text_to_chess(str_move);
-        for (var col = 0; col < 9; col++)
+		if(chess != 'p' && chess != 'P')
 		{
-            for(var row = 0; row < 10; row++)
+			for (var col = 0; col < 9; col++)
 			{
-                if (board[row][col] == chess)
-                    return col;
+				for(var row = 0; row < 10; row++)
+				{
+					if (board[row][col] == chess)
+						return col;
+				}
+			}
+		}
+		else
+		{
+			for (var col = 0; col < 9; col++)
+			{
+				num = 0;
+				for(var row = 0; row < 10; row++)
+				{
+					if (board[row][col] == chess)
+					{
+						if(++num>1) return col;
+					}
+				}
 			}
 		}
         return -1;
