@@ -266,9 +266,9 @@
     }
 }
 
-@media only screen and (max-height: 360px) {
+@media only screen and (max-height: 420px) {
     .consoleBtn {
-        height: calc(40 / 360 * 100vh);
-        margin-bottom: calc(5 / 360 * 100vh);
+        height: calc(50 / 420 * 100vh);
+        margin-bottom: calc(10 / 420 * 100vh);
     }
 }
