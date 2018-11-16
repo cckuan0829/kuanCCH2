@@ -265,3 +265,10 @@
         width: 100%;
     }
 }
+
+@media only screen and (max-height: 360px) {
+    .consoleBtn {
+        height: calc(40 / 360 * 100vh);
+        margin-bottom: calc(5 / 360 * 100vh);
+    }
+}
