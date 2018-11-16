@@ -16,12 +16,14 @@
 <body>
     <div id="main">
 		<div class = "titleBar">
-				<p class = "titleText">中國象棋雲庫分析</p>
+				<p class = "titleText">象棋雲梯</p>
 		</div>
 
 		<div id="buttonList" class="btnList">
-				<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
 
+				<button id = "uploadBtn" class = "consoleBtn">上傳檔案</button>
+				<input id="uploadInput" type=file   accept="text/plain" > 
+				
 				<button id="clearBtn" class="consoleBtn">清空輸入</button>
 				
 				<button id="copyEgBtn" class="consoleBtn">範例棋譜</button>
@@ -31,14 +33,12 @@
 				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
 
 				<!--<button id="infoBtn" class="consoleBtn">使用說明</button>-->
-
-				
 		</div>
 
 		<div id = "content">
 				<div class = "chessBookInputArea">
 						<textarea id="chessBookInput" class = "inputArea" style="font-size: 12pt"></textarea>
-						<input id="uploadBtn" type=file   accept="text/plain"> 
+						<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
 				</div>
 				<div class = "chessBookOutptArea">
 					<table class = "outputTable" id="moveListTable" style="visibility:hidden">

@@ -37,6 +37,7 @@ var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 //var infoBtn = document.getElementById("infoBtn");
 var uploadBtn =  document.getElementById("uploadBtn");
+var uploadInput = document.getElementById("uploadInput");
 //var stopBtn = document.getElementById("stopBtn");
 //var drawChartBtn = document.getElementById("drawChartBtn");
 
@@ -69,7 +70,9 @@ $(document).ready(function() {
     clearBtn.addEventListener("click", clearInputText);
 	//infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
-	uploadBtn.addEventListener('change', handleFileSelect, false);
+	uploadInput.addEventListener('change', handleFileSelect, false);
+	uploadBtn.addEventListener('click', onUploadBtnClick);
+	
 
 	/*stopBtn.addEventListener("click", stopQuery);*/
 
@@ -80,10 +83,13 @@ $(document).ready(function() {
     initPlaceholder();
 });
 
+function onUploadBtnClick() {
+	$("#uploadInput").click();
+}
 
 function onDownloadBtnClick() {
 	
-	console.log($("#uploadBtn").value);
+	console.log($("#uploadInput").value);
 	if($("#moveListTable")[0].innerText === "") {
 		alert('搜尋後才能下載!');
 	}
