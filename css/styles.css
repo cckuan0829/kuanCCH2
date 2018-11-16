@@ -37,7 +37,6 @@
     width: 95%;
     height: 10vw;
     overflow:auto;
-    padding: 1em;
 	border: 3px solid #222222;
 }
 
@@ -123,7 +122,7 @@
 .btnList {
     position: fixed;
     display: block;
-    width: 12%;
+    width: 160px;
     height: 100%;
     top: 0px;
     padding: 50px 0 0 0;
@@ -133,10 +132,10 @@
 #content {
     position: relative;
     display: block;
-    width: 85%;
+    width: calc(100vw - 160px - 40px);
     height: 100%;
-    left: 13%;
-    top: 60px;
+    left: 160px;
+    padding: 60px 20px;
     z-index: 1;
     
 }
@@ -229,10 +228,13 @@
     }
     .btnList {
         top: 0px;
+        width: calc(160 / 1024 * 100vw) ;
         padding: calc(50 / 1024 * 100vw) 0 0 0;
     }
     #content {
-        top: calc(60 / 1024 * 100vw);
+        width: calc( 100vw - (160 / 1024 * 100vw) - 40px);
+        left: calc(160 / 1024 * 100vw);
+        padding: calc(60 / 1024 * 100vw) calc(20 / 1024 * 100vw);
     }
     #queryBtn {
         /* font-size: calc(36 / 1024 * 100vw); */
