@@ -200,7 +200,7 @@ async function queryCloudDB() {
 			var query_result = [];
 			_inQuety = true;
 			is_got_result   = true;
-			_status_str = "進度: " + 0 + "/" + list_num;
+			_status_str = "進度:" + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
 			move_list  = query_result[0];
@@ -435,7 +435,7 @@ async function queryByMoveList(chess_manual)
 			red_score.push(NaN);
 			score_bias.push(NaN);
 		}
-        _status_str = "進度: " + _move_curr + "/" + _move_total ;
+        _status_str = "進度:" + _move_curr + "/" + _move_total ;
 		showResult();
 		prev_recommend_list = recommend_list;
 		addStr("\n");

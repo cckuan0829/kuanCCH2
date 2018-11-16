@@ -126,7 +126,7 @@
     height: 100%;
     top: 0px;
     padding: 50px 0 0 0;
-    background-color: #faebd75c;
+    background-color: #cedee68f;
 }
 
 #content {
@@ -165,6 +165,8 @@
 }
 
 .consoleBtn {
+    width: 140px;
+    height: 70px;
     letter-spacing: 1px;
 	-moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
 	-webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
@@ -184,8 +186,10 @@
 	cursor:pointer;
 	color:#ffffff;
     font-family:cursive;
-    font-size: 30px;
+    font-size: 28px;
     margin: 10px;
+    margin-bottom: 20px;
+    white-space: nowrap;
 }
 
 .consoleBtn:disabled {
@@ -213,7 +217,7 @@
 }
 
 #queryBtn {
-    height: 60px;
+    font-size: 24px;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -221,7 +225,11 @@
         font-size: calc(30 / 1024 * 100vw);
     }
     .consoleBtn {
-        font-size: calc(30 / 1024 * 100vw);
+        width: calc(140 / 1024 * 100vw);
+        height: calc(70 / 1024 * 100vw);
+        font-size: calc(28 / 1024 * 100vw);
+        margin: calc(10 / 1024 * 100vw);
+        margin-bottom: calc(20 / 1024 * 100vw);
     }
     .inputArea, .outputArea{
         font-size:  calc(20 / 1024 * 100vw);
@@ -237,8 +245,7 @@
         padding: calc(60 / 1024 * 100vw) calc(20 / 1024 * 100vw);
     }
     #queryBtn {
-        /* font-size: calc(36 / 1024 * 100vw); */
-        height:  calc(60 / 1024 * 100vw);;
+        font-size: calc(24 / 1024 * 100vw);
     }
 }
 
