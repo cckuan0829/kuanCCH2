@@ -38,18 +38,16 @@ var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
 var uploadBtn =  document.getElementById("uploadBtn");
 var uploadInput = document.getElementById("uploadInput");
-//var stopBtn = document.getElementById("stopBtn");
-//var drawChartBtn = document.getElementById("drawChartBtn");
+
 
 var buttonList = [
 	queryBtn,
 	copyBtn,
 	clearBtn,
-	//infoBtn,
+	infoBtn,
 	downloadBtn,
 	uploadBtn
-	//stopBtn
-	//drawChartBtn
+
 ];
 
 var _pgn_str = "";
@@ -73,8 +71,6 @@ $(document).ready(function() {
 	uploadInput.addEventListener('change', handleFileSelect, false);
 	uploadBtn.addEventListener('click', onUploadBtnClick);
 	
-
-	/*stopBtn.addEventListener("click", stopQuery);*/
 
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("範例棋譜",inputExample);
