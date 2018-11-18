@@ -38,7 +38,8 @@ var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
 var uploadBtn =  document.getElementById("uploadBtn");
 var uploadInput = document.getElementById("uploadInput");
-
+var prevBtn = document.getElementById("prevBtn");
+var nextBtn = document.getElementById("nextBtn");
 
 var buttonList = [
 	queryBtn,
@@ -46,19 +47,30 @@ var buttonList = [
 	clearBtn,
 	infoBtn,
 	downloadBtn,
-	uploadBtn
-
+	uploadBtn,
+	prevBtn,
+	nextBtn
 ];
 
-var _pgn_str = "";
-var _chess_str = "";
-var _copy_str = "";
-var _status_str = "";
-var _move_total = 0;
-var _move_curr  = 0;
-var _toStop = false;
-var _inQuety = false;
-var _is_not_complete = false;
+var _chessInfo =
+{
+	pgn_str: "",
+	copy_str: "",
+	status_str: "",
+	move_total: 0,
+	move_curr: 0,
+	currNumber: 0,
+	toStop: false,
+	inQuety: false,
+	is_not_complete: false,
+	is_got_result: false,
+	moveList: [],
+	fenList: [],
+	scoreList: [],
+	biasList: [],
+	recommendList: [],
+	badRate: [0, 0, 0, 0], //red NG, red BAD, black NG, black BAD 
+}
 
 $(document).ready(function() {
     queryBtn.addEventListener("click", queryCloudDB);
@@ -70,7 +82,8 @@ $(document).ready(function() {
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
 	uploadInput.addEventListener('change', handleFileSelect, false);
 	uploadBtn.addEventListener('click', onUploadBtnClick);
-	
+	prevBtn.addEventListener('click', onPrevBtnClick);
+	nextBtn.addEventListener('click', onNextBtnClick);
 
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("範例棋譜",inputExample);
@@ -101,6 +114,22 @@ function onDownloadBtnClick() {
 		{
 			setFilenameandDownload();
 		}
+	}
+}
+
+function onPrevBtnClick()
+{
+	if(_chessInfo.currNumber>0)
+	{
+		showBoardbyNum(_chessInfo.currNumber-1);
+	}
+}
+
+function onNextBtnClick()
+{
+	if(_chessInfo.currNumber<_chessInfo.move_total)
+	{
+		showBoardbyNum(_chessInfo.currNumber+1);
 	}
 }
 
@@ -148,33 +177,38 @@ function handleFileSelect(evt) {
 }
 
 function stopQuery() {
-	_toStop = true;
+	_chessInfo.toStop = true;
+}
+
+function resetChessInfo() {
+	_chessInfo.copy_str = "";
+	_chessInfo.status_str = "";
+	_chessInfo.move_total = 0;
+	_chessInfo.move_curr = 0;
+	_chessInfo.currNumber = 0;
+	_chessInfo.toStop = false;
+	_chessInfo.inQuety = false;
+	_chessInfo.is_not_complete = false;
+	_chessInfo.is_got_result = false;
+	_chessInfo.scoreList = [];
+	_chessInfo.biasList = [];
+	_chessInfo.fenList = [];
+	_chessInfo.recommendList = [];
+	_chessInfo.badRate = [0, 0, 0, 0];
 }
 
 async function queryCloudDB() {
 	
-	if(_inQuety)
+	if(_chessInfo.inQuety)
 	{
-		_inQuety = false;
+		_chessInfo.inQuety = false;
 		stopQuery();
 		return;
 	}
-	_toStop = false;
-	_move_total = 0;
-    _move_curr  = 0;
-	_status_str = "";
-	_chess_str = "";
-	_copy_str = "";
-	_pgn_str = "";
-	move_list = [];
-	red_score = [];
-	score_bias = [];
-	recommend_list = [];
-	badRateCount = [0,0,0,0];
+	resetChessInfo();
+	
     var mytext   = document.getElementById("chessBookInput").value;	
 	disableButtons();
-    _is_not_complete = false;
-	var is_got_result   = false;
 	
 	removeDisplayTable();
 	resetBadRate();
@@ -194,33 +228,35 @@ async function queryCloudDB() {
 		if (result)
 		{
 			var query_result = [];
-			_inQuety = true;
-			is_got_result   = true;
-			_status_str = "進度:" + 0 + "/" + list_num;
+			_chessInfo.inQuety = true;
+			_chessInfo.is_got_result = true;
+			_chessInfo.status_str = "進度:" + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
-			move_list  = query_result[0];
-			red_score  = query_result[1];
-			score_bias = query_result[2];
-			recommend_list = query_result[3];
-			_pgn_str = generate_pgn_file(move_list, red_score, score_bias, recommend_list);
-			if(red_score.findIndex(Number.isNaN) >= 0)
-				_is_not_complete = true;
+			_chessInfo.moveList  = query_result[0];
+			_chessInfo.scoreList  = query_result[1];
+			_chessInfo.biasList = query_result[2];
+			_chessInfo.recommendList = query_result[3];
+			_chessInfo.fenList = query_result[4];
+			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
+			if(_chessInfo.scoreList.findIndex(Number.isNaN) >= 0)
+				_chessInfo.is_not_complete = true;
 		}
 		else
 		{
 			alert("輸入格式有誤!");
 		}
 	}
-	if(is_got_result)
+	if(_chessInfo.is_got_result)
 	{
 		showResult();  
-		updateBadRate(calBadRate(score_bias, true));
+		showBoardbyNum(0);
+		updateBadRate(calBadRate(_chessInfo.biasList));
 		$('.chartArea').addClass('opacity9');
-		drawScore(move_list ,red_score, score_bias);
+		drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
 	}
 	enableButtons();
-	_inQuety = false;
+	_chessInfo.inQuety = false;
 	
     $("#copyEgBtn").attr("disabled", false);
     $("#queryBtn").html($("#queryBtn").val());
@@ -229,7 +265,7 @@ async function queryCloudDB() {
 function copyQueryResult() {
 	
 	const el = document.createElement('textarea');
-    el.value = _copy_str;
+    el.value = _chessInfo.copy_str;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
@@ -318,10 +354,8 @@ function copyToClipboard(infoString, copiedContent ) {
 }
 
 function showResult(){
-    if(_status_str == "") _status_str = $("#queryBtn").val();
-    document.getElementById("queryBtn").innerHTML = _status_str;
-
-	//document.getElementById("chessBookOutput").innerHTML = _chess_str;
+    if(_chessInfo.status_str == "") _status_str = $("#queryBtn").val();
+    document.getElementById("queryBtn").innerHTML = _chessInfo.status_str;
 }
 
 function disableButtons(){
@@ -342,7 +376,10 @@ async function queryByMoveList(chess_manual)
 	var list      = parsing_text(chess_manual);
 	var fen       = list[0];
 	var move_list = list[1];
+	var red_score = [];
+	var score_bias = [];
 	var first_recommend_list = [];
+	var fen_list = [];
 	var prev_fen  = fen;
 	var recommend_list = await query_cloud(fen);
 	var prev_recommend_list = recommend_list;
@@ -353,18 +390,19 @@ async function queryByMoveList(chess_manual)
 	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
     var fisrt_recommend_move_text = "";
 	
-	_move_total = move_list.length;
-	_copy_str  += "FEN：" + fen + "\n";
+	_chessInfo.move_total = move_list.length;
+	_chessInfo.copy_str  += "FEN：" + fen + "\n";
 	
 	showDisplayHeader();
 	
 	for (var i = 0; i < move_list.length; i++)
 	{
-		_move_curr = i+1;
-		addStr(_move_curr + "." + move_list[i]);
+		_chessInfo.move_curr = i+1;
+		addStr(_chessInfo.move_curr + "." + move_list[i]);
 
 		prev_fen = fen;
 		fen = Update_FEN(fen, move_list[i]);
+		fen_list.push(fen);
 		curr_score = await query_score(fen);
 		curr_score = is_red_before ? curr_score*(-1) : curr_score;
 		recommend_list = await query_cloud(fen);
@@ -431,7 +469,7 @@ async function queryByMoveList(chess_manual)
 			red_score.push(NaN);
 			score_bias.push(NaN);
 		}
-        _status_str = "進度:" + _move_curr + "/" + _move_total ;
+        _chessInfo.status_str = "進度:" + _chessInfo.move_curr + "/" + _chessInfo.move_total ;
 		showResult();
 		prev_recommend_list = recommend_list;
 		addStr("\n");
@@ -439,25 +477,23 @@ async function queryByMoveList(chess_manual)
 		if ( Math.abs(score_diff) > 20 || Number.isNaN(score_diff))
 		{
 			first_recommend_list.push(fisrt_recommend_move_text);
-			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen, !is_red_before]);
+			addDisplayRow([_chessInfo.move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen, !is_red_before]);
 		}
 		else
 		{
 			first_recommend_list.push("");
-			addDisplayRow([_move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen, !is_red_before]);
+			addDisplayRow([_chessInfo.move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen, !is_red_before]);
 		}
-		if(_toStop) break;
+		if(_chessInfo.toStop) break;
     } 
-	_chess_str = _chess_str + "end " + "\n\n";
 	
-	return [move_list, red_score, score_bias, first_recommend_list];
+	return [move_list, red_score, score_bias, first_recommend_list, fen_list];
 }
 
 function addStr(newstr) {
 
 	console.log(newstr);
-	_chess_str += newstr + "\n";
-	_copy_str  += newstr + "\n";
+	_chessInfo.copy_str  += newstr + "\n";
 }	
 
 function showDisplayHeader(){
@@ -496,10 +532,13 @@ function addDisplayRow(info_list) {
 	if(info_list[5]!="")
 	{
 		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
-		$('#infoList'+info_list[0]).bind("click", function() {
+		/*$('#infoList'+info_list[0]).bind("click", function() {
 			 copyToClipboard("此盤面FEN碼", decodeURI(info_list[5]) ); 
+		});*/
+		$('#infoList'+info_list[0]).bind("click", function() {
+			 showBoardbyNum(info_list[0]);
 		});
-
+		
 		if(info_list[6] == true)
 			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
 		else
@@ -530,8 +569,8 @@ function removeDisplayTable() {
 function updateBadRate(badrate) {
 	var badratetext = document.getElementById("badRate");
 	badratetext.classList.add("rateArea");
-	badratetext.innerHTML = "紅方 緩著率："+badrate[0]+"%， 失著率："+badrate[1]+"% \n"+
-	                        "黑方 緩著率："+badrate[2]+"%， 失著率："+badrate[3]+"%";
+	badratetext.innerHTML = "紅方 緩著率："+_chessInfo.badRate[0]+"%， 失著率："+_chessInfo.badRate[1]+"% \n"+
+	                        "黑方 緩著率："+_chessInfo.badRate[2]+"%， 失著率："+_chessInfo.badRate[3]+"%";
 }
 
 function resetBadRate()
@@ -540,9 +579,9 @@ function resetBadRate()
 	badratetext.innerHTML = "";
 }
 
-function calBadRate(score_bias, first_is_Red)
+function calBadRate(score_bias)
 {
-	var badRate = [NaN,NaN,NaN,NaN];
+	_chessInfo.badRate = [NaN,NaN,NaN,NaN];
 	var badRateCount = [0,0,0,0,0,0];
 	var not_good = 50;
 	var bad = 200;
@@ -562,34 +601,44 @@ function calBadRate(score_bias, first_is_Red)
 			}
 		}
 	}
-	
-	if(first_is_Red)
+
+	if(badRateCount[0]>0)
 	{
-		if(badRateCount[0]>0)
-		{
-			badRate[0] = parseInt(100*badRateCount[1]/badRateCount[0]);
-			badRate[1] = parseInt(100*badRateCount[2]/badRateCount[0]);
-		}
-		
-		if(badRateCount[3]>0)
-		{
-			badRate[2] = parseInt(100*badRateCount[4]/badRateCount[3]);
-			badRate[3] = parseInt(100*badRateCount[5]/badRateCount[3]);
-		}
+		_chessInfo.badRate[0] = parseInt(100*badRateCount[1]/badRateCount[0]);
+		_chessInfo.badRate[1] = parseInt(100*badRateCount[2]/badRateCount[0]);
 	}
-	else
+		
+	if(badRateCount[3]>0)
 	{
-		if(badRateCount[3]>0)
-		{
-			badRate[0] = parseInt(100*badRateCount[4]/badRateCount[3]);
-			badRate[1] = parseInt(100*badRateCount[5]/badRateCount[3]);
-		}
-		
-		if(badRateCount[0]>0)
-		{
-			badRate[2] = parseInt(100*badRateCount[1]/badRateCount[0]);
-			badRate[3] = parseInt(100*badRateCount[2]/badRateCount[0]);
-		}
+		_chessInfo.badRate[2] = parseInt(100*badRateCount[4]/badRateCount[3]);
+		_chessInfo.badRate[3] = parseInt(100*badRateCount[5]/badRateCount[3]);
 	}
+
 	return badRate;
 }
+
+function showBoardbyNum(num)
+{
+	var moveNumbertext = document.getElementById("moveNumber");
+	if(_chessInfo.fenList.length >= num && num > 0) fen = _chessInfo.fenList[num-1];
+	else fen = getDefaultFEN();
+	chessList = FEN_to_ChessList(fen);
+	_chessInfo.currNumber = num;
+	moveNumbertext.innerHTML = _chessInfo.currNumber+"/"+_chessInfo.move_total;
+	new ChessBoard(chessList);
+}
+
+function showBoard(fen)
+{
+	chessList = FEN_to_ChessList(fen);
+	new ChessBoard(chessList);
+}
+
+function showInitBoard()
+{
+	fen = getDefaultFEN();
+	chessList = FEN_to_ChessList(fen);
+	new ChessBoard(chessList);
+}
+
+window.onload = showInitBoard;

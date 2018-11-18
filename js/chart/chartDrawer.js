@@ -45,7 +45,7 @@ function drawScore(move_list, score_list, score_bias) {
 			point.markerType = "cross";	
 			point.markerBorderColor = "black"; //change color here
 			point.markerBorderThickness = 1;
-			point.markerSize = 14;
+			point.markerSize = 16;
 		}
 		else if(score_bias[i]>50)
 		{
@@ -55,13 +55,13 @@ function drawScore(move_list, score_list, score_bias) {
 			point.markerType = "triangle";
 			point.markerBorderColor = "black"; //change color here
             point.markerBorderThickness = 1;
-			point.markerSize = 14;
+			point.markerSize = 16;
 		}
 		else
 		{
 			point.markerColor = "black";
 			point.markerType = "circle";
-			point.markerSize = 6;
+			point.markerSize = 8;
 		}
 		
 		if(isNaN(score_list[i]))
@@ -126,6 +126,9 @@ function drawChart() {
         // suffix: "points"
         },
         data: [{
+			click: function(e){
+				showBoardbyNum(e.dataPointIndex+1);
+			},
 			lineColor: "black",
 			lineThickness: 2,
             type: "line",
@@ -135,7 +138,7 @@ function drawChart() {
             xValueType: "int",
           //  xValueFormatString: "DD MMM hh:mm TT",
           //  yValueFormatString: "#,##0.##\"%\"",
-            dataPoints: dataAry
+            dataPoints: dataAry,
         }],
 		
     });

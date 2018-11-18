@@ -1340,3 +1340,7 @@ function convert2HalfChar(val)
 	var half_str = val.toString()[0].replace(/[\uff01-\uff5e]/g, function(s) { return String.fromCharCode(s.charCodeAt(0) - 0xfee0); });
 	return half_str;
 }
+function getDefaultFEN() 
+{
+	return "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR";
+}	

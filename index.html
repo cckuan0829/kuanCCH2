@@ -11,6 +11,7 @@
 		gtag('config', 'UA-127983579-1');
 	</script>
 	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/chessboard.css">
 </head>
 
 <body>
@@ -40,6 +41,114 @@
 						<textarea id="chessBookInput" class = "inputArea"></textarea>
 						<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
 				</div>
+				
+				<div id="chessboard">
+					<i class="chess-td-trans trans-top-1"></i>
+					<i class="chess-td-trans trans-top-2"></i>
+					<i class="chess-td-trans trans-bottom-1"></i>
+					<i class="chess-td-trans trans-bottom-2"></i>
+					<table>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr class="chess-center">
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+						<tr>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+							<td class="chess-td"></td>
+						</tr>
+					</table>
+					<div id="chesslist">
+					</div>
+					
+					<div id = "chessboardcontrol">
+						<table>
+							<td align="center">
+								<button id="prevBtn">上一步</button>
+							</td>
+							<td align="center">
+								<button id="nextBtn">下一步</button>
+							</td>
+							<td align="center">
+								<p id="moveNumber">000/000</p>
+							</td>
+						</table>
+					</div>
+				</div>
+				
 				<div class = "chessBookOutptArea">
 					<table class = "outputTable" id="moveListTable" style="visibility:hidden">
 						<thead id="moveListTableHeader">

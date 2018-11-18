@@ -1,0 +1,112 @@
+body{font-size: 12px; font-family: "微軟正黑體"}
+
+#chessboard {
+	position: relative;
+	margin: auto;
+}
+#chessboard, #chessboard * {
+	box-sizing: border-box;
+}
+#chessboard table {
+	border-collapse: collapse;
+}
+#chessboard .chess-center {
+	height: 25px;
+}
+/*棋盘每个格的状态*/
+#chessboard .chess-td {
+	width: 25px;
+	height: 25px;
+	border: 1px solid #fff;
+}
+/*九宫格的状态*/
+#chessboard .chess-td-trans {
+	width: 71px;
+	height: 0;
+	position: absolute;
+	border-top: 1px solid #fff;
+}
+#chessboard .trans-top-1 {
+	left: 66px;
+	top: 25px;
+	transform: rotate(45deg);
+}
+#chessboard .trans-top-2 {
+	left: 66px;
+	top: 25px;
+	transform: rotate(-45deg);
+}
+#chessboard .trans-bottom-1 {
+	left: 66px;
+	bottom: 45px;
+	transform: rotate(45deg);
+}
+#chessboard .trans-bottom-2 {
+	left: 66px;
+	bottom: 45px;
+	transform: rotate(-45deg);
+}
+/*棋子的样式*/
+#chesslist .chesspiece {
+	position: absolute;
+	border-radius: 50%;
+	width: 22px;
+	height: 22px;
+	text-align: center;
+	line-height: 20px;
+	background: #aaa;
+	font-style: normal;
+	font-size: 11px;
+	font-weight: 600;
+	cursor: pointer;
+	z-index: 1;
+}
+/*上方棋子的样式*/
+#chesslist .black {
+	color: #0033cc;
+}
+/*下方棋子的样式*/
+#chesslist .red {
+	color: #c40;
+}
+
+#chessboard .chess-td {
+	width: 25px;
+	height: 25px;
+	border: 1px solid black;
+}
+#chessboard .chess-td-trans {
+	border-top: 1px solid black;
+}
+#chesslist .chesspiece {
+	line-height: 20px;
+	background: #f2d0a3;
+	border: 1px solid black
+}
+#chessboard .active {
+	background: #f40;
+	color: #fff;
+	border-color: #f40;
+}
+
+#chessboardcontrol{
+	position: relative;
+	margin-top: 5px;
+	height: 15px;
+}
+
+#prevBtn {
+	width: 70px;
+}
+
+#nextBtn {
+	width: 70px;
+}
+
+#moveNumber {
+	width: 60px;
+}
+
+body {
+	background-color: #fffcc7;
+}

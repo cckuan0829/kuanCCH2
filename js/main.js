@@ -20,4 +20,5 @@ function loadScript(url, callback, type)
 loadScript("js/console/console.js", null, 'text/javascript');
 loadScript("js/chart/chartDrawer.js", null, 'text/javascript');
 loadScript("js/query/queryData.js", null, 'text/javascript');
+loadScript("js/board/chessBoard.js", null, 'text/javascript');
 
