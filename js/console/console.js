@@ -35,7 +35,7 @@ var placeholder = "在這輸入或貼上棋譜，例如：\n\n" + inputExample;
 var queryBtn = document.getElementById("queryBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
-//var infoBtn = document.getElementById("infoBtn");
+var infoBtn = document.getElementById("infoBtn");
 var uploadBtn =  document.getElementById("uploadBtn");
 var uploadInput = document.getElementById("uploadInput");
 //var stopBtn = document.getElementById("stopBtn");
@@ -68,7 +68,7 @@ $(document).ready(function() {
 
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
-	//infoBtn.addEventListener("click", showInfo);
+	infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
 	uploadInput.addEventListener('change', handleFileSelect, false);
 	uploadBtn.addEventListener('click', onUploadBtnClick);
