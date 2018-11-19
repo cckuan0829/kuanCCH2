@@ -17,7 +17,7 @@
 <body>
     <div id="main">
 		<div class = "titleBar">
-				<p class = "titleText">象棋雲梯</p>
+				<p id="title" class = "titleText">象棋雲梯</p>
 		</div>
 
 		<div id="buttonList" class="btnList">
@@ -37,11 +37,6 @@
 		</div>
 
 		<div id = "content">
-				<div class = "chessBookInputArea">
-						<textarea id="chessBookInput" class = "inputArea"></textarea>
-						<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
-				</div>
-				
 				<div id="chessboard">
 					<i class="chess-td-trans trans-top-1"></i>
 					<i class="chess-td-trans trans-top-2"></i>
@@ -149,29 +144,36 @@
 					</div>
 				</div>
 				
-				<div class = "chessBookOutptArea">
-					<table class = "outputTable" id="moveListTable" style="visibility:hidden">
-						<thead id="moveListTableHeader">
-							<tr>
-							<th id = "th_num">步數</th>
-							<th id = "th_move">著法</th>
-							<th id = "th_score">局面分數</th>
-							<th id = "th_bias">此著偏差</th>
-							<th id = "th_recom">推薦著法</th>
-							</tr>
-						</thead>
-						<tbody class = "TableBody" id="moveListTableBody">
-		
-						</tbody>
-					</table>
+				<div class = "chessBookInputArea">
+						<textarea id="chessBookInput" class = "inputArea"></textarea>
+						<button id="queryBtn" class="consoleBtn">雲庫查詢</button>
 				</div>
-
-				<div class="chartArea">
-					<div id = "chartContainer" > </div>
-					<div id = "badRate" class="rateArea">
-							<font color="white"></font>
+				
+				<div class = "chessOutput">
+					<div class = "chessBookOutptArea">
+						<table class = "outputTable" id="moveListTable" style="visibility:hidden">
+							<thead id="moveListTableHeader">
+								<tr>
+								<th id = "th_num">步數</th>
+								<th id = "th_move">著法</th>
+								<th id = "th_score">局面分數</th>
+								<th id = "th_bias">此著偏差</th>
+								<th id = "th_recom">推薦著法</th>
+								</tr>
+							</thead>
+							<tbody class = "TableBody" id="moveListTableBody">
+			
+							</tbody>
+						</table>
 					</div>
-				</div>	
+
+					<div class="chartArea">
+						<div id = "chartContainer" > </div>
+						<div id = "badRate" class="rateArea">
+								<font color="white"></font>
+						</div>
+					</div>
+				</div>					
 		</div>
 
 

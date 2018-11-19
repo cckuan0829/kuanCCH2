@@ -1170,7 +1170,7 @@ function generate_pgn_file(move_list, red_score, score_bias, recommend_list)
 		pgn_str =
 '[Game "Chinese Chess"]\n\
 [Result "*"]\n\
-{本PGN由"棋雲分析"網站生成}\n';
+{本PGN由"'+document.getElementById("title").innerHTML+'"網站生成}\n';
 		
 		for(var i = 0; i<size; i++)
 		{

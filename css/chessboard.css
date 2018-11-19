@@ -2,7 +2,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 
 #chessboard {
 	position: relative;
-	margin: 0 0 15px 0;
+	margin: 0 25px 20px 0;
 }
 #chessboard, #chessboard * {
 	box-sizing: border-box;
@@ -56,7 +56,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	line-height: 20px;
 	background: #aaa;
 	font-style: normal;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: 600;
 	cursor: pointer;
 	z-index: 1;

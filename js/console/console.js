@@ -103,7 +103,7 @@ function onDownloadBtnClick() {
 		alert('搜尋後才能下載!');
 	}
 	else {	
-		if(_is_not_complete)
+		if(_chessInfo.is_not_complete)
 		{
 			if (confirm("棋雲分析未完整，是否仍要下載pgn檔?"))
 			{
@@ -148,7 +148,7 @@ function setFilenameandDownload()
 		else
 			outFileName += ".pgn";
 			
-		var encoded = new TextEncoder("gb18030",{ NONSTANDARD_allowLegacyEncoding: true }).encode(_pgn_str);
+		var encoded = new TextEncoder("gb18030",{ NONSTANDARD_allowLegacyEncoding: true }).encode(_chessInfo.pgn_str);
 		download(encoded,outFileName);
 	}
 }
@@ -265,13 +265,13 @@ async function queryCloudDB() {
 function copyQueryResult() {
 	
 	const el = document.createElement('textarea');
-    el.value = _chessInfo.copy_str;
+    el.value = document.getElementById("badRate").innerHTML+"\n"+_chessInfo.copy_str;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
 	
-	if(_copy_str != "")		
+	if(_chessInfo.copy_str != "")		
 		alert("複製成功!");
 	else
 		alert("沒有可複製的文字!");
