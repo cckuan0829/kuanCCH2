@@ -30,8 +30,8 @@ var ChessPiece = function(x ,y, chess) {
 };
 //把棋子放置在页面中
 ChessPiece.prototype.placement = function() {
-	if(this.chess == this.chess.toUpperCase()) this.DOM = $('<i class="chesspiece red">');
-	else this.DOM = $('<i class="chesspiece black">');
+	if(this.chess == this.chess.toUpperCase()) this.DOM = $('<i class="chesspieceRed textcolor">');
+	else this.DOM = $('<i class="chesspieceBlack textcolor">');
 	
 	this.DOM.html(chessType[this.chess])
 	this.DOM.css({

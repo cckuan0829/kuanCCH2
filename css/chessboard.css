@@ -47,7 +47,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	transform: rotate(-45deg);
 }
 /*棋子的样式*/
-#chesslist .chesspiece {
+#chesslist .chesspieceRed, .chesspieceBlack{
 	position: absolute;
 	border-radius: 50%;
 	width: 22px;
@@ -56,18 +56,14 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	line-height: 20px;
 	background: #aaa;
 	font-style: normal;
-	font-size: 11px;
+	font-size: 14px;
 	font-weight: 600;
 	cursor: pointer;
 	z-index: 1;
 }
 /*上方棋子的样式*/
-#chesslist .black {
-	color: #0033cc;
-}
-/*下方棋子的样式*/
-#chesslist .red {
-	color: #c40;
+#chesslist .textcolor {
+	color: white;
 }
 
 #chessboard .chess-td {
@@ -78,10 +74,13 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 #chessboard .chess-td-trans {
 	border-top: 1px solid black;
 }
-#chesslist .chesspiece {
+#chesslist .chesspieceRed {
 	line-height: 20px;
-	background: #f2d0a3;
-	border: 1px solid black
+	background: red;
+}
+#chesslist .chesspieceBlack {
+	line-height: 20px;
+	background: Black;
 }
 #chessboard .active {
 	background: #f40;
