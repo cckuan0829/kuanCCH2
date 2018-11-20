@@ -160,7 +160,7 @@
 	display: inline-block;
 	position: relative;
 	width: 100%;
-	height: 60%;
+	height: 55%; /* modifed by kuan */
 }
 
 .chessBookOutptArea {
@@ -178,6 +178,11 @@
     display: inline-block;
     height: 100%; /* modifed by kuan */
     width: 50%;
+}
+
+/* added by kuan */
+#chartContainer {
+	height: 100%;
 }
 
 .consoleBtn {

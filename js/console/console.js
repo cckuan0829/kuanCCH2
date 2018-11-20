@@ -532,11 +532,9 @@ function addDisplayRow(info_list) {
 	if(info_list[5]!="")
 	{
 		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
-		/*$('#infoList'+info_list[0]).bind("click", function() {
-			 copyToClipboard("此盤面FEN碼", decodeURI(info_list[5]) ); 
-		});*/
 		$('#infoList'+info_list[0]).bind("click", function() {
 			 showBoardbyNum(info_list[0]);
+			 copyToClipboard("此盤面FEN碼", decodeURI(info_list[5]) ); 
 		});
 		
 		if(info_list[6] == true)
