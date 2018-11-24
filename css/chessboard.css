@@ -2,7 +2,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 
 #chessboard {
 	position: relative;
-	margin: 0 25px 20px 0;
+	margin: 15px 25px 0 0;
 }
 #chessboard, #chessboard * {
 	box-sizing: border-box;
@@ -11,64 +11,81 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	border-collapse: collapse;
 }
 #chessboard .chess-center {
-	height: 25px;
+	height: 30px;
 }
 /*棋盘每个格的状态*/
 #chessboard .chess-td {
-	width: 25px;
-	height: 25px;
+	width: 30px;
+	height: 30px;
 	border: 1px solid #fff;
 }
 /*九宫格的状态*/
 #chessboard .chess-td-trans {
-	width: 71px;
+	width: 85px;
 	height: 0;
 	position: absolute;
 	border-top: 1px solid #fff;
 }
 #chessboard .trans-top-1 {
-	left: 66px;
-	top: 25px;
+	left: 78px;
+	top: 30px;
 	transform: rotate(45deg);
 }
 #chessboard .trans-top-2 {
-	left: 66px;
-	top: 25px;
+	left: 78px;
+	top: 30px;
 	transform: rotate(-45deg);
 }
 #chessboard .trans-bottom-1 {
-	left: 66px;
-	bottom: 45px;
+	left: 78px;
+	bottom: 75px;
 	transform: rotate(45deg);
 }
 #chessboard .trans-bottom-2 {
-	left: 66px;
-	bottom: 45px;
+	left: 78px;
+	bottom: 75px;
 	transform: rotate(-45deg);
 }
 /*棋子的样式*/
 #chesslist .chesspieceRed, .chesspieceBlack{
 	position: absolute;
 	border-radius: 50%;
-	width: 22px;
-	height: 22px;
+	width: 25px;
+	height: 25px;
 	text-align: center;
-	line-height: 20px;
+	line-height: 25px;
 	background: #aaa;
 	font-style: normal;
-	font-size: 13px;
-	font-weight: 600;
+	font-size: 18px;
+	font-weight: 800;
 	cursor: pointer;
 	z-index: 1;
+	display: flex;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
 }
+
+#chesslist .chesspieceMovingCurve{
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	border-radius: 20%;
+	border: 1px solid #FFF;
+	cursor: pointer;
+	z-index: 1;
+	display: flex;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
+}
+
 /*上方棋子的样式*/
 #chesslist .textcolor {
 	color: white;
 }
 
 #chessboard .chess-td {
-	width: 25px;
-	height: 25px;
+	width: 30px;
+	height: 30px;
 	border: 1px solid black;
 }
 #chessboard .chess-td-trans {
@@ -88,18 +105,12 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	border-color: #f40;
 }
 
-#chessboardcontrol{
-	position: relative;
+#chessNumCtrl {
 	margin-top: 5px;
-	height: 15px;
 }
 
-#prevBtn {
-	width: 70px;
-}
-
-#nextBtn {
-	width: 70px;
+.boardBtn {
+	width: 50px;
 }
 
 #moveNumber {

@@ -40,6 +40,12 @@ var uploadBtn =  document.getElementById("uploadBtn");
 var uploadInput = document.getElementById("uploadInput");
 var prevBtn = document.getElementById("prevBtn");
 var nextBtn = document.getElementById("nextBtn");
+var firstBtn = document.getElementById("firstBtn");
+var endBtn = document.getElementById("endBtn");
+var fenBtn = document.getElementById("fenBtn");
+var cloudBtn = document.getElementById("cloudBtn");
+var verticalBtn = document.getElementById("verticalBtn");
+var horizBtn = document.getElementById("horizBtn");
 
 var buttonList = [
 	queryBtn,
@@ -48,8 +54,14 @@ var buttonList = [
 	infoBtn,
 	downloadBtn,
 	uploadBtn,
+	firstBtn,
+	endBtn,
 	prevBtn,
-	nextBtn
+	nextBtn,
+	fenBtn,
+	cloudBtn,
+	verticalBtn,
+	horizBtn,
 ];
 
 var _chessInfo =
@@ -64,6 +76,8 @@ var _chessInfo =
 	inQuety: false,
 	is_not_complete: false,
 	is_got_result: false,
+	is_vertical_original: true,
+	is_horizontal_original: true,
 	moveList: [],
 	fenList: [],
 	scoreList: [],
@@ -82,8 +96,14 @@ $(document).ready(function() {
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
 	uploadInput.addEventListener('change', handleFileSelect, false);
 	uploadBtn.addEventListener('click', onUploadBtnClick);
+	firstBtn.addEventListener('click', onFirstBtnClick);
+	endBtn.addEventListener('click', onEndBtnClick);
 	prevBtn.addEventListener('click', onPrevBtnClick);
 	nextBtn.addEventListener('click', onNextBtnClick);
+	fenBtn.addEventListener('click', onFenBtnClick);
+	cloudBtn.addEventListener('click', onCloudBtnClick);
+	verticalBtn.addEventListener('click', onVerticalBtnClick);
+	horizBtn.addEventListener('click', onHorizBtnClick);
 
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("範例棋譜",inputExample);
@@ -105,7 +125,7 @@ function onDownloadBtnClick() {
 	else {	
 		if(_chessInfo.is_not_complete)
 		{
-			if (confirm("棋雲分析未完整，是否仍要下載pgn檔?"))
+			if (confirm("盤面分析未完整，是否仍要下載pgn檔?"))
 			{
 				setFilenameandDownload();
 			}
@@ -114,6 +134,21 @@ function onDownloadBtnClick() {
 		{
 			setFilenameandDownload();
 		}
+	}
+}
+
+function onFirstBtnClick()
+{
+	showBoardbyNum(0);
+	_chessInfo.currNumber = 0;
+}
+
+function onEndBtnClick()
+{
+	if(_chessInfo.move_total>0)
+	{
+		showBoardbyNum(_chessInfo.move_total);
+		_chessInfo.currNumber = _chessInfo.move_total;
 	}
 }
 
@@ -131,6 +166,49 @@ function onNextBtnClick()
 	{
 		showBoardbyNum(_chessInfo.currNumber+1);
 	}
+}
+
+function onFenBtnClick()
+{
+	if(_chessInfo.move_total>0)
+	{
+		if(_chessInfo.currNumber>0)
+		{
+			copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.currNumber-1]);
+		}
+		else
+		{
+			copyToClipboard("此盤面FEN碼", getDefaultFEN());
+		}
+	}
+}
+
+function onCloudBtnClick()
+{
+	if(_chessInfo.move_total>0)
+	{
+		if(_chessInfo.currNumber>0)
+		{
+			window.open("http://www.chessdb.cn/query/?"+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
+		}
+		else
+		{
+			window.open("http://www.chessdb.cn/query/?"+getDefaultFEN(), "_blank");
+		}
+	}
+}
+
+function onVerticalBtnClick()
+{
+	_chessInfo.is_vertical_original = ! _chessInfo.is_vertical_original;
+	showBoardbyNum(_chessInfo.currNumber);
+	
+}
+
+function onHorizBtnClick()
+{
+	_chessInfo.is_horizontal_original = ! _chessInfo.is_horizontal_original;
+	showBoardbyNum(_chessInfo.currNumber);
 }
 
 function setFilenameandDownload()
@@ -190,6 +268,8 @@ function resetChessInfo() {
 	_chessInfo.inQuety = false;
 	_chessInfo.is_not_complete = false;
 	_chessInfo.is_got_result = false;
+	_chessInfo.is_vertical_original = true;
+	_chessInfo.is_horizontal_original = true;
 	_chessInfo.scoreList = [];
 	_chessInfo.biasList = [];
 	_chessInfo.fenList = [];
@@ -484,9 +564,13 @@ async function queryByMoveList(chess_manual)
 			first_recommend_list.push("");
 			addDisplayRow([_chessInfo.move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen, !is_red_before]);
 		}
-		if(_chessInfo.toStop) break;
+		if(_chessInfo.toStop) 
+		{
+			_chessInfo.move_total = _chessInfo.move_curr; 
+			break;
+		}
     } 
-	
+	_chessInfo.move_curr = 0;
 	return [move_list, red_score, score_bias, first_recommend_list, fen_list];
 }
 
@@ -533,8 +617,7 @@ function addDisplayRow(info_list) {
 	{
 		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
 		$('#infoList'+info_list[0]).bind("click", function() {
-			 showBoardbyNum(info_list[0]);
-			 copyToClipboard("此盤面FEN碼", decodeURI(info_list[5]) ); 
+			 showBoardbyNum(info_list[0]); 
 		});
 		
 		if(info_list[6] == true)
@@ -620,7 +703,7 @@ function showBoardbyNum(num)
 	var moveNumbertext = document.getElementById("moveNumber");
 	if(_chessInfo.fenList.length >= num && num > 0) fen = _chessInfo.fenList[num-1];
 	else fen = getDefaultFEN();
-	chessList = FEN_to_ChessList(fen);
+	chessList = FEN_to_ChessList(fen, _chessInfo.is_vertical_original, _chessInfo.is_horizontal_original);
 	_chessInfo.currNumber = num;
 	moveNumbertext.innerHTML = _chessInfo.currNumber+"/"+_chessInfo.move_total;
 	new ChessBoard(chessList);
@@ -628,14 +711,14 @@ function showBoardbyNum(num)
 
 function showBoard(fen)
 {
-	chessList = FEN_to_ChessList(fen);
+	chessList = FEN_to_ChessList(fen, _chessInfo.is_vertical_original, _chessInfo.is_horizontal_original);
 	new ChessBoard(chessList);
 }
 
 function showInitBoard()
 {
 	fen = getDefaultFEN();
-	chessList = FEN_to_ChessList(fen);
+	chessList = FEN_to_ChessList(fen, true, true);
 	new ChessBoard(chessList);
 }
 

@@ -1,6 +1,7 @@
 var pos = {};
 
 var chessType = {
+	'X':'',
 	'K':'帥',
 	'k':'將',
 	'A':'仕',
@@ -18,8 +19,8 @@ var chessType = {
 };
 
 var config = {
-	preChessPiece: 20,
-	preTd: 25,
+	preChessPiece: 25,
+	preTd: 30,
 };
 
 var ChessPiece = function(x ,y, chess) {
@@ -30,8 +31,15 @@ var ChessPiece = function(x ,y, chess) {
 };
 //把棋子放置在页面中
 ChessPiece.prototype.placement = function() {
-	if(this.chess == this.chess.toUpperCase()) this.DOM = $('<i class="chesspieceRed textcolor">');
-	else this.DOM = $('<i class="chesspieceBlack textcolor">');
+	if(this.chess == 'X')
+	{
+		this.DOM = $('<i class="chesspieceMovingCurve">');
+	}
+	else
+	{
+		if(this.chess == this.chess.toUpperCase()) this.DOM = $('<i class="chesspieceRed textcolor">');
+		else this.DOM = $('<i class="chesspieceBlack textcolor">');
+	}
 	
 	this.DOM.html(chessType[this.chess])
 	this.DOM.css({
@@ -64,14 +72,14 @@ ChessBoard.prototype.placementAll = function() {
 	}
 };
 
-function FEN_to_ChessList(fen)
+function FEN_to_ChessList(fen, is_vertical_ori, is_horiz_ori)
 {
     var chesslist=[];
     var row_list = fen.split(/\/|%/);
 
 	for( var i = 0; i < 10; i++)
 	{
-        var index = 0
+        var index = 0;
         for ( var j = 0; j < row_list[i].length; j++)
 		{
             var cha = row_list[i][j];
@@ -82,10 +90,13 @@ function FEN_to_ChessList(fen)
             }
 			else
 			{
-                chesslist.push([index, i, cha]);
+				var x = is_vertical_ori ? index : 8-index;
+				var y = is_horiz_ori ? i : 9-i;
+                chesslist.push([x, y, cha]);
                 index = index + 1;
 			}
 		}
 	}
+	
     return chesslist;
 }
