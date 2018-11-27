@@ -46,6 +46,7 @@ var fenBtn = document.getElementById("fenBtn");
 var cloudBtn = document.getElementById("cloudBtn");
 var verticalBtn = document.getElementById("verticalBtn");
 var horizBtn = document.getElementById("horizBtn");
+var scoreBtn = document.getElementById("scoreBtn");
 
 var buttonList = [
 	queryBtn,
@@ -62,6 +63,7 @@ var buttonList = [
 	cloudBtn,
 	verticalBtn,
 	horizBtn,
+	scoreBtn,
 ];
 
 var _chessInfo =
@@ -79,6 +81,7 @@ var _chessInfo =
 	is_vertical_original: true,
 	is_horizontal_original: true,
 	moveList: [],
+	moveCurveList: [],
 	fenList: [],
 	scoreList: [],
 	biasList: [],
@@ -104,7 +107,8 @@ $(document).ready(function() {
 	cloudBtn.addEventListener('click', onCloudBtnClick);
 	verticalBtn.addEventListener('click', onVerticalBtnClick);
 	horizBtn.addEventListener('click', onHorizBtnClick);
-
+	scoreBtn.addEventListener('click', onScoreBtnClick);
+	
     $("#copyEgBtn").bind("click", function() {
         copyToClipboard("範例棋譜",inputExample);
     });
@@ -211,6 +215,14 @@ function onHorizBtnClick()
 	showBoardbyNum(_chessInfo.currNumber);
 }
 
+function onScoreBtnClick()
+{
+	$info= $('#chess-info');
+	if($info.css("visibility") == "hidden") $info.css('visibility', 'visible');
+	else $info.css('visibility', 'hidden');
+
+}
+
 function setFilenameandDownload()
 {
 	var outFileName = prompt("請輸入下載檔名", "chess_file");
@@ -270,6 +282,8 @@ function resetChessInfo() {
 	_chessInfo.is_got_result = false;
 	_chessInfo.is_vertical_original = true;
 	_chessInfo.is_horizontal_original = true;
+	_chessInfo.moveList = [];
+	_chessInfo.moveCurveList = [];
 	_chessInfo.scoreList = [];
 	_chessInfo.biasList = [];
 	_chessInfo.fenList = [];
@@ -314,10 +328,11 @@ async function queryCloudDB() {
 			showResult();
 			query_result = await queryByMoveList(mytext);
 			_chessInfo.moveList  = query_result[0];
-			_chessInfo.scoreList  = query_result[1];
+			_chessInfo.scoreList = query_result[1];
 			_chessInfo.biasList = query_result[2];
 			_chessInfo.recommendList = query_result[3];
 			_chessInfo.fenList = query_result[4];
+			_chessInfo.moveCurveList = query_result[5];
 			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
 			if(_chessInfo.scoreList.findIndex(Number.isNaN) >= 0)
 				_chessInfo.is_not_complete = true;
@@ -460,6 +475,7 @@ async function queryByMoveList(chess_manual)
 	var score_bias = [];
 	var first_recommend_list = [];
 	var fen_list = [];
+	var curve_list = [];
 	var prev_fen  = fen;
 	var recommend_list = await query_cloud(fen);
 	var prev_recommend_list = recommend_list;
@@ -481,6 +497,7 @@ async function queryByMoveList(chess_manual)
 		addStr(_chessInfo.move_curr + "." + move_list[i]);
 
 		prev_fen = fen;
+		curve_list.push(get_Curve(fen, move_list[i]));
 		fen = Update_FEN(fen, move_list[i]);
 		fen_list.push(fen);
 		curr_score = await query_score(fen);
@@ -549,6 +566,7 @@ async function queryByMoveList(chess_manual)
 			red_score.push(NaN);
 			score_bias.push(NaN);
 		}
+		
         _chessInfo.status_str = "進度:" + _chessInfo.move_curr + "/" + _chessInfo.move_total ;
 		showResult();
 		prev_recommend_list = recommend_list;
@@ -571,7 +589,7 @@ async function queryByMoveList(chess_manual)
 		}
     } 
 	_chessInfo.move_curr = 0;
-	return [move_list, red_score, score_bias, first_recommend_list, fen_list];
+	return [move_list, red_score, score_bias, first_recommend_list, fen_list, curve_list];
 }
 
 function addStr(newstr) {
@@ -700,26 +718,62 @@ function calBadRate(score_bias)
 
 function showBoardbyNum(num)
 {
+	var chessList;
 	var moveNumbertext = document.getElementById("moveNumber");
 	if(_chessInfo.fenList.length >= num && num > 0) fen = _chessInfo.fenList[num-1];
 	else fen = getDefaultFEN();
 	chessList = FEN_to_ChessList(fen, _chessInfo.is_vertical_original, _chessInfo.is_horizontal_original);
+	if(num > 0)
+	{
+		var x_1, x_2, y_1, y2;
+		if(_chessInfo.is_vertical_original) 
+		{
+			y_1 = _chessInfo.moveCurveList[num-1][1];
+			y_2 = _chessInfo.moveCurveList[num-1][3];
+		}
+		else
+		{
+			y_1 = 8-_chessInfo.moveCurveList[num-1][1];
+			y_2 = 8-_chessInfo.moveCurveList[num-1][3];
+		}
+		
+		if(_chessInfo.is_horizontal_original) 
+		{
+			x_1 = _chessInfo.moveCurveList[num-1][0];
+			x_2 = _chessInfo.moveCurveList[num-1][2];
+		}
+		else
+		{
+			x_1 = 9-_chessInfo.moveCurveList[num-1][0];
+			x_2 = 9-_chessInfo.moveCurveList[num-1][2];
+		}
+		
+		chessList.push([x_1, y_1, 'X']);
+		chessList.push([x_2, y_2, 'Y']);
+	}
 	_chessInfo.currNumber = num;
 	moveNumbertext.innerHTML = _chessInfo.currNumber+"/"+_chessInfo.move_total;
-	new ChessBoard(chessList);
-}
-
-function showBoard(fen)
-{
-	chessList = FEN_to_ChessList(fen, _chessInfo.is_vertical_original, _chessInfo.is_horizontal_original);
-	new ChessBoard(chessList);
+	if(num == 0)
+	{
+		$('#scoreBtn').html('info');
+		new ChessBoard(chessList, null, null, null);
+	}
+	else
+	{
+		if(num>3 && _chessInfo.biasList[num-1]>=200) $('#scoreBtn').html('×');
+		else if(num>3 && _chessInfo.biasList[num-1]>=50) $('#scoreBtn').html('▲');
+		else $('#scoreBtn').html('info');
+		new ChessBoard(chessList, _chessInfo.scoreList[num-1], _chessInfo.biasList[num-1], _chessInfo.recommendList[num-1]);
+	}
 }
 
 function showInitBoard()
 {
+	var chessList;
+	$('#scoreBtn').html('info');
 	fen = getDefaultFEN();
 	chessList = FEN_to_ChessList(fen, true, true);
-	new ChessBoard(chessList);
+	new ChessBoard(chessList, null, null);
 }
 
 window.onload = showInitBoard;

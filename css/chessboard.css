@@ -46,17 +46,27 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	bottom: 75px;
 	transform: rotate(-45deg);
 }
+#chess-info{
+	position: absolute;
+	left:0px;
+	top: -62px;
+	text-align: center;
+	color: black;
+	font-size: 14px;
+	visibility: hidden;
+}
+
 /*棋子的样式*/
 #chesslist .chesspieceRed, .chesspieceBlack{
 	position: absolute;
 	border-radius: 50%;
-	width: 25px;
-	height: 25px;
+	width: 26px;
+	height: 26px;
 	text-align: center;
-	line-height: 25px;
+	line-height: 26px;
 	background: #aaa;
 	font-style: normal;
-	font-size: 18px;
+	font-size: 17px;
 	font-weight: 800;
 	cursor: pointer;
 	z-index: 1;
@@ -65,14 +75,26 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	align-items: center; /* align vertical */
 }
 
+#chesslist .chesscurrent{
+	position: absolute;
+	border-radius: 20%;
+	width: 26px;
+	height: 26px;
+	border: 1px solid #ffff33;
+	cursor: pointer;
+	z-index: 2;
+	display: flex;
+	justify-content: center; /* align horizontal */
+	align-items: center; /* align vertical */
+}
+
 #chesslist .chesspieceMovingCurve{
 	position: absolute;
-	width: 25px;
-	height: 25px;
-	border-radius: 20%;
-	border: 1px solid #FFF;
-	cursor: pointer;
-	z-index: 1;
+	margin: 9.3px;
+	height: 8px;
+	width: 8px;
+	border-radius: 50%;
+	background-color: #555;
 	display: flex;
 	justify-content: center; /* align horizontal */
 	align-items: center; /* align vertical */
@@ -111,6 +133,10 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 
 .boardBtn {
 	width: 50px;
+}
+
+.boardBtn2 {
+	width: 45px;
 }
 
 #moveNumber {

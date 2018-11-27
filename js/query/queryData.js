@@ -731,6 +731,7 @@ function apply_move(fen, chess_pos, str_move)
     var col     = chess_pos[1];
 	var val     = 0;
 	var val_temp = convert2HalfChar(str_move[3]);
+	var curve   = [];
 	
     if (is_red)
         val = convert_text_to_num(val_temp);
@@ -997,11 +998,14 @@ function apply_move(fen, chess_pos, str_move)
 	{
         board[9-row][9-col] = '0';
         board[9-end_row][9-end_col] = chess;
+		//curve = [9-col, 9-row, 9-end_col, 9-end_row];
+		curve = [9-row, 9-col, 9-end_row, 9-end_col];
 	}		
     else
 	{
         board[row][col-1] = '0';
         board[end_row][end_col-1] = chess;
+		curve = [row, col-1, end_row, end_col-1];
 	}
 	
     fen = Board_to_FEN(board);
@@ -1011,7 +1015,78 @@ function apply_move(fen, chess_pos, str_move)
     else
         fen = fen+'%20w';
 	
-    return [true, fen]; 
+    return [true, fen, curve]; 
+}
+
+function get_Curve(fen, str_move)
+{
+	var board       = FEN_to_Board(fen);
+    var is_red      = check_red(str_move);
+    var chess       = conver_text_to_chess(str_move);
+    var global_col  = get_global_col(board, str_move);
+    var global_row  = 0;
+	var val         = convert_text_to_num(str_move[3]);
+    var front       = get_front(str_move);
+    var move        = get_direction(str_move);
+    var index_list  = [];
+	var row         = 0;
+	var col         = 0;
+    for (var i = 0; i < 10; i++)
+	{
+        if (board[i][global_col] == chess)
+            index_list.push(i);
+	}
+    var is_mul = (index_list.length > 1);
+    
+    if (front != 0)
+	{
+        if ((front == 1 && is_red) || (front == -1 && !is_red))
+            global_row = index_list[0]; 
+        else if ((front == 1 && !is_red) || (front == -1 && is_red))
+            global_row = index_list[1];
+        if (is_red)
+		{
+            row = 9-global_row;
+            col = 9-global_col;
+		}
+        else
+		{
+            row = global_row;
+            col = global_col+1;
+		}
+		
+		var return_list = apply_move(fen, [row, col], str_move);
+        var result      = return_list[0];
+		var new_fen     = return_list[1]; 
+        
+		if (result)
+            return return_list[2];
+	}			
+    else
+	{
+        for (var j = 0; j < index_list.length; j++)
+		{
+            global_row = index_list[j];
+            if (is_red)
+			{
+                row = 9-global_row;
+                col = 9-global_col;
+			}
+            else
+			{
+                row = global_row;
+                col = global_col+1;
+			}
+            
+			var return_list = apply_move(fen, [row, col], str_move);
+			var result      = return_list[0];
+			var new_fen     = return_list[1]; 
+        
+			if (result)
+				return return_list[2];
+		}
+	}				
+    return [0, 0, 0, 0];
 }
 
 function Update_FEN(fen, str_move)

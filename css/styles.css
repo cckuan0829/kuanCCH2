@@ -142,6 +142,11 @@
 }
 
 /* added by kuan */
+#funcBtnList {
+	margin-top: 8px;
+}
+
+/* added by kuan */
 #chessboard {
 	display: inline-block;
     position: relative;

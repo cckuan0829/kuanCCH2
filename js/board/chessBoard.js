@@ -1,7 +1,6 @@
-var pos = {};
-
 var chessType = {
 	'X':'',
+	'Y':'',
 	'K':'帥',
 	'k':'將',
 	'A':'仕',
@@ -19,7 +18,7 @@ var chessType = {
 };
 
 var config = {
-	preChessPiece: 25,
+	preChessPiece: 26,
 	preTd: 30,
 };
 
@@ -35,22 +34,43 @@ ChessPiece.prototype.placement = function() {
 	{
 		this.DOM = $('<i class="chesspieceMovingCurve">');
 	}
+	else if(this.chess == 'Y')
+	{
+		this.DOM = $('<i class="chesscurrent">');
+	}
 	else
 	{
 		if(this.chess == this.chess.toUpperCase()) this.DOM = $('<i class="chesspieceRed textcolor">');
 		else this.DOM = $('<i class="chesspieceBlack textcolor">');
 	}
 	
-	this.DOM.html(chessType[this.chess])
+	this.DOM.html(chessType[this.chess]);
 	this.DOM.css({
-		left: this.x*config.preTd - config.preChessPiece/2,
-		top: this.y*config.preTd - config.preChessPiece/2
+		left: this.y*config.preTd - config.preChessPiece/2,
+		top: this.x*config.preTd - config.preChessPiece/2,
 	});
-	pos[this.x+'-'+this.y] = this.DOM;   //通知pos
 	$list.append(this.DOM);
 };
 
-var ChessBoard = function(chessList) {
+var ChessBoard = function(chessList, score, bias, recommend) {
+	$info= $('#chess-info');
+	var recommend_text = "";
+	if(recommend != null && recommend != "") recommend_text = "，推薦："+recommend;
+	
+	if(score != null && bias != null)
+	{
+		if(bias >= 200)
+			$info.html("局分："+score+"；失著"+recommend_text);
+		else if(bias >= 50)
+			$info.html("局分："+score+"；緩著"+recommend_text);
+		else
+			$info.html("局分："+score);
+	}
+	else
+	{
+		$info.html("");
+	}
+	
 	this.chessList = chessList;
 	this.initBoard();
 	this.placementAll();
@@ -90,8 +110,8 @@ function FEN_to_ChessList(fen, is_vertical_ori, is_horiz_ori)
             }
 			else
 			{
-				var x = is_vertical_ori ? index : 8-index;
-				var y = is_horiz_ori ? i : 9-i;
+				var x = is_horiz_ori ? i : 9-i;
+				var y = is_vertical_ori ? index : 8-index;
                 chesslist.push([x, y, cha]);
                 index = index + 1;
 			}
