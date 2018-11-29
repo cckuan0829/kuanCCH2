@@ -2,7 +2,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 
 #chessboard {
 	position: relative;
-	margin: 15px 25px 0 0;
+	margin: 30px 5px 5px 5px;
 }
 #chessboard, #chessboard * {
 	box-sizing: border-box;
@@ -19,6 +19,15 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	height: 30px;
 	border: 1px solid #fff;
 }
+
+#chessboard .chess-axi-top, .chess-axi-bot {
+	position: absolute;
+	width: 30px;
+	height: 20px;
+	font-size: 12px;
+	font-style: normal;
+}
+
 /*九宫格的状态*/
 #chessboard .chess-td-trans {
 	width: 85px;
@@ -38,18 +47,18 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 }
 #chessboard .trans-bottom-1 {
 	left: 78px;
-	bottom: 75px;
+	bottom: 93px;
 	transform: rotate(45deg);
 }
 #chessboard .trans-bottom-2 {
 	left: 78px;
-	bottom: 75px;
+	bottom: 93px;
 	transform: rotate(-45deg);
 }
 #chess-info{
 	position: absolute;
 	left:0px;
-	top: -62px;
+	top: -77px;
 	text-align: center;
 	color: black;
 	font-size: 14px;
@@ -128,7 +137,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 }
 
 #chessNumCtrl {
-	margin-top: 5px;
+	margin-top: 22px;
 }
 
 .boardBtn {
