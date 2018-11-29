@@ -178,11 +178,11 @@ function onFenBtnClick()
 	{
 		if(_chessInfo.currNumber>0)
 		{
-			copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.currNumber-1]);
+			copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.currNumber-1].replace("%20", " "));
 		}
 		else
 		{
-			copyToClipboard("此盤面FEN碼", getDefaultFEN());
+			copyToClipboard("此盤面FEN碼", getDefaultFEN().replace("%20", " "));
 		}
 	}
 }
@@ -718,52 +718,33 @@ function calBadRate(score_bias)
 
 function showBoardbyNum(num)
 {
-	var chessList;
+	var chessList, fen, curve;
 	var moveNumbertext = document.getElementById("moveNumber");
-	if(_chessInfo.fenList.length >= num && num > 0) fen = _chessInfo.fenList[num-1];
-	else fen = getDefaultFEN();
-	chessList = FEN_to_ChessList(fen, _chessInfo.is_vertical_original, _chessInfo.is_horizontal_original);
-	if(num > 0)
+	if(_chessInfo.fenList.length >= num && num > 0) 
 	{
-		var x_1, x_2, y_1, y2;
-		if(_chessInfo.is_vertical_original) 
-		{
-			y_1 = _chessInfo.moveCurveList[num-1][1];
-			y_2 = _chessInfo.moveCurveList[num-1][3];
-		}
-		else
-		{
-			y_1 = 8-_chessInfo.moveCurveList[num-1][1];
-			y_2 = 8-_chessInfo.moveCurveList[num-1][3];
-		}
-		
-		if(_chessInfo.is_horizontal_original) 
-		{
-			x_1 = _chessInfo.moveCurveList[num-1][0];
-			x_2 = _chessInfo.moveCurveList[num-1][2];
-		}
-		else
-		{
-			x_1 = 9-_chessInfo.moveCurveList[num-1][0];
-			x_2 = 9-_chessInfo.moveCurveList[num-1][2];
-		}
-		
-		chessList.push([x_1, y_1, 'X']);
-		chessList.push([x_2, y_2, 'Y']);
+		fen = _chessInfo.fenList[num-1];
+		curve = _chessInfo.moveCurveList[num-1];
 	}
+	else 
+	{
+		fen = getDefaultFEN();
+		curve = null;
+	}
+	chessList = FEN_to_ChessList(fen, curve, _chessInfo.is_horizontal_original , _chessInfo.is_vertical_original);
+
 	_chessInfo.currNumber = num;
 	moveNumbertext.innerHTML = _chessInfo.currNumber+"/"+_chessInfo.move_total;
 	if(num == 0)
 	{
 		$('#scoreBtn').html('info');
-		new ChessBoard(chessList, null, null, null);
+		new ChessBoard(chessList, null, null, null, _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
 	}
 	else
 	{
 		if(num>3 && _chessInfo.biasList[num-1]>=200) $('#scoreBtn').html('×');
 		else if(num>3 && _chessInfo.biasList[num-1]>=50) $('#scoreBtn').html('▲');
 		else $('#scoreBtn').html('info');
-		new ChessBoard(chessList, _chessInfo.scoreList[num-1], _chessInfo.biasList[num-1], _chessInfo.recommendList[num-1]);
+		new ChessBoard(chessList, _chessInfo.scoreList[num-1], _chessInfo.biasList[num-1], _chessInfo.recommendList[num-1], _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
 	}
 }
 
@@ -772,8 +753,8 @@ function showInitBoard()
 	var chessList;
 	$('#scoreBtn').html('info');
 	fen = getDefaultFEN();
-	chessList = FEN_to_ChessList(fen, true, true);
-	new ChessBoard(chessList, null, null);
+	chessList = FEN_to_ChessList(fen, null, true, true);
+	new ChessBoard(chessList, null, null, null, true, true);
 }
 
 window.onload = showInitBoard;

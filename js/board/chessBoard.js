@@ -9,13 +9,20 @@ var chessType = {
 	'b':'象',
 	'R':'車',
 	'r':'車',
-	'N':'馬',
+	'N':'傌',
 	'n':'馬',
 	'C':'炮',
-	'c':'炮',
+	'c':'包',
 	'P':'兵',
 	'p':'卒',
 };
+
+var _chessBoardNumber = 
+[['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+ ['9', '8', '7', '6', '5', '4', '3', '2', '1'],
+ ['一', '二', '三', '四', '五', '六', '七', '八', '九'],
+ ['九', '八', '七', '六', '五', '四', '三', '二', '一'],
+];
 
 var config = {
 	preChessPiece: 26,
@@ -52,7 +59,7 @@ ChessPiece.prototype.placement = function() {
 	$list.append(this.DOM);
 };
 
-var ChessBoard = function(chessList, score, bias, recommend) {
+var ChessBoard = function(chessList, score, bias, recommend, is_horiz_ori, is_vertical_ori) {
 	$info= $('#chess-info');
 	var recommend_text = "";
 	if(recommend != null && recommend != "") recommend_text = "，推薦："+recommend;
@@ -72,13 +79,69 @@ var ChessBoard = function(chessList, score, bias, recommend) {
 	}
 	
 	this.chessList = chessList;
-	this.initBoard();
+	this.initBoard(is_horiz_ori, is_vertical_ori);
 	this.placementAll();
 };
 
-ChessBoard.prototype.initBoard = function() {
+ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 	$list = $('#chesslist');
 	$list.empty();
+	$axi_top = $('#axi-top');
+	$axi_bot = $('#axi-bot');
+	$axi_top.empty();
+	$axi_bot.empty();
+	
+	var top_num = 0;
+	var bot_num = 0;
+	if(is_hori_ori)
+	{
+		if(is_vert_ori)
+		{
+			top_num = 0;
+			bot_num = 3;
+		}
+		else
+		{
+			top_num = 3;
+			bot_num = 0;
+		}
+	}
+	else
+	{
+
+		if(is_vert_ori)
+		{
+			top_num = 1;
+			bot_num = 2;
+		}
+		else
+		{
+			top_num = 2;
+			bot_num = 1;
+		}
+	}
+	
+	for(var i = 0; i < 9; i++)
+	{
+		this.DOM = $('<i class="chess-axi-top">');
+		this.DOM.html(_chessBoardNumber[top_num][i]);
+		this.DOM.css({
+			left: -5+(i)*30,
+			top: -31,
+		});
+		$axi_top.append(this.DOM);
+	}	
+	
+	for(var i = 0; i < 9; i++)
+	{
+		this.DOM = $('<i class="chess-axi-bot">');
+		this.DOM.html(_chessBoardNumber[bot_num][i]);
+		this.DOM.css({
+			left: -5+(i)*30,
+			top: 14,
+		});
+		$axi_bot.append(this.DOM);
+	}
 }
 
 ChessBoard.prototype.placementAll = function() {
@@ -92,11 +155,12 @@ ChessBoard.prototype.placementAll = function() {
 	}
 };
 
-function FEN_to_ChessList(fen, is_vertical_ori, is_horiz_ori)
+function FEN_to_ChessList(fen, curve, is_horiz_ori, is_vertical_ori)
 {
     var chesslist=[];
     var row_list = fen.split(/\/|%/);
-
+	var x_1, x_2, y_1, y2;
+	
 	for( var i = 0; i < 10; i++)
 	{
         var index = 0;
@@ -110,12 +174,40 @@ function FEN_to_ChessList(fen, is_vertical_ori, is_horiz_ori)
             }
 			else
 			{
-				var x = is_horiz_ori ? i : 9-i;
-				var y = is_vertical_ori ? index : 8-index;
+				var x = is_vertical_ori ? i : 9-i;
+				var y = is_horiz_ori ? index : 8-index;
                 chesslist.push([x, y, cha]);
                 index = index + 1;
 			}
 		}
+	}
+	
+	if (curve != null)
+	{
+		if(is_horiz_ori) 
+		{
+			y_1 = curve[1];
+			y_2 = curve[3];
+		}
+		else
+		{
+			y_1 = 8-curve[1];
+			y_2 = 8-curve[3];
+		}
+		
+		if(is_vertical_ori) 
+		{
+			x_1 = curve[0];
+			x_2 = curve[2];
+		}
+		else
+		{
+			x_1 = 9-curve[0];
+			x_2 = 9-curve[2];
+		}
+		
+		chesslist.push([x_1, y_1, 'X']);
+		chesslist.push([x_2, y_2, 'Y']);
 	}
 	
     return chesslist;
