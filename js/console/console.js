@@ -110,7 +110,8 @@ $(document).ready(function() {
 	scoreBtn.addEventListener('click', onScoreBtnClick);
 	
     $("#copyEgBtn").bind("click", function() {
-        copyToClipboard("範例棋譜",inputExample);
+        //copyToClipboard("範例棋譜",inputExample);
+		document.getElementById("chessBookInput").value = inputExample;	
     });
     
     initPlaceholder();
