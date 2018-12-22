@@ -120,6 +120,14 @@
    
 }
 
+.fbLink {
+	position: fixed;
+	text-align: right;
+    font-size: 20px;
+	margin-top: -30px;
+	width: 95%;
+}/*added by kuan*/
+
 .btnList {
     position: fixed;
     display: block;
@@ -250,7 +258,13 @@
     .titleText {
         font-size: calc(30 / 1024 * 100vw);
     }
-    .consoleBtn {
+	
+	.fbLink {
+		font-size: calc(20 / 1024 * 100vw);
+		margin-top: calc(-30 / 1024 * 100vw);
+	}/*added by kuan*/
+	
+	.consoleBtn {
         width: calc(140 / 1024 * 100vw);
         height: calc(70 / 1024 * 100vw);
         font-size: calc(28 / 1024 * 100vw);
