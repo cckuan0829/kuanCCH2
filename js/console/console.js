@@ -113,6 +113,16 @@ $(document).ready(function() {
         //copyToClipboard("範例棋譜",inputExample);
 		document.getElementById("chessBookInput").value = inputExample;	
     });
+	
+	document.addEventListener('paste', function (e) {
+	var pastedText = undefined;
+    if (window.clipboardData && window.clipboardData.getData) { // IE
+		pastedText = window.clipboardData.getData('Text');
+    } else if (e.clipboardData && e.clipboardData.getData) {
+		pastedText = e.clipboardData.getData('text/plain');
+	}
+	document.getElementById("chessBookInput").value = pastedText;
+	});
     
     initPlaceholder();
 });
@@ -219,8 +229,16 @@ function onHorizBtnClick()
 function onScoreBtnClick()
 {
 	$info= $('#chess-info');
-	if($info.css("visibility") == "hidden") $info.css('visibility', 'visible');
-	else $info.css('visibility', 'hidden');
+	if($info.css("visibility") == "hidden") 
+	{
+		$info.css('visibility', 'visible');
+		$('#scoreBtn').html('hide');
+	}
+	else 
+	{
+		$info.css('visibility', 'hidden');
+		$('#scoreBtn').html('info');
+	}
 
 }
 
@@ -375,7 +393,6 @@ function copyQueryResult() {
 }
 
 function clearInputText() {
-	
 	document.getElementById("chessBookInput").value = "";
 	uploadBtn.value = '';
 }
@@ -748,6 +765,11 @@ function showBoardbyNum(num)
 		else $('#scoreBtn').html('info');
 		new ChessBoard(chessList, _chessInfo.scoreList[num-1], _chessInfo.biasList[num-1], _chessInfo.recommendList[num-1], _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
 	}
+	
+	if($('#chess-info').css("visibility") != "hidden") 
+	{
+		$('#scoreBtn').html('hide');
+	}
 }
 
 function showInitBoard()
@@ -757,6 +779,11 @@ function showInitBoard()
 	fen = getDefaultFEN();
 	chessList = FEN_to_ChessList(fen, null, true, true);
 	new ChessBoard(chessList, null, null, null, true, true);
+	
+	if($('#chess-info').css("visibility") != "hidden") 
+	{
+		$('#scoreBtn').html('hide');
+	}
 }
 
 window.onload = showInitBoard;
