@@ -115,13 +115,17 @@ $(document).ready(function() {
     });
 	
 	document.addEventListener('paste', function (e) {
-	var pastedText = undefined;
-    if (window.clipboardData && window.clipboardData.getData) { // IE
-		pastedText = window.clipboardData.getData('Text');
-    } else if (e.clipboardData && e.clipboardData.getData) {
-		pastedText = e.clipboardData.getData('text/plain');
-	}
-	document.getElementById("chessBookInput").value = pastedText;
+		var pastedText = undefined;
+		if(!$("#chessBookInput").is(':focus'))
+		{
+			if (window.clipboardData && window.clipboardData.getData) { // IE
+				pastedText = window.clipboardData.getData('Text');
+			} else if (e.clipboardData && e.clipboardData.getData) {
+				pastedText = e.clipboardData.getData('text/plain');
+			}
+			document.getElementById("chessBookInput").value = pastedText;
+		}
+		
 	});
     
     initPlaceholder();
