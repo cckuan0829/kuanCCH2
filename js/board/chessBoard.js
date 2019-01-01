@@ -81,6 +81,9 @@ var ChessBoard = function(chessList, score, bias, recommend, is_horiz_ori, is_ve
 	this.chessList = chessList;
 	this.initBoard(is_horiz_ori, is_vertical_ori);
 	this.placementAll();
+	
+	var title = document.getElementById("chessboard-name");
+	title.innerHTML = document.getElementById("title").innerHTML;
 };
 
 ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
