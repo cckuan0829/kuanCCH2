@@ -91,6 +91,7 @@ function drawChart() {
         animationEnabled: true,
 		theme: "light1",
 		zoomEnabled: true,
+		exportEnabled: true,
         title: {
             text:　$('#badRate').html(),
             fontSize: 20,

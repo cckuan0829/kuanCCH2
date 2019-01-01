@@ -2,7 +2,6 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 
 #chessboard {
 	position: relative;
-	margin: 30px 5px 5px 5px;
 }
 #chessboard, #chessboard * {
 	box-sizing: border-box;
@@ -13,11 +12,11 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 #chessboard .chess-center {
 	height: 30px;
 }
-/*棋盘每个格的状态*/
+
 #chessboard .chess-td {
 	width: 30px;
 	height: 30px;
-	border: 1px solid #fff;
+	border: 0.5px solid black;
 }
 
 #chessboard .chess-axi-top, .chess-axi-bot {
@@ -28,33 +27,50 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	font-style: normal;
 }
 
-/*九宫格的状态*/
 #chessboard .chess-td-trans {
 	width: 85px;
 	height: 0;
 	position: absolute;
-	border-top: 1px solid #fff;
 }
 #chessboard .trans-top-1 {
 	left: 78px;
 	top: 30px;
 	transform: rotate(45deg);
+	border: 0.75px solid black;
 }
 #chessboard .trans-top-2 {
 	left: 78px;
 	top: 30px;
 	transform: rotate(-45deg);
+	border: 0.75px solid black;
 }
 #chessboard .trans-bottom-1 {
 	left: 78px;
-	bottom: 93px;
+	bottom: 30px;
 	transform: rotate(45deg);
+	border: 0.75px solid black;
 }
 #chessboard .trans-bottom-2 {
 	left: 78px;
-	bottom: 93px;
+	bottom: 30px;
 	transform: rotate(-45deg);
+	border: 0.75px solid black;
 }
+
+#chessboard-name{
+	position: absolute;
+	left: 85px;
+	top: 122px;
+	font-size: 18px;
+	font-family: "微軟正黑體";
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+    align-items: center;
+	-webkit-justify-content: center;
+    justify-content: center;/
+}
+
 #chess-info{
 	position: absolute;
 	left:0px;
@@ -71,17 +87,20 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	border-radius: 50%;
 	width: 26px;
 	height: 26px;
-	text-align: center;
-	line-height: 26px;
+	
 	background: #aaa;
 	font-style: normal;
 	font-size: 17px;
 	font-weight: 800;
 	cursor: pointer;
 	z-index: 1;
+	
+    display: -webkit-flex;
 	display: flex;
-	justify-content: center; /* align horizontal */
-	align-items: center; /* align vertical */
+	-webkit-align-items: center;
+    align-items: center;
+	-webkit-justify-content: center;
+    justify-content: center;
 }
 
 #chesslist .chesscurrent{
@@ -89,7 +108,7 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	border-radius: 20%;
 	width: 26px;
 	height: 26px;
-	border: 1px solid #ffff33;
+	border: 1px solid #737373;
 	cursor: pointer;
 	z-index: 2;
 	display: flex;
@@ -114,14 +133,6 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 	color: white;
 }
 
-#chessboard .chess-td {
-	width: 30px;
-	height: 30px;
-	border: 1px solid black;
-}
-#chessboard .chess-td-trans {
-	border-top: 1px solid black;
-}
 #chesslist .chesspieceRed {
 	line-height: 20px;
 	background: red;
@@ -137,7 +148,8 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 }
 
 #chessNumCtrl {
-	margin-top: 22px;
+	margin-top: -10px;
+	margin-left: 10px;
 }
 
 .boardBtn {

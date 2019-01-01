@@ -11,6 +11,7 @@
 		gtag('config', 'UA-127983579-1');
 	</script>
 	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/modal.css">
 	<link rel="stylesheet" href="css/chessboard.css">
 </head>
 
@@ -54,102 +55,108 @@
 					<td align="center">
 						<button id="scoreBtn" class="boardBtn2">info</button>
 					</td>
+					<td align="center">
+						<button id="picBtn" class="boardBtn2">pic</button>
+					</td>
 				</table>
-				<div id="chessboard">
-					<i class="chess-td-trans trans-top-1"></i>
-					<i class="chess-td-trans trans-top-2"></i>
-					<i class="chess-td-trans trans-bottom-1"></i>
-					<i class="chess-td-trans trans-bottom-2"></i>
-					<div id="chess-info"></div>
-					<div id="axi-top" class="chess-axi-top"></div>
-					<table>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr class="chess-center">
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-						<tr>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-							<td class="chess-td"></td>
-						</tr>
-					</table>
-					<div id="axi-bot" class="chess-axi-bot"></div>
-					<div id="chesslist">
+				<div id="wholeboard">
+					<div id ="chessboardPic">
+						<div id="chessboard">
+							<i class="chess-td-trans trans-top-1"></i>
+							<i class="chess-td-trans trans-top-2"></i>
+							<i class="chess-td-trans trans-bottom-1"></i>
+							<i class="chess-td-trans trans-bottom-2"></i>
+							<div id="chessboard-name"></div>
+							<div id="chess-info"></div>
+							<div id="axi-top" class="chess-axi-top"></div>
+							<table>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr class="chess-center">
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+								<tr>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+									<td class="chess-td"></td>
+								</tr>
+							</table>
+							<div id="axi-bot" class="chess-axi-bot"></div>
+							<div id="chesslist"></div>
+						</div>
 					</div>
-					
 					
 					<table id="chessNumCtrl">
 						<td align="center">
@@ -194,7 +201,7 @@
 						</table>
 					</div>
 
-					<div class="chartArea">
+					<div id = "scoreChart" class="chartArea">
 						<div id = "chartContainer" > </div>
 						<div id = "badRate" class="rateArea">
 								<font color="white"></font>
@@ -203,24 +210,17 @@
 				</div>					
 		</div>
 
-
-
-				<!-- <video autoplay loop id="bgVideo">
-				<source src="assets/video/bgVideo.mp4" type="video/mp4">
-				Your browser does not support HTML5 video.
-		</video> -->
-
-		<!--<iframe src="assets/audio/silence.mp3" allow="autoplay" style="display:none" id="iframeAudio">
-		</iframe>
-
-		<audio controls id="audioPlayer" autoplay loop>
-				<source src="assets/audio/bgSound.mp3" type="audio/mp3">
-		</audio>
-		-->
-
-		<!-- <iframe width="1" height="1" src="https://www.youtube.com/embed/erlTPDI3s6w?playlist=erlTPDI3s6w&loop=1&autoplay=1"frameborder="0" allow="autoplay"></iframe> -->
-
+		<!-- The Modal -->
+		<div id="myModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<div id="myBoard">
+			</div>
+		</div>
+		
 	</div>
+	<script src="js/library/html2canvas.js"></script>
 	<script src="js/library/require.js"></script>
     <script src="js/main.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->

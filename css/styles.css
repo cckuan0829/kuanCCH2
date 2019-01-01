@@ -155,9 +155,9 @@
 }
 
 /* added by kuan */
-#chessboard {
+#wholeboard {
 	display: inline-block;
-    position: relative;
+	position: relative;
 	float: left;
 }
 
@@ -165,7 +165,22 @@
 .chessBookInputArea {
     display: inline-block;
     position: relative;
+	left: 15px;
 	width: 65%;
+}
+
+/* added by kuan */
+#chessboardPic {
+	position: relative;
+	width: 290px;
+	height: 335px;
+}
+
+/* added by kuan */
+#chessboard {
+    position: relative;
+	top: 30px;
+	left: 25px;
 }
 
 /* added by kuan */

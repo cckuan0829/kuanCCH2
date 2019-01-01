@@ -47,6 +47,9 @@ var cloudBtn = document.getElementById("cloudBtn");
 var verticalBtn = document.getElementById("verticalBtn");
 var horizBtn = document.getElementById("horizBtn");
 var scoreBtn = document.getElementById("scoreBtn");
+var picBtn = document.getElementById("picBtn");
+var closeModal = document.getElementsByClassName("close")[0];
+var modal = document.getElementById('myModal');
 
 var buttonList = [
 	queryBtn,
@@ -64,6 +67,7 @@ var buttonList = [
 	verticalBtn,
 	horizBtn,
 	scoreBtn,
+	picBtn,
 ];
 
 var _chessInfo =
@@ -108,11 +112,24 @@ $(document).ready(function() {
 	verticalBtn.addEventListener('click', onVerticalBtnClick);
 	horizBtn.addEventListener('click', onHorizBtnClick);
 	scoreBtn.addEventListener('click', onScoreBtnClick);
+	picBtn.addEventListener('click', onPicBtnClick);
 	
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
 		document.getElementById("chessBookInput").value = inputExample;	
     });
+	
+	// When the user clicks on <span> (x), close the modal
+	closeModal.onclick = function() {
+	modal.style.display = "none";
+	}
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	if (event.target == modal) {
+		modal.style.display = "none";
+		}
+	}
 	
 	document.addEventListener('paste', function (e) {
 		var pastedText = undefined;
@@ -244,6 +261,15 @@ function onScoreBtnClick()
 		$('#scoreBtn').html('info');
 	}
 
+}
+
+function onPicBtnClick()
+{
+	$("#myBoard").empty();
+	html2canvas(document.querySelector("#chessboardPic")).then(canvas => {
+    $("#myBoard").append(canvas)
+	});
+	document.getElementById('myModal').style.display = "block";
 }
 
 function setFilenameandDownload()
