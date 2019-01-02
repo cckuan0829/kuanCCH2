@@ -14,6 +14,8 @@ var dataAry = [
 var _max = 0;
 var _min = 0;
 var _size = 0;
+var _title = document.getElementById("title").innerHTML;
+
 $(document).ready(function() {
     $("#drawChartBtn").bind("click", function() {
         drawChart();
@@ -133,7 +135,6 @@ function drawChart() {
 			lineColor: "black",
 			lineThickness: 2,
             type: "line",
-            name: "盤面絕對分數圖",
             connectNullData: true,
             nullDataLineDashType:"dot",
             xValueType: "int",

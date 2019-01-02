@@ -266,10 +266,13 @@ function onScoreBtnClick()
 function onPicBtnClick()
 {
 	$("#myBoard").empty();
-	html2canvas(document.querySelector("#chessboardPic")).then(canvas => {
-    $("#myBoard").append(canvas)
-	});
-	document.getElementById('myModal').style.display = "block";
+	html2canvas(document.querySelector("#chessboardPic")).then(function (canvas) {
+                        var img = Canvas2Image.convertToImage(canvas, canvas.width, canvas.height);
+                        $('#myBoard').html(img);
+                        img.setAttribute('width', $("#chessboardPic").css( "width" ));
+                        img.setAttribute('height', $("#chessboardPic").css( "height" ));
+                    });
+	document.getElementById('myModal').style.display = "block";				
 }
 
 function setFilenameandDownload()
