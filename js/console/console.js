@@ -820,3 +820,6 @@ function showInitBoard()
 }
 
 window.onload = showInitBoard;
+window.onorientationchange = function() { 
+		setTimeout(function () {showBoardbyNum(_chessInfo.currNumber);}, 100);
+    };

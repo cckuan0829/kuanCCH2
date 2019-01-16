@@ -148,7 +148,7 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
 }
 
 #chessNumCtrl {
-	margin-top: -10px;
+	margin-top: -5px;
 	margin-left: 10px;
 }
 
@@ -226,8 +226,8 @@ body {
 	}
 
 	#chess-info{
-		top: -130px;
-		font-size: 25px;
+		top: -132px;
+		font-size: 22px;
 	}
 	
 	#chesslist .chesspieceRed, .chesspieceBlack{

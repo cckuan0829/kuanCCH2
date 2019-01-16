@@ -179,7 +179,7 @@
 /* added by kuan */
 #chessboard {
     position: relative;
-	top: 40px;
+	top: 30px;
 	left: 25px;
 }
 
@@ -302,10 +302,6 @@
     #queryBtn {
         font-size: calc(24 / 1024 * 100vw);
     }
-	#chessboardPic {
-		width: 580px;
-		height: 660px;
-	}
 }
 
 @media (orientation: portrait) {
@@ -327,6 +323,14 @@
 		margin-bottom: 10vh;
     }
 	
+	#chessboard {
+		top: 40px;
+	}
+	
+	#chessboardPic {
+		width: 580px;
+		height: 660px;
+	}
 }
 
 @media only screen and (max-height: 420px) {
