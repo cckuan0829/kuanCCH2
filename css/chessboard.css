@@ -1,4 +1,4 @@
-body{font-size: 12px; font-family: "微軟正黑體"}
+body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
 
 #chessboard {
 	position: relative;
@@ -166,4 +166,109 @@ body{font-size: 12px; font-family: "微軟正黑體"}
 
 body {
 	background-color: #fffcc7;
+}
+
+
+@media (orientation: portrait) {
+    #chessboard table {
+		margin-top: 20px;
+	}
+	
+	#chessboard .chess-center {
+		height: 60px;
+	}
+
+	#chessboard .chess-td {
+		width: 60px;
+		height: 60px;
+	}
+
+	#chessboard .chess-axi-top {
+		top: -30px;
+		left: -5px;
+		width: 60px;
+		height: 40px;
+		font-size: 24px;
+	}
+
+	#chessboard .chess-axi-bot {
+		bottom: -50px;
+		left: -5px;
+		width: 60px;
+		height: 40px;
+		font-size: 24px;
+	}
+	
+	#chessboard .chess-td-trans {
+		width: 170px;
+	}
+	#chessboard .trans-top-1 {
+		left: 156px;
+		top: 60px;
+	}
+	#chessboard .trans-top-2 {
+		left: 156px;
+		top: 60px;
+	}
+	#chessboard .trans-bottom-1 {
+		left: 156px;
+		bottom: 60px;
+	}
+	#chessboard .trans-bottom-2 {
+		left: 156px;
+		bottom: 60px;
+	}
+
+	#chessboard-name{
+		left: 170px;
+		top: 244px;
+		font-size: 36px;
+	}
+
+	#chess-info{
+		top: -130px;
+		font-size: 25px;
+	}
+	
+	#chesslist .chesspieceRed, .chesspieceBlack{
+		width: 52px;
+		height: 52px;
+		font-size: 34px;
+	}
+
+	#chesslist .chesscurrent{
+		width: 52px;
+		height: 52px;
+	}
+
+	#chesslist .chesspieceMovingCurve{
+		margin: 19px;
+		height: 16px;
+		width: 16px;
+	}
+	
+	body{
+		--chess: 52;
+		--grid: 60;
+	}
+	
+	#chessNumCtrl {
+		margin-top: -35px;
+		margin-left: 10px;
+		font-size: 25px;
+	}
+	
+	.boardBtn {
+		width: 100px;
+		font-size: 25px;
+	}
+
+	.boardBtn2 {
+		width: 82px;
+		font-size: 25px;
+	}
+
+	#moveNumber {
+		width: 100px;
+	}
 }

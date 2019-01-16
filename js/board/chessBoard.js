@@ -24,11 +24,6 @@ var _chessBoardNumber =
  ['九', '八', '七', '六', '五', '四', '三', '二', '一'],
 ];
 
-var config = {
-	preChessPiece: 26,
-	preTd: 30,
-};
-
 var ChessPiece = function(x ,y, chess) {
 	this.x = x;
 	this.y = y;
@@ -37,6 +32,10 @@ var ChessPiece = function(x ,y, chess) {
 };
 //把棋子放置在页面中
 ChessPiece.prototype.placement = function() {
+	var bodyStyles = window.getComputedStyle(document.body); 
+	var preChessPiece = bodyStyles.getPropertyValue('--chess');
+	var preTd = bodyStyles.getPropertyValue('--grid');
+
 	if(this.chess == 'X')
 	{
 		this.DOM = $('<i class="chesspieceMovingCurve">');
@@ -53,8 +52,8 @@ ChessPiece.prototype.placement = function() {
 	
 	this.DOM.html(chessType[this.chess]);
 	this.DOM.css({
-		left: this.y*config.preTd - config.preChessPiece/2,
-		top: this.x*config.preTd - config.preChessPiece/2,
+		left: this.y*preTd - preChessPiece/2,
+		top: this.x*preTd - preChessPiece/2,
 	});
 	$list.append(this.DOM);
 };
@@ -94,6 +93,8 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 	$axi_top.empty();
 	$axi_bot.empty();
 	
+	var bodyStyles = window.getComputedStyle(document.body); 
+	var preTd = bodyStyles.getPropertyValue('--grid');
 	var top_num = 0;
 	var bot_num = 0;
 	if(is_hori_ori)
@@ -129,7 +130,7 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 		this.DOM = $('<i class="chess-axi-top">');
 		this.DOM.html(_chessBoardNumber[top_num][i]);
 		this.DOM.css({
-			left: -5+(i)*30,
+			left: -5+(i)*preTd,
 			top: -31,
 		});
 		$axi_top.append(this.DOM);
@@ -140,11 +141,12 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 		this.DOM = $('<i class="chess-axi-bot">');
 		this.DOM.html(_chessBoardNumber[bot_num][i]);
 		this.DOM.css({
-			left: -5+(i)*30,
+			left: -5+(i)*preTd,
 			top: 14,
 		});
 		$axi_bot.append(this.DOM);
 	}
+
 }
 
 ChessBoard.prototype.placementAll = function() {
