@@ -289,6 +289,9 @@
     .inputArea, .outputArea{
         font-size:  calc(20 / 1024 * 100vw);
     }
+	.chessBookInputArea {
+		width: 45%;
+	}
     .btnList {
         top: 0px;
         width: calc(160 / 1024 * 100vw) ;
@@ -305,22 +308,20 @@
 }
 
 @media (orientation: portrait) {
-    .chessOutput {
-		height: 35vh;
-	}
-	
 	.chessBookOutptArea {
         width: 85%;
         margin: 3% 0 1% 0;
     }
 	.TableBody {
         position: relative;
+		height: 40vh;
 		display:block;
 	}
     .chartArea {
-		display: block;
+		position: relative;
         width: 85%;
-		margin-bottom: 10vh;
+		height: 40vh;
+		margin-bottom: 5vh;
     }
 	
 	#chessboard {

@@ -16,7 +16,7 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
 #chessboard .chess-td {
 	width: 30px;
 	height: 30px;
-	border: 0.5px solid black;
+	border: 1px solid black;
 }
 
 #chessboard .chess-axi-top, .chess-axi-bot {
@@ -36,25 +36,25 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
 	left: 78px;
 	top: 30px;
 	transform: rotate(45deg);
-	border: 0.75px solid black;
+	border: 1px solid black;
 }
 #chessboard .trans-top-2 {
 	left: 78px;
 	top: 30px;
 	transform: rotate(-45deg);
-	border: 0.75px solid black;
+	border: 1px solid black;
 }
 #chessboard .trans-bottom-1 {
 	left: 78px;
 	bottom: 30px;
 	transform: rotate(45deg);
-	border: 0.75px solid black;
+	border: 1px solid black;
 }
 #chessboard .trans-bottom-2 {
 	left: 78px;
 	bottom: 30px;
 	transform: rotate(-45deg);
-	border: 0.75px solid black;
+	border: 1px solid black;
 }
 
 #chessboard-name{
