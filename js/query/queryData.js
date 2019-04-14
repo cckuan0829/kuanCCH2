@@ -1419,3 +1419,120 @@ function getDefaultFEN()
 {
 	return "rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR";
 }	
+
+function convertBoard2dpxq(board)
+{
+	var dpxq_str = '';
+
+	var A_idx=[0,0];
+	var B_idx=[0,0];
+	var N_idx=[0,0];
+	var R_idx=[0,0];
+	var C_idx=[0,0];
+	var P_idx=[0,0];
+	
+	var K_r = 99;
+    var K_b = 99;
+	var A_r = [99, 99]; 
+	var A_b = [99, 99]; 
+    var B_r = [99, 99];  
+	var B_b = [99, 99]; 
+	var N_r = [99, 99]; 
+	var N_b = [99, 99]; 
+	var R_r = [99, 99]; 
+	var R_b = [99, 99]; 
+	var C_r = [99, 99];  
+	var C_b = [99, 99]; 
+	var P_r = [99, 99, 99, 99, 99];  
+	var P_b = [99, 99, 99, 99, 99];  
+	
+    for( var row = 0; row < 10; row++)
+	{
+        var index = 0;
+        for ( var col = 0; col < 9; col++)
+		{
+			var pos = col*10+row;
+            var cha = board[row][col];
+            if(cha == 'K')
+			{
+				K_r = pos;
+			}
+			else if(cha == 'k')
+			{
+				K_b = pos;
+			}
+			else if(cha == 'A')
+			{
+				A_r[A_idx[0]] = pos;
+				A_idx[0] = A_idx[0] + 1;
+			}
+			else if(cha == 'a')
+			{
+				A_b[A_idx[1]] = pos;
+				A_idx[1] = A_idx[1] + 1;
+			}
+			else if(cha == 'B')
+			{
+				B_r[B_idx[0]] = pos;
+				B_idx[0] = B_idx[0] + 1;
+			}
+			else if(cha == 'b')
+			{
+				B_b[B_idx[1]] = pos;
+				B_idx[1] = B_idx[1] + 1;
+			}
+			else if(cha == 'N')
+			{
+				N_r[N_idx[0]] = pos;
+				N_idx[0] = N_idx[0] + 1;
+			}
+			else if(cha == 'n')
+			{
+				N_b[N_idx[1]] = pos;
+				N_idx[1] = N_idx[1] + 1;
+			}
+			else if(cha == 'R')
+			{
+				R_r[R_idx[0]] = pos;
+				R_idx[0] = R_idx[0] + 1;
+			}
+			else if(cha == 'r')
+			{
+				R_b[R_idx[1]] = pos;
+				R_idx[1] = R_idx[1] + 1;
+			}
+			else if(cha == 'C')
+			{
+				C_r[C_idx[0]] = pos;
+				C_idx[0] = C_idx[0] + 1;
+			}
+			else if(cha == 'c')
+			{
+				C_b[C_idx[1]] = pos;
+				C_idx[1] = C_idx[1] + 1;
+			}
+			else if(cha == 'P')
+			{
+				P_r[P_idx[0]] = pos;
+				P_idx[0] = P_idx[0] + 1;
+			}
+			else if(cha == 'p')
+			{
+				P_b[P_idx[1]] = pos;
+				P_idx[1] = P_idx[1] + 1;
+			}
+		}
+	}
+	//俥傌相仕帥仕相傌俥炮炮兵兵兵兵兵車馬象士將士象馬車包包卒卒卒卒卒
+	
+	dpxq_str = twodig(R_r[0])+twodig(N_r[0])+twodig(B_r[0])+twodig(A_r[0])+twodig(K_r)+twodig(A_r[1])+twodig(B_r[1])+twodig(N_r[1])+twodig(R_r[1])+
+	           twodig(C_r[0])+twodig(C_r[1])+twodig(P_r[0])+twodig(P_r[1])+twodig(P_r[2])+twodig(P_r[3])+twodig(P_r[4])+
+	           twodig(R_b[0])+twodig(N_b[0])+twodig(B_b[0])+twodig(A_b[0])+twodig(K_b)+twodig(A_b[1])+twodig(B_b[1])+twodig(N_b[1])+twodig(R_b[1])+
+	           twodig(C_b[0])+twodig(C_b[1])+twodig(P_b[0])+twodig(P_b[1])+twodig(P_b[2])+twodig(P_b[3])+twodig(P_b[4]);
+	
+    return dpxq_str;
+}
+
+function twodig(n){
+    return n > 9 ? "" + n: "0" + n;
+}

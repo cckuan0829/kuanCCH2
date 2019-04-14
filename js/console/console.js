@@ -38,12 +38,14 @@ var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
 var uploadBtn =  document.getElementById("uploadBtn");
 var uploadInput = document.getElementById("uploadInput");
+var downloadBtn = document.getElementById("downloadBtn");
 var prevBtn = document.getElementById("prevBtn");
 var nextBtn = document.getElementById("nextBtn");
 var firstBtn = document.getElementById("firstBtn");
 var endBtn = document.getElementById("endBtn");
 var fenBtn = document.getElementById("fenBtn");
 var cloudBtn = document.getElementById("cloudBtn");
+var dpxqBtn = document.getElementById("dpxqBtn");
 var verticalBtn = document.getElementById("verticalBtn");
 var horizBtn = document.getElementById("horizBtn");
 var scoreBtn = document.getElementById("scoreBtn");
@@ -64,10 +66,11 @@ var buttonList = [
 	nextBtn,
 	fenBtn,
 	cloudBtn,
+	dpxqBtn,
 	verticalBtn,
 	horizBtn,
 	scoreBtn,
-	picBtn,
+	//picBtn,
 ];
 
 var _chessInfo =
@@ -109,10 +112,11 @@ $(document).ready(function() {
 	nextBtn.addEventListener('click', onNextBtnClick);
 	fenBtn.addEventListener('click', onFenBtnClick);
 	cloudBtn.addEventListener('click', onCloudBtnClick);
+	dpxqBtn.addEventListener('click', onDpxqBtnClick);
 	verticalBtn.addEventListener('click', onVerticalBtnClick);
 	horizBtn.addEventListener('click', onHorizBtnClick);
 	scoreBtn.addEventListener('click', onScoreBtnClick);
-	picBtn.addEventListener('click', onPicBtnClick);
+	//picBtn.addEventListener('click', onPicBtnClick);
 	
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
@@ -201,6 +205,13 @@ function onNextBtnClick()
 	if(_chessInfo.currNumber<_chessInfo.move_total)
 	{
 		showBoardbyNum(_chessInfo.currNumber+1);
+		
+		//var w = $(window);
+        //var row = $('moveListTable').find('tr').eq( line );
+
+        //if (row.length){
+        //   w.scrollTop( row.offset().top - (w.height()/2) );
+        //}
 	}
 }
 
@@ -234,6 +245,25 @@ function onCloudBtnClick()
 	}
 }
 
+function onDpxqBtnClick()
+{
+	if(_chessInfo.move_total>0)
+	{
+		if(_chessInfo.currNumber>0)
+		{
+			var fen = _chessInfo.fenList[_chessInfo.currNumber-1];
+			console.log(fen);
+			var board = FEN_to_Board(_chessInfo.fenList[_chessInfo.currNumber-1]);
+			console.log(board);
+			var dpxq = convertBoard2dpxq(board);
+			console.log(dpxq);
+			var dpxq_url = "http://www.dpxq.com/hldcg/search/?site=www.dpxq.com&owner=%B6%A5%BC%E2%B6%D4%BE%D6&e=&p=" + dpxq +
+			               "tree&red=&black=&result=&title=&date=&class=&event=&open=&order=&page=1"; 
+			window.open(dpxq_url, "_blank");
+		}
+	}
+}
+
 function onVerticalBtnClick()
 {
 	_chessInfo.is_vertical_original = ! _chessInfo.is_vertical_original;
@@ -260,7 +290,7 @@ function onScoreBtnClick()
 		$info.css('visibility', 'hidden');
 		$('#scoreBtn').html('info');
 	}
-
+    
 }
 
 function onPicBtnClick()
