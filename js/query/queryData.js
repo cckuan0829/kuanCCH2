@@ -322,23 +322,23 @@ function convert_english_num(num)
     	
 function convert_chinese_num(str_num)
 {
-    if(str_num == '一')
+    if(str_num == '一' || str_num == '１')
         return 1;
-    else if (str_num == '二')
+    else if (str_num == '二' || str_num == '２')
         return 2;
-    else if (str_num == '三')
-        return 3;
-    else if (str_num == '四')
+    else if (str_num == '三' || str_num == '３')
+        return 3; 
+    else if (str_num == '四' || str_num == '４')
         return 4;
-    else if (str_num == '五')
+    else if (str_num == '五' || str_num == '５')
         return 5;
-    else if (str_num == '六')
+    else if (str_num == '六' || str_num == '６')
         return 6;
-    else if (str_num == '七')
+    else if (str_num == '七' || str_num == '７')
         return 7;
-    else if (str_num == '八')
+    else if (str_num == '八' || str_num == '８')
         return 8;
-    else if (str_num == '九')
+    else if (str_num == '九' || str_num == '９')
         return 9;
     else
         return -1;
@@ -1262,13 +1262,16 @@ function generate_pgn_file(move_list, red_score, score_bias, recommend_list)
 			
 			pgn_str += convert2SimpChinese(move_list[i]);
 			pgn_str += "\n";
-			if(commend.length == 4)
+			if(score || bias || commend.length == 4)
 			{
-				pgn_str += "{ 局面分數 = "+score+"\n 此著偏差 = "+bias+"\n 推薦著法 = "+commend+"}\n";
-			}
-			else
-			{
-				pgn_str += "{ 局面分數 = "+score+"\n 此著偏差 = "+bias+"}\n";
+				if(commend.length == 4)
+				{
+					pgn_str += "{ 局面分數 = "+score+"\n 此著偏差 = "+bias+"\n 推薦著法 = "+commend+"}\n";
+				}
+				else
+				{
+					pgn_str += "{ 局面分數 = "+score+"\n 此著偏差 = "+bias+"}\n";
+				}
 			}
 		}
 	}
@@ -1388,6 +1391,63 @@ function convert2SimpChinese(move_str)
 	}
 	
 	return simp_str;
+}
+
+function convert2Eng(move_str)
+{
+	var eng_str = "";
+	var is_front_or_rear = 0;
+	var subStr = move_str.substring(0, 2);
+	var chess = conver_text_to_chess(move_str);
+	var is_red = check_red(move_str);
+	
+	if(isArrayElementInString(subStr, FRONT_S))
+	{
+		eng_str = chess + "+";
+	}
+	else if(isArrayElementInString(subStr, REAR_S))
+	{		
+		eng_str = chess + "-";
+	}
+	else
+	{
+		eng_str = chess;
+		if(move_str[3]<='9' && move_str[3]>='0')
+		    eng_str += move_str[3];
+	    else
+		    eng_str += convert_chinese_num(move_str[3]);
+	}
+	
+	if(isArrayElementInString(move_str[2], FORWARD_S))
+	{
+		eng_str += "+";
+	}
+	else if(isArrayElementInString(move_str[2], BACKWARD_S)) 
+	{
+		eng_str += "-";
+	}
+	else 
+	{
+		eng_str += ".";
+	}
+
+	if(move_str[3]<='9' && move_str[3]>='0')
+		eng_str += move_str[3];
+	else
+		eng_str += convert_chinese_num(move_str[3]);
+
+	return eng_str;
+}
+
+function convert2engmovelist(moveList)
+{
+	var eng_movelist = [];
+	for(var j = 0; j < moveList.length; j++)
+	{
+		eng_movelist.push(convert2Eng(moveList[j]));
+	}
+	
+	return eng_movelist;
 }
 
 function isArrayElementInString(str, arr)

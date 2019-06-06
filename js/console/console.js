@@ -33,11 +33,13 @@ var placeholder = "在這輸入或貼上棋譜，例如：\n\n" + inputExample;
 
 // should put all buttons to consoleConfig file
 var queryBtn = document.getElementById("queryBtn");
+var queryLadderBtn = document.getElementById("queryLadderBtn");
 var copyBtn = document.getElementById("copyBtn");
 var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
-var uploadBtn =  document.getElementById("uploadBtn");
-var uploadInput = document.getElementById("uploadInput");
+var openfileBtn = document.getElementById("openfileBtn");
+var openfileInput = document.getElementById("openfileInput");
+var uploadBtn = document.getElementById("uploadBtn");
 var downloadBtn = document.getElementById("downloadBtn");
 var prevBtn = document.getElementById("prevBtn");
 var nextBtn = document.getElementById("nextBtn");
@@ -55,10 +57,12 @@ var modal = document.getElementById('myModal');
 
 var buttonList = [
 	queryBtn,
+	queryLadderBtn,
 	copyBtn,
 	clearBtn,
 	infoBtn,
 	downloadBtn,
+	openfileBtn,
 	uploadBtn,
 	firstBtn,
 	endBtn,
@@ -88,6 +92,7 @@ var _chessInfo =
 	is_vertical_original: true,
 	is_horizontal_original: true,
 	moveList: [],
+	engmoveList: [],
 	moveCurveList: [],
 	fenList: [],
 	scoreList: [],
@@ -99,12 +104,12 @@ var _chessInfo =
 $(document).ready(function() {
     queryBtn.addEventListener("click", queryCloudDB);
     $("#queryBtn").val($("#queryBtn").html());
-
+    queryLadderBtn.addEventListener("click", queryLadderDB);
     copyBtn.addEventListener("click", copyQueryResult);
     clearBtn.addEventListener("click", clearInputText);
 	infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
-	uploadInput.addEventListener('change', handleFileSelect, false);
+	openfileInput.addEventListener('change', handleFileSelect, false);
 	uploadBtn.addEventListener('click', onUploadBtnClick);
 	firstBtn.addEventListener('click', onFirstBtnClick);
 	endBtn.addEventListener('click', onEndBtnClick);
@@ -153,9 +158,145 @@ $(document).ready(function() {
     initPlaceholder();
 });
 
-function onUploadBtnClick() {
-	$("#uploadInput").click();
+
+function getParameterHandler(val) {
+	
+	var is_exist = false;
+	
+	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	{url:val, query:"yes"},
+	function(data){
+	   if( data.includes("yes"))
+	   {
+		   is_exist = true;
+	   }
+	   else
+	   {
+		   alert("查無資料!");
+		   drawScore([], [], []);
+		   return;
+	   }
+	});
+    
+	$.get(
+    "https://pragmatic-byway-242913.appspot.com/chess.php",
+    {url: val},
+    function(data) {
+
+	   var res = data.toString().split(";");
+	   console.log(res[0]); //account
+	   console.log(res[1]); //record
+	   var obj = JSON.parse(res[1]);
+	   var fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
+	   
+	   _chessInfo.move_total = obj.move_num;
+	   _chessInfo.moveList   = obj.move_list;
+	   
+	   document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+	   
+	   for (var i = 0; i < _chessInfo.move_total; i++)
+	   {
+		 _chessInfo.moveCurveList.push(get_Curve(fen, _chessInfo.moveList[i]));  
+		 fen = Update_FEN(fen, _chessInfo.moveList[i]);
+		 _chessInfo.fenList.push(fen);
+	   }
+
+	   _chessInfo.scoreList  = obj.score;
+       _chessInfo.biasList   = obj.bias;
+	   _chessInfo.recommendList = obj.recommend;
+	
+	   removeDisplayTable();
+	   showDisplayHeader();
+	
+	   var is_red = true;
+	   for (var i = 0; i < _chessInfo.move_total; i++)
+	   {
+	      addDisplayRow([i+1, _chessInfo.moveList[i], _chessInfo.scoreList[i], _chessInfo.biasList[i], 
+	                  _chessInfo.recommendList[i], _chessInfo.fenList[i], is_red]);	
+	      is_red = !is_red;
+	   }
+	   showResult();
+	   showBoardbyNum(0);
+	   updateBadRate(calBadRate(_chessInfo.biasList));
+	   $('.chartArea').addClass('opacity9');
+	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
+	   enableButtons();
+	   _chessInfo.inQuety = false;
+	   
+       $("#copyEgBtn").attr("disabled", false);
+       $("#queryBtn").html($("#queryBtn").val());
+       });
 }
+
+function insert2mysql() {
+    var movestr = _chessInfo.engmoveList.join(",");
+	var hash = hash2INT32(movestr);
+	var jobj = {
+		 "move_num": _chessInfo.move_total,
+		 "move_list": _chessInfo.moveList,
+		 "score": _chessInfo.scoreList,
+		 "bias": _chessInfo.biasList,
+		 "recommend": _chessInfo.recommendList
+	   };
+	var jstr = JSON.stringify(jobj);
+	   
+	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	{url:hash, record:jstr, account:""},
+	function(data){
+		const el = document.createElement('textarea');
+        el.value = "http://asiagodkuan.nctu.me/?"+hash;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+		alert(el.value);
+	});
+}
+
+function uploadresult() {
+	var movestr = _chessInfo.engmoveList.join(",");
+	var hash = hash2INT32(movestr);
+	
+	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	{url:hash, query:"yes"},
+	function(data){
+	   if( data.includes("yes"))
+	   {
+		   if (confirm("該棋局已存在，是否要覆蓋?"))
+		   {
+		       insert2mysql();
+		   }
+	   }
+	   else
+	   {
+		   insert2mysql();
+	   }
+	});
+}
+
+function onUploadBtnClick() {
+    
+	if(_chessInfo.move_total == 0)
+	{
+		alert('搜尋後才能上傳!');
+	}
+	else
+	{　　	　
+		if(_chessInfo.is_not_complete)
+		{
+			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
+			{
+				uploadresult();
+			}
+		}
+		else
+		{
+			uploadresult();
+		}
+	}
+}
+
+
 
 function onDownloadBtnClick() {
 	
@@ -365,6 +506,7 @@ function resetChessInfo() {
 	_chessInfo.is_got_result = false;
 	_chessInfo.is_vertical_original = true;
 	_chessInfo.is_horizontal_original = true;
+	_chessInfo.engmoveList = [];
 	_chessInfo.moveList = [];
 	_chessInfo.moveCurveList = [];
 	_chessInfo.scoreList = [];
@@ -372,6 +514,44 @@ function resetChessInfo() {
 	_chessInfo.fenList = [];
 	_chessInfo.recommendList = [];
 	_chessInfo.badRate = [0, 0, 0, 0];
+}
+
+async function queryLadderDB() {
+	var hash;
+	var mytext   = document.getElementById("chessBookInput").value;	
+	disableButtons();
+	
+	removeDisplayTable();
+	resetBadRate();
+	
+	if (mytext == "" || mytext ===  placeholder)
+	{
+		alert("請輸入棋譜!");
+		drawScore([], [], []);
+	}
+	else
+	{
+	    var res      = check_text_valid(mytext);
+		var result   = res[0];
+		var list_num = res[1];
+	    
+		if (result)
+		{
+			var list = parsing_text(mytext);
+			var move_list = list[1];
+			var eng_move_list = convert2engmovelist(move_list);
+			var movestr = eng_move_list.join(",");
+	        var hash = hash2INT32(movestr);
+			getParameterHandler(hash); 
+		}
+		else
+		{
+			alert("輸入格式有誤!");
+			drawScore([], [], []);
+		}
+	}
+	
+	enableButtons();
 }
 
 async function queryCloudDB() {
@@ -411,6 +591,7 @@ async function queryCloudDB() {
 			showResult();
 			query_result = await queryByMoveList(mytext);
 			_chessInfo.moveList  = query_result[0];
+			_chessInfo.engmoveList = convert2engmovelist(_chessInfo.moveList);
 			_chessInfo.scoreList = query_result[1];
 			_chessInfo.biasList = query_result[2];
 			_chessInfo.recommendList = query_result[3];
@@ -458,7 +639,6 @@ function copyQueryResult() {
 
 function clearInputText() {
 	document.getElementById("chessBookInput").value = "";
-	uploadBtn.value = '';
 }
 
 function showInfo() {
@@ -466,7 +646,7 @@ function showInfo() {
 	alert("操作步驟:\
 	     \n\t1. 從象棋橋或是東萍匯出文字棋譜。\
 	     \n\t2. 將文字棋譜貼至本網頁上，然後按下'雲庫查詢'。\
-		 \n\t3. 或選'上傳檔案'，然後選欲上傳之pgn檔，再按下'雲庫查詢'。\
+		 \n\t3. 或選'開啟檔案'，然後選欲開啟之pgn檔，再按下'雲庫查詢'。\
 		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
 		 \n\t5. 可將複製結果匯入象棋橋：在象棋橋按'匯入'=>'文字棋譜'。\
 		 \n輸出說明:\
@@ -837,17 +1017,33 @@ function showBoardbyNum(num)
 }
 
 function showInitBoard()
-{
-	var chessList;
-	$('#scoreBtn').html('info');
-	fen = getDefaultFEN();
-	chessList = FEN_to_ChessList(fen, null, true, true);
-	new ChessBoard(chessList, null, null, null, true, true);
-	
-	if($('#chess-info').css("visibility") != "hidden") 
+{   
+    if(window.location.search != "")
 	{
-		$('#scoreBtn').html('hide');
+		var url = window.location.search;
+		var res = url.split("?");
+		if(res[1]>0)
+		{
+			getParameterHandler(res[1]);
+		}
+		else
+		{
+			alert("網址有誤!");
+		}
 	}
+    else		
+	{
+		var chessList;
+		$('#scoreBtn').html('info');
+		fen = getDefaultFEN();
+		chessList = FEN_to_ChessList(fen, null, true, true);
+		new ChessBoard(chessList, null, null, null, true, true);
+	
+		if($('#chess-info').css("visibility") != "hidden") 
+		{
+			$('#scoreBtn').html('hide');
+		}
+	}		
 }
 
 window.onload = showInitBoard;
