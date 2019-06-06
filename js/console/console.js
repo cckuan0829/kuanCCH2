@@ -192,7 +192,7 @@ function getParameterHandler(val) {
 	   _chessInfo.move_total = obj.move_num;
 	   _chessInfo.moveList   = obj.move_list;
 	   
-	   document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+	   document.getElementById("chessBookInput").value = "http://asiagodkuan.nctu.me/?"+val+"\n"+_chessInfo.moveList.join(" ");
 	   
 	   for (var i = 0; i < _chessInfo.move_total; i++)
 	   {
