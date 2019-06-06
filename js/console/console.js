@@ -188,23 +188,29 @@ function getParameterHandler(val) {
 	   console.log(res[1]); //record
 	   var obj = JSON.parse(res[1]);
 	   var fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
+	   var out_str = "http://asiagodkuan.nctu.me/?"+val+"\n";
 	   
 	   _chessInfo.move_total = obj.move_num;
 	   _chessInfo.moveList   = obj.move_list;
-	   
-	   document.getElementById("chessBookInput").value = "http://asiagodkuan.nctu.me/?"+val+"\n"+_chessInfo.moveList.join(" ");
 	   
 	   for (var i = 0; i < _chessInfo.move_total; i++)
 	   {
 		 _chessInfo.moveCurveList.push(get_Curve(fen, _chessInfo.moveList[i]));  
 		 fen = Update_FEN(fen, _chessInfo.moveList[i]);
 		 _chessInfo.fenList.push(fen);
+		 
+		 if(i%2 == 0) { out_str += i/2 + 1 + "."; }
+		 
+		 out_str += _chessInfo.moveList[i]+" ";
+		 
+		 if(i%2 == 1) { out_str += "\n"; }
 	   }
 
 	   _chessInfo.scoreList  = obj.score;
        _chessInfo.biasList   = obj.bias;
 	   _chessInfo.recommendList = obj.recommend;
-	
+	   
+	   document.getElementById("chessBookInput").value = out_str;
 	   removeDisplayTable();
 	   showDisplayHeader();
 	
