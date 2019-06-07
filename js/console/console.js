@@ -35,6 +35,7 @@ var placeholder = "在這輸入或貼上棋譜，例如：\n\n" + inputExample;
 var queryBtn = document.getElementById("queryBtn");
 var queryLadderBtn = document.getElementById("queryLadderBtn");
 var copyBtn = document.getElementById("copyBtn");
+var copyURLBtn = document.getElementById("copyURLBtn"); 
 var clearBtn = document.getElementById("clearBtn");
 var infoBtn = document.getElementById("infoBtn");
 var openfileBtn = document.getElementById("openfileBtn");
@@ -59,6 +60,7 @@ var buttonList = [
 	queryBtn,
 	queryLadderBtn,
 	copyBtn,
+	copyURLBtn,
 	clearBtn,
 	infoBtn,
 	downloadBtn,
@@ -106,6 +108,7 @@ $(document).ready(function() {
     $("#queryBtn").val($("#queryBtn").html());
     queryLadderBtn.addEventListener("click", queryLadderDB);
     copyBtn.addEventListener("click", copyQueryResult);
+	copyURLBtn.addEventListener("click", copyUrl);
     clearBtn.addEventListener("click", clearInputText);
 	infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
@@ -189,7 +192,7 @@ function getParameterHandler(val) {
 	   console.log(res[1]); //record
 	   var obj = JSON.parse(res[1]);
 	   var fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
-	   var out_str = "http://asiagodkuan.nctu.me/?"+val+"\n";
+	   var out_str = "";
 	   
 	   _chessInfo.move_total = obj.move_num;
 	   _chessInfo.moveList   = obj.move_list;
@@ -251,12 +254,6 @@ function insert2mysql() {
 	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
 	{url:hash, record:jstr, account:""},
 	function(data){
-		const el = document.createElement('textarea');
-        el.value = "http://asiagodkuan.nctu.me/?"+hash;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
 		alert(el.value);
 	});
 }
@@ -645,6 +642,38 @@ function copyQueryResult() {
 	else
 		alert("沒有可複製的文字!");
 	
+}
+
+function copyUrl() {
+	var movestr = _chessInfo.engmoveList.join(",");
+	var hash = hash2INT32(movestr);
+    
+    if(_chessInfo.moveList.length == 0)
+	{
+		alert("沒有有效的URL可以複製!");
+		return;
+	}
+  	
+	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	{url:hash, query:"yes"},
+	function(data){
+	   if( data.includes("yes"))
+	   {
+		   const el = document.createElement('textarea');
+		   el.value = "http://asiagodkuan.nctu.me/?"+hash;
+           document.body.appendChild(el);
+           el.select();
+           document.execCommand('copy');
+           document.body.removeChild(el);
+		   alert("已複製URL : "+ el.value);
+	   }
+	   else
+	   {
+		   alert("沒有有效的URL可以複製!");
+		   return;
+	   }
+	});
+
 }
 
 function clearInputText() {
