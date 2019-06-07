@@ -192,6 +192,7 @@ function getParameterHandler(val) {
 	   
 	   _chessInfo.move_total = obj.move_num;
 	   _chessInfo.moveList   = obj.move_list;
+	   _chessInfo.engmoveList = convert2engmovelist(_chessInfo.moveList);
 	   
 	   for (var i = 0; i < _chessInfo.move_total; i++)
 	   {
@@ -282,7 +283,7 @@ function uploadresult() {
 
 function onUploadBtnClick() {
     
-	if(_chessInfo.move_total == 0)
+	if(_chessInfo.move_total == 0 )
 	{
 		alert('搜尋後才能上傳!');
 	}
