@@ -1028,7 +1028,8 @@ function showInitBoard()
     if(window.location.search != "")
 	{
 		var url = window.location.search;
-		var res = url.split("?");
+		var res = url.split('&').join('?').split('?')
+		//var res = url.split("?");
 		if(res[1]>0)
 		{
 			getParameterHandler(res[1]);
