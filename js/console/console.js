@@ -110,6 +110,7 @@ $(document).ready(function() {
 	infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
 	openfileInput.addEventListener('change', handleFileSelect, false);
+	openfileBtn.addEventListener("click", onOpenfileBtnClick);
 	uploadBtn.addEventListener('click', onUploadBtnClick);
 	firstBtn.addEventListener('click', onFirstBtnClick);
 	endBtn.addEventListener('click', onEndBtnClick);
@@ -303,7 +304,9 @@ function onUploadBtnClick() {
 	}
 }
 
-
+function onOpenfileBtnClick() {
+	$("#openfileInput").click();
+}
 
 function onDownloadBtnClick() {
 	
