@@ -654,6 +654,15 @@ function copyUrl() {
 		return;
 	}
   	
+	const el = document.createElement('textarea');
+    el.value = "http://asiagodkuan.nctu.me/?"+hash;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    alert("已複製URL : "+ el.value);
+	
+	/*
 	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
 	{url:hash, query:"yes"},
 	function(data){
@@ -673,7 +682,7 @@ function copyUrl() {
 		   return;
 	   }
 	});
-
+    */ 
 }
 
 function clearInputText() {
