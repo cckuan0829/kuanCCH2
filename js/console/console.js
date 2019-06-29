@@ -637,9 +637,9 @@ function createCopyStr(chessInfo) {
 	var score_list = chessInfo[2];
 	var bias_list = chessInfo[3]; 
 	var recommend_list = chessInfo[4]; 
-	var move_list_len = move_list.length;
+	var size = Math.min(move_list.length, score_list.length, recommend_list.length);
 
-	for (var i = 0; i < move_list_len; i++)
+	for (var i = 0; i < size; i++)
 	{
 		chess_str += (i+1) + "." + move_list[i] +"\n";
 		if(!isNaN(score_list[i]) || !isNaN(bias_list[i]) || recommend_list[i] != "")

@@ -30,7 +30,7 @@ function drawScore(move_list, score_list, score_bias) {
 	
 	for(var i = 0; i<score_list.length; i++)
 	{
-		if(!isNaN(score_list[i]))
+		if(score_list[i] != undefined && !isNaN(score_list[i]))
 			_size = i;
 	}
 	

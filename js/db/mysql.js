@@ -59,6 +59,9 @@ function getParameterHandler(val) {
 	   var is_red = true;
 	   for (var i = 0; i < _chessInfo.move_total; i++)
 	   {
+	   	  if(_chessInfo.scoreList[i] == undefined) _chessInfo.scoreList[i] = NaN;
+	   	  if(_chessInfo.biasList[i] == undefined) _chessInfo.biasList[i] = NaN;
+	   	  if(_chessInfo.recommendList[i] == undefined) _chessInfo.recommendList[i] = "";
 	      addDisplayRow([i+1, _chessInfo.moveList[i], _chessInfo.scoreList[i], _chessInfo.biasList[i], 
 	                  _chessInfo.recommendList[i], _chessInfo.fenList[i], is_red]);	
 	      is_red = !is_red;

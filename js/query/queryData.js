@@ -163,7 +163,7 @@ async function queryByMoveList(chess_manual)
         if(_chessInfo.toStop) 
 		{
 			_chessInfo.move_total = _chessInfo.move_curr; 
-			break;
+			return res; 
 		}
     } 
 
