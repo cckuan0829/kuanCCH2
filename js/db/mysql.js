@@ -66,14 +66,17 @@ function getParameterHandler(val) {
 	                  _chessInfo.recommendList[i], _chessInfo.fenList[i], is_red]);	
 	      is_red = !is_red;
 	   }
+	   
+	   _chessInfo.inQuety = false;
+	   _chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
+	   _chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList]);       
+   
 	   showResult();
 	   showBoardbyNum(0);
-	   updateBadRate(calBadRate(_chessInfo.biasList));
-	   $('.chartArea').addClass('opacity9');
 	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
 	   enableButtons();
-	   _chessInfo.inQuety = false;
-	   
+	   updateBadRate(calBadRate(_chessInfo.biasList));
+	   $('.chartArea').addClass('opacity9');
        $("#copyEgBtn").attr("disabled", false);
        $("#queryBtn").html($("#queryBtn").val());
        });

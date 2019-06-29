@@ -1515,6 +1515,37 @@ function twodig(n){
     return n > 9 ? "" + n: "0" + n;
 }
 
+function createCopyStr(chessInfo) {
+    var chess_str = "";
+    var fen_list = chessInfo[0];
+    var move_list = chessInfo[1];
+    var score_list = chessInfo[2];
+    var bias_list = chessInfo[3]; 
+    var recommend_list = chessInfo[4]; 
+    var size = Math.min(move_list.length, score_list.length, recommend_list.length);
+
+    for (var i = 0; i < size; i++)
+    {
+        chess_str += (i+1) + "." + move_list[i] +"\n";
+        if(!isNaN(score_list[i]) || !isNaN(bias_list[i]) || recommend_list[i] != "")
+        {
+            chess_str += 'Red score   = ' + score_list[i] +"\n";
+            chess_str += 'score bias  = ' + bias_list[i] +"\n";
+            if(recommend_list[i].length == 4)
+            {
+                chess_str += 'recommend : '+ recommend_list[i] +"\n";
+            }
+            else
+            {
+                chess_str += 'recommend : '+ "\n" + recommend_list[i] +"\n";
+            }
+        }
+        chess_str += "\n";
+    }
+
+    return chess_str;
+}
+
 function generate_pgn_file(move_list, red_score, score_bias, recommend_list)
 {
     var pgn_str = "";

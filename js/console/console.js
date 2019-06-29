@@ -626,33 +626,9 @@ function enableButtons() {
 }
 
 function addCopyStr(newstr) {
-	
+
 	_chessInfo.copy_str  += newstr + "\n";
 }	
-
-function createCopyStr(chessInfo) {
-	var chess_str = "";
-	var fen_list = chessInfo[0];
-	var move_list = chessInfo[1];
-	var score_list = chessInfo[2];
-	var bias_list = chessInfo[3]; 
-	var recommend_list = chessInfo[4]; 
-	var size = Math.min(move_list.length, score_list.length, recommend_list.length);
-
-	for (var i = 0; i < size; i++)
-	{
-		chess_str += (i+1) + "." + move_list[i] +"\n";
-		if(!isNaN(score_list[i]) || !isNaN(bias_list[i]) || recommend_list[i] != "")
-		{
-			chess_str += 'Red score   = ' + score_list[i] +"\n";
-			chess_str += 'score bias  = ' + bias_list[i] +"\n";
-        	chess_str += 'recommend : '+ "\n" + recommend_list[i] +"\n";
-		}
-		chess_str += "\n";
-	}
-
-	return chess_str;
-}
 
 function showDisplayHeader(){
 	var table = document.getElementById("moveListTable");
@@ -669,7 +645,6 @@ function showDisplayHeader(){
 	table.classList.add("outputTable");	
 	table.style.visibility = "visible";
 }
-
 
 function addDisplayRow(info_list) {
     var table = document.getElementById("moveListTable");
