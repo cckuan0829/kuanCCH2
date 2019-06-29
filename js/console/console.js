@@ -1,18 +1,6 @@
-/*
-  1.炮二平五      炮８平５  
-  2.車一進一      馬８進７  
-  3.車一平六      車９平８  
-  4.馬二進三      車８進６ 
-  5.車六進七      馬２進１
-  6.車九進一      炮２進７
-  7.炮八進五      馬７退８
-  8.炮五進四      士６進５  
-  9.車九平六      將５平６  
- 10.前車進一      士５退４  
- 11.車六平四      炮５平６  
- 12.車四進六      將６平５  
- 13.炮八平五 
-*/
+var _cloudUrl = "http://www.chessdb.cn/query/?";
+var _ladderUrl = "http://asiagodkuan.nctu.me/?";
+var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
 
 var inputExample = 
 "  1.炮二平五      炮８平５\n\
@@ -167,7 +155,7 @@ function getParameterHandler(val) {
 	
 	var is_exist = false;
 	
-	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	$.post(_chessDbUrl, 
 	{url:val, query:"yes"},
 	function(data){
 	   if( data.includes("yes"))
@@ -183,7 +171,7 @@ function getParameterHandler(val) {
 	});
     
 	$.get(
-    "https://pragmatic-byway-242913.appspot.com/chess.php",
+    _chessDbUrl,
     {url: val},
     function(data) {
 
@@ -251,7 +239,7 @@ function insert2mysql() {
 	   };
 	var jstr = JSON.stringify(jobj);
 	   
-	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	$.post(_chessDbUrl, 
 	{url:hash, record:jstr, account:""},
 	function(data){
 		alert(el.value);
@@ -262,7 +250,7 @@ function uploadresult() {
 	var movestr = _chessInfo.engmoveList.join(",");
 	var hash = hash2INT32(movestr);
 	
-	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
+	$.post(_chessDbUrl, 
 	{url:hash, query:"yes"},
 	function(data){
 	   if( data.includes("yes"))
@@ -354,13 +342,6 @@ function onNextBtnClick()
 	if(_chessInfo.currNumber<_chessInfo.move_total)
 	{
 		showBoardbyNum(_chessInfo.currNumber+1);
-		
-		//var w = $(window);
-        //var row = $('moveListTable').find('tr').eq( line );
-
-        //if (row.length){
-        //   w.scrollTop( row.offset().top - (w.height()/2) );
-        //}
 	}
 }
 
@@ -385,11 +366,11 @@ function onCloudBtnClick()
 	{
 		if(_chessInfo.currNumber>0)
 		{
-			window.open("http://www.chessdb.cn/query/?"+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
+			window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
 		}
 		else
 		{
-			window.open("http://www.chessdb.cn/query/?"+getDefaultFEN(), "_blank");
+			window.open(_cloudUrl+getDefaultFEN(), "_blank");
 		}
 	}
 }
@@ -571,7 +552,7 @@ async function queryCloudDB() {
 	}
 	resetChessInfo();
 	
-    var mytext   = document.getElementById("chessBookInput").value;	
+    var mytext = document.getElementById("chessBookInput").value;	
 	disableButtons();
 	
 	removeDisplayTable();
@@ -579,16 +560,18 @@ async function queryCloudDB() {
 	
     $("#copyEgBtn").attr("disabled", true);
 	
-	if (mytext == "" || mytext ===  placeholder)
+	if (mytext == "" || mytext === placeholder)
 	{
 		alert("請輸入棋譜!");
 	}
 	else
 	{
-		var list     = check_text_valid(mytext);
-		var result   = list[0];
-		var list_num = list[1];
-	
+		var list      = check_text_valid(mytext);
+		var result    = list[0];
+		var list_num  = list[1];
+	    var parse_res = parsing_text(mytext);
+        var fen       = parse_res[0];
+
 		if (result)
 		{
 			var query_result = [];
@@ -597,16 +580,16 @@ async function queryCloudDB() {
 			_chessInfo.status_str = "進度:" + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
-			_chessInfo.moveList  = query_result[0];
+			_chessInfo.moveList  = query_result.move_list;
+			_chessInfo.move_total = query_result.move_list.length;
 			_chessInfo.engmoveList = convert2engmovelist(_chessInfo.moveList);
-			_chessInfo.scoreList = query_result[1];
-			_chessInfo.biasList = query_result[2];
-			_chessInfo.recommendList = query_result[3];
-			_chessInfo.fenList = query_result[4];
-			_chessInfo.moveCurveList = query_result[5];
+			_chessInfo.scoreList = query_result.red_score_list;
+			_chessInfo.biasList = query_result.score_bias_list;
+			_chessInfo.recommendList = query_result.first_recommend_list;
+			_chessInfo.fenList = query_result.fen_list;
+			_chessInfo.moveCurveList = query_result.curve_list; 
+			_chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, query_result.recommend_str_list]);       
 			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
-			if(_chessInfo.scoreList.findIndex(Number.isNaN) >= 0)
-				_chessInfo.is_not_complete = true;
 		}
 		else
 		{
@@ -655,34 +638,13 @@ function copyUrl() {
 	}
   	
 	const el = document.createElement('textarea');
-    el.value = "http://asiagodkuan.nctu.me/?"+hash;
+    el.value = _ladderUrl+hash;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
     alert("已複製URL : "+ el.value);
-	
-	/*
-	$.post("https://pragmatic-byway-242913.appspot.com/chess.php", 
-	{url:hash, query:"yes"},
-	function(data){
-	   if( data.includes("yes"))
-	   {
-		   const el = document.createElement('textarea');
-		   el.value = "http://asiagodkuan.nctu.me/?"+hash;
-           document.body.appendChild(el);
-           el.select();
-           document.execCommand('copy');
-           document.body.removeChild(el);
-		   alert("已複製URL : "+ el.value);
-	   }
-	   else
-	   {
-		   alert("沒有有效的URL可以複製!");
-		   return;
-	   }
-	});
-    */ 
+
 }
 
 function clearInputText() {
@@ -777,137 +739,35 @@ function enableButtons() {
 	}
 }
 
-async function queryByMoveList(chess_manual)
-{
-	var list      = parsing_text(chess_manual);
-	var fen       = list[0];
-	var move_list = list[1];
-	var red_score = [];
-	var score_bias = [];
-	var first_recommend_list = [];
-	var fen_list = [];
-	var curve_list = [];
-	var prev_fen  = fen;
-	var recommend_list = await query_cloud(fen);
-	var prev_recommend_list = recommend_list;
-	var score_diff = 0;
-	var is_red_before = (fen.indexOf('w') >= 0);
-	var curr_score = 0;
-	var show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
-	var search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
-    var fisrt_recommend_move_text = "";
-	
-	_chessInfo.move_total = move_list.length;
-	_chessInfo.copy_str  += "FEN：" + fen + "\n";
-	
-	showDisplayHeader();
-	
-	for (var i = 0; i < move_list.length; i++)
-	{
-		_chessInfo.move_curr = i+1;
-		addStr(_chessInfo.move_curr + "." + move_list[i]);
+function addCopyStr(newstr) {
 
-		prev_fen = fen;
-		curve_list.push(get_Curve(fen, move_list[i]));
-		fen = Update_FEN(fen, move_list[i]);
-		fen_list.push(fen);
-		curr_score = await query_score(fen);
-		curr_score = is_red_before ? curr_score*(-1) : curr_score;
-		recommend_list = await query_cloud(fen);
-		is_red_before  = (fen.indexOf('w') >= 0);
-        red_score_list = [];
-		recommend_text = [];
-		fisrt_recommend_move_text = "";
-		show_len = recommend_list.length <= 5 ? recommend_list.length : 5;
-	    search_len = recommend_list.length <= 10 ? recommend_list.length : 10;
-		
-		if( prev_recommend_list[0] != undefined)
-		{
-			var qurey_list = prev_recommend_list[0].split(/:|,/);  
-			var score_list = [];	
-			search_len = prev_recommend_list.length <= 10 ? prev_recommend_list.length : 10;
-			for ( var j = 0; j < search_len; j++)
-			{
-				qurey_list = prev_recommend_list[j].split(/:|,|\(/);       
-				
-				if (prev_recommend_list[j].indexOf('invalid') >= 0 || prev_recommend_list[j].length < 10)
-				{
-					addStr('Red score   = '+ NaN);
-					addStr('score bias  = '+ NaN);
-					red_score.push(NaN);
-					score_bias.push(NaN);
-				}
-				else
-				{
-					var move = get_move_text(prev_fen, qurey_list[1]);
-					var score = qurey_list[3];
-					score     = is_red_before ? score*(-1) : score;
-					score_list.push(score);
-					if(fen == Update_FEN(prev_fen, move))
-					{
-						curr_score = parseInt(score);
-						if(j > 3) break;
-					}
-					recommend_text.push("-" + move + " ,score = " + score)
-					
-					if( j == 0)
-						fisrt_recommend_move_text = move;
-				}
-			}
-			addStr('Red score   = '+ curr_score);
-			red_score.push(curr_score);
-			if(is_red_before)
-				score_diff = Math.min(...score_list)-curr_score;
-		    else
-				score_diff = Math.max(...score_list)-curr_score
-
-			addStr('score bias  = ' + Math.abs(score_diff));
-			score_bias.push(Math.abs(score_diff));
-			
-			addStr('recommend :');
-			for ( var j = 0; j < show_len; j++)
-			{
-				if(recommend_text[j] != undefined) addStr(recommend_text[j]);
-			}		
-		}
-		else
-		{	
-			curr_score = NaN;
-			score_diff = NaN;
-			red_score.push(NaN);
-			score_bias.push(NaN);
-		}
-		
-        _chessInfo.status_str = "進度:" + _chessInfo.move_curr + "/" + _chessInfo.move_total ;
-		showResult();
-		prev_recommend_list = recommend_list;
-		addStr("\n");
-		
-		if ( Math.abs(score_diff) > 20 || Number.isNaN(score_diff))
-		{
-			first_recommend_list.push(fisrt_recommend_move_text);
-			addDisplayRow([_chessInfo.move_curr, move_list[i], curr_score, Math.abs(score_diff), fisrt_recommend_move_text, fen, !is_red_before]);
-		}
-		else
-		{
-			first_recommend_list.push("");
-			addDisplayRow([_chessInfo.move_curr, move_list[i], curr_score, Math.abs(score_diff), "", fen, !is_red_before]);
-		}
-		if(_chessInfo.toStop) 
-		{
-			_chessInfo.move_total = _chessInfo.move_curr; 
-			break;
-		}
-    } 
-	_chessInfo.move_curr = 0;
-	return [move_list, red_score, score_bias, first_recommend_list, fen_list, curve_list];
-}
-
-function addStr(newstr) {
-
-	console.log(newstr);
+	//console.log(newstr);
 	_chessInfo.copy_str  += newstr + "\n";
 }	
+
+function createCopyStr(chessInfo) {
+	var chess_str = "";
+	var fen_list = chessInfo[0];
+	var move_list = chessInfo[1];
+	var score_list = chessInfo[2];
+	var bias_list = chessInfo[3]; 
+	var recommend_list = chessInfo[4]; 
+	var move_list_len = move_list.length;
+
+	for (var i = 0; i < move_list_len; i++)
+	{
+		chess_str += (i+1) + "." + move_list[i] +"\n";
+		if(!isNaN(score_list[i]) || !isNaN(bias_list[i]) || recommend_list[i].length == 4)
+		{
+			chess_str += 'Red score   = ' + score_list[i] +"\n";
+			chess_str += 'score bias  = ' + bias_list[i] +"\n";
+        	chess_str += 'recommend : '+ "\n" + recommend_list[i] +"\n";
+		}
+		chess_str += "\n";
+	}
+
+	return chess_str;
+}
 
 function showDisplayHeader(){
 	var table = document.getElementById("moveListTable");
@@ -940,7 +800,7 @@ function addDisplayRow(info_list) {
 	var cell_recommend = row.insertCell(4);
 
 	var move_str = info_list[1];
-    var result = move_str.link("http://www.chessdb.cn/query/?"+info_list[5]);
+    var result = move_str.link(_cloudUrl+info_list[5]);
     
 	if(info_list[5]!="")
 	{
@@ -950,9 +810,9 @@ function addDisplayRow(info_list) {
 		});
 		
 		if(info_list[6] == true)
-			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
+			cell_move.innerHTML = '<a href="'+_cloudUrl+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
 		else
-			cell_move.innerHTML = '<a href="'+"http://www.chessdb.cn/query/?"+info_list[5]+'" target="_blank" style="color:blue">'+move_str+'</a>';
+			cell_move.innerHTML = '<a href="'+_cloudUrl+info_list[5]+'" target="_blank" style="color:blue">'+move_str+'</a>';
 		
 	}
 	else
