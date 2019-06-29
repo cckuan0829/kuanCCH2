@@ -150,123 +150,6 @@ $(document).ready(function() {
     initPlaceholder();
 });
 
-
-function getParameterHandler(val) {
-	
-	var is_exist = false;
-	
-	$.post(_chessDbUrl, 
-	{url:val, query:"yes"},
-	function(data){
-	   if( data.includes("yes"))
-	   {
-		   is_exist = true;
-	   }
-	   else
-	   {
-		   alert("查無資料!");
-		   drawScore([], [], []);
-		   return;
-	   }
-	});
-    
-	$.get(
-    _chessDbUrl,
-    {url: val},
-    function(data) {
-
-	   var res = data.toString().split(";");
-	   console.log(res[0]); //account
-	   console.log(res[1]); //record
-	   var obj = JSON.parse(res[1]);
-	   var fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
-	   var out_str = "";
-	   
-	   _chessInfo.move_total = obj.move_num;
-	   _chessInfo.moveList   = obj.move_list;
-	   _chessInfo.engmoveList = convert2engmovelist(_chessInfo.moveList);
-	   
-	   for (var i = 0; i < _chessInfo.move_total; i++)
-	   {
-		 _chessInfo.moveCurveList.push(get_Curve(fen, _chessInfo.moveList[i]));  
-		 fen = Update_FEN(fen, _chessInfo.moveList[i]);
-		 _chessInfo.fenList.push(fen);
-		 
-		 if(i%2 == 0) { out_str += i/2 + 1 + "."; }
-		 
-		 out_str += _chessInfo.moveList[i]+" ";
-		 
-		 if(i%2 == 1) { out_str += "\n"; }
-	   }
-
-	   _chessInfo.scoreList  = obj.score;
-       _chessInfo.biasList   = obj.bias;
-	   _chessInfo.recommendList = obj.recommend;
-	   
-	   document.getElementById("chessBookInput").value = out_str;
-	   removeDisplayTable();
-	   showDisplayHeader();
-	
-	   var is_red = true;
-	   for (var i = 0; i < _chessInfo.move_total; i++)
-	   {
-	      addDisplayRow([i+1, _chessInfo.moveList[i], _chessInfo.scoreList[i], _chessInfo.biasList[i], 
-	                  _chessInfo.recommendList[i], _chessInfo.fenList[i], is_red]);	
-	      is_red = !is_red;
-	   }
-	   showResult();
-	   showBoardbyNum(0);
-	   updateBadRate(calBadRate(_chessInfo.biasList));
-	   $('.chartArea').addClass('opacity9');
-	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
-	   enableButtons();
-	   _chessInfo.inQuety = false;
-	   
-       $("#copyEgBtn").attr("disabled", false);
-       $("#queryBtn").html($("#queryBtn").val());
-       });
-}
-
-function insert2mysql() {
-    var movestr = _chessInfo.engmoveList.join(",");
-	var hash = hash2INT32(movestr);
-	var jobj = {
-		 "move_num": _chessInfo.move_total,
-		 "move_list": _chessInfo.moveList,
-		 "score": _chessInfo.scoreList,
-		 "bias": _chessInfo.biasList,
-		 "recommend": _chessInfo.recommendList
-	   };
-	var jstr = JSON.stringify(jobj);
-	   
-	$.post(_chessDbUrl, 
-	{url:hash, record:jstr, account:""},
-	function(data){
-		alert(el.value);
-	});
-}
-
-function uploadresult() {
-	var movestr = _chessInfo.engmoveList.join(",");
-	var hash = hash2INT32(movestr);
-	
-	$.post(_chessDbUrl, 
-	{url:hash, query:"yes"},
-	function(data){
-	   if( data.includes("yes"))
-	   {
-		   if (confirm("該棋局已存在，是否要覆蓋?"))
-		   {
-		       insert2mysql();
-		   }
-	   }
-	   else
-	   {
-		   insert2mysql();
-	   }
-	});
-}
-
 function onUploadBtnClick() {
     
 	if(_chessInfo.move_total == 0 )
@@ -279,12 +162,12 @@ function onUploadBtnClick() {
 		{
 			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
 			{
-				uploadresult();
+				uploadresult(_chessInfo);
 			}
 		}
 		else
 		{
-			uploadresult();
+			uploadresult(_chessInfo);
 		}
 	}
 }
@@ -590,6 +473,9 @@ async function queryCloudDB() {
 			_chessInfo.moveCurveList = query_result.curve_list; 
 			_chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, query_result.recommend_str_list]);       
 			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
+		    
+		    if(_chessInfo.scoreList.findIndex(Number.isNaN) >= 0)
+				_chessInfo.is_not_complete = true;
 		}
 		else
 		{
@@ -740,8 +626,7 @@ function enableButtons() {
 }
 
 function addCopyStr(newstr) {
-
-	//console.log(newstr);
+	
 	_chessInfo.copy_str  += newstr + "\n";
 }	
 
@@ -757,7 +642,7 @@ function createCopyStr(chessInfo) {
 	for (var i = 0; i < move_list_len; i++)
 	{
 		chess_str += (i+1) + "." + move_list[i] +"\n";
-		if(!isNaN(score_list[i]) || !isNaN(bias_list[i]) || recommend_list[i].length == 4)
+		if(!isNaN(score_list[i]) || !isNaN(bias_list[i]) || recommend_list[i] != "")
 		{
 			chess_str += 'Red score   = ' + score_list[i] +"\n";
 			chess_str += 'score bias  = ' + bias_list[i] +"\n";

@@ -107,7 +107,7 @@ function insert2mysql(chessInfo) {
 	$.post(_chessDbUrl, 
 	{url:hash, record:jstr, account:""},
 	function(data){
-		alert(el.value);
+		alert("上傳雲梯成功!");
 	});
 }
 

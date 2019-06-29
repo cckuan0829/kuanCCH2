@@ -22,4 +22,5 @@ loadScript("js/chart/chartDrawer.js", null, 'text/javascript');
 loadScript("js/query/queryData.js", null, 'text/javascript');
 loadScript("js/parser/chessparser.js", null, 'text/javascript');
 loadScript("js/board/chessBoard.js", null, 'text/javascript');
+loadScript("js/db/mysql.js", null, 'text/javascript');
 

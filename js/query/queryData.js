@@ -35,7 +35,7 @@ async function queryByMove(prev_fen, move)
 {
 	var recommend_list;
 	var prev_recommend_list;
-	var is_red_before = (fen.indexOf('w') >= 0);
+	var is_red_before = false;
 	var show_len;
 	var search_len;
     var fisrt_recommend_move_text = "";
