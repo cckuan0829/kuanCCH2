@@ -1,5 +1,5 @@
 var _cloudUrl = "http://www.chessdb.cn/query/?";
-var _ladderUrl = "http://asiagodkuan.nctu.me/?";
+var _ladderUrl = "http://chessladder.nctu.me/?";
 var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
 
 var inputExample = 
