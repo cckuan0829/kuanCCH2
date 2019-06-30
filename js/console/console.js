@@ -786,7 +786,8 @@ function showBoardbyNum(num)
 
 function showInitBoard()
 {   
-    if(window.location.search != "")
+	var searchStr = window.location.search;
+    if(searchStr != "" && searchStr.indexOf("?fbclid") == -1)
 	{
 		var url = window.location.search;
 		var res = url.split('&').join('?').split('?')
