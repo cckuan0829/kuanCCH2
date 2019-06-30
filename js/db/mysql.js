@@ -76,6 +76,13 @@ function getParameterHandler(val) {
 	   updateBadRate(calBadRate(_chessInfo.biasList));
 	   $('.chartArea').addClass('opacity9');
 	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
+
+	   enableButtons();
+       _chessInfo.inQuety = false;
+	
+       $("#copyEgBtn").attr("disabled", false);
+       $("#queryBtn").html($("#queryBtn").val());
+
        });
 }
 
