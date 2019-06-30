@@ -71,14 +71,11 @@ function getParameterHandler(val) {
 	   _chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
 	   _chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList]);       
    
-	   showResult();
+	   showResult();  
 	   showBoardbyNum(0);
-	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
-	   enableButtons();
 	   updateBadRate(calBadRate(_chessInfo.biasList));
 	   $('.chartArea').addClass('opacity9');
-       $("#copyEgBtn").attr("disabled", false);
-       $("#queryBtn").html($("#queryBtn").val());
+	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
        });
 }
 
