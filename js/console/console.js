@@ -1,6 +1,7 @@
 var _cloudUrl = "http://www.chessdb.cn/query/?";
 var _ladderUrl = "http://chessladder.nctu.me/?";
 var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
+var _chessboard;
 
 var inputExample = 
 "  1.炮二平五      炮８平５\n\
@@ -41,6 +42,7 @@ var verticalBtn = document.getElementById("verticalBtn");
 var horizBtn = document.getElementById("horizBtn");
 var scoreBtn = document.getElementById("scoreBtn");
 var picBtn = document.getElementById("picBtn");
+var editModeBtn = document.getElementById("editModeBtn");
 var closeModal = document.getElementsByClassName("close")[0];
 var modal = document.getElementById('myModal');
 
@@ -65,6 +67,7 @@ var buttonList = [
 	horizBtn,
 	scoreBtn,
 	//picBtn,
+	editModeBtn
 ];
 
 var _chessInfo =
@@ -79,6 +82,7 @@ var _chessInfo =
 	inQuety: false,
 	is_not_complete: false,
 	is_got_result: false,
+	is_edit_mode: false,
 	is_vertical_original: true,
 	is_horizontal_original: true,
 	moveList: [],
@@ -114,7 +118,7 @@ $(document).ready(function() {
 	horizBtn.addEventListener('click', onHorizBtnClick);
 	scoreBtn.addEventListener('click', onScoreBtnClick);
 	//picBtn.addEventListener('click', onPicBtnClick);
-	
+	editModeBtn.addEventListener('click', onEditModeBtnClick);
 	
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
@@ -145,8 +149,8 @@ $(document).ready(function() {
 			document.getElementById("chessBookInput").value = pastedText;
 		}
 		
-	});
-    
+	}); 
+    addChessBoardEvt();
     initPlaceholder();
 });
 
@@ -182,7 +186,8 @@ function onDownloadBtnClick() {
 	if($("#moveListTable")[0].innerText === "") {
 		alert('搜尋後才能下載!');
 	}
-	else {	
+	else {
+		/*	
 		if(_chessInfo.is_not_complete)
 		{
 			if (confirm("盤面分析未完整，是否仍要下載pgn檔?"))
@@ -194,11 +199,20 @@ function onDownloadBtnClick() {
 		{
 			setFilenameandDownload();
 		}
+		*/
+		setFilenameandDownload();
 	}
 }
 
 function onFirstBtnClick()
 {
+	if(_chessInfo.is_edit_mode)
+	{
+		_chessInfo.moveList = [];
+		document.getElementById("moveNumber").innerHTML = 0;
+		document.getElementById("chessBookInput").value = "";
+	}
+
 	showBoardbyNum(0);
 	_chessInfo.currNumber = 0;
 }
@@ -214,9 +228,33 @@ function onEndBtnClick()
 
 function onPrevBtnClick()
 {
-	if(_chessInfo.currNumber>0)
+	if(_chessInfo.is_edit_mode)
 	{
-		showBoardbyNum(_chessInfo.currNumber-1);
+		if(_chessInfo.moveList.length>1)
+		{
+			_chessInfo.moveList.pop();
+			_chessInfo.fenList.pop();
+			document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
+			document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+			//showBoardbyNum(_chessInfo.moveList.length);
+			chessList = FEN_to_ChessList(_chessInfo.fenList[_chessInfo.moveList.length-1], null, true, true);
+        	_chessboard = new ChessBoard(chessList, null, null, null, true, true);
+    	}
+    	else
+    	{
+    		_chessInfo.moveList.pop();
+			_chessInfo.fenList.pop();
+			document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
+			document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+    		showBoardbyNum(0);
+    	}
+	}
+	else
+	{
+		if(_chessInfo.currNumber>0)
+		{
+			showBoardbyNum(_chessInfo.currNumber-1);
+		}
 	}
 }
 
@@ -230,49 +268,82 @@ function onNextBtnClick()
 
 function onFenBtnClick()
 {
-	if(_chessInfo.move_total>0)
+	if(_chessInfo.is_edit_mode)
 	{
-		if(_chessInfo.currNumber>0)
+		if(_chessInfo.fenList.length > 0)
 		{
-			copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.currNumber-1].replace("%20", " "));
+			copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.fenList.length-1].replace("%20", " "));
 		}
-		else
+	}
+	else
+	{
+		if(_chessInfo.move_total>0)
 		{
-			copyToClipboard("此盤面FEN碼", getDefaultFEN().replace("%20", " "));
+			if(_chessInfo.currNumber>0)
+			{
+				copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.currNumber-1].replace("%20", " "));
+			}
+			else
+			{
+				copyToClipboard("此盤面FEN碼", getDefaultFEN().replace("%20", " "));
+			}
 		}
 	}
 }
 
 function onCloudBtnClick()
 {
-	if(_chessInfo.move_total>0)
+	if(_chessInfo.is_edit_mode)
 	{
-		if(_chessInfo.currNumber>0)
+		if(_chessInfo.fenList.length > 0)
 		{
-			window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
+			console.log(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
+			window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
 		}
-		else
+	}
+	else
+	{
+		if(_chessInfo.move_total>0)
 		{
-			window.open(_cloudUrl+getDefaultFEN(), "_blank");
+			if(_chessInfo.currNumber>0)
+			{
+				window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
+			}
+			else
+			{
+				window.open(_cloudUrl+getDefaultFEN(), "_blank");
+			}
 		}
 	}
 }
 
 function onDpxqBtnClick()
 {
-	if(_chessInfo.move_total>0)
+	if(_chessInfo.is_edit_mode)
 	{
-		if(_chessInfo.currNumber>0)
+		if(_chessInfo.fenList.length > 0)
 		{
-			var fen = _chessInfo.fenList[_chessInfo.currNumber-1];
-			console.log(fen);
-			var board = FEN_to_Board(_chessInfo.fenList[_chessInfo.currNumber-1]);
-			console.log(board);
+			var board = FEN_to_Board(_chessInfo.fenList[_chessInfo.fenList.length-1]);
 			var dpxq = convertBoard2dpxq(board);
-			console.log(dpxq);
 			var dpxq_url = "http://www.dpxq.com/hldcg/search/?site=www.dpxq.com&owner=%B6%A5%BC%E2%B6%D4%BE%D6&e=&p=" + dpxq +
-			               "tree&red=&black=&result=&title=&date=&class=&event=&open=&order=&page=1"; 
+				           "tree&red=&black=&result=&title=&date=&class=&event=&open=&order=&page=1"; 
 			window.open(dpxq_url, "_blank");
+		}
+	}
+	else
+	{
+		if(_chessInfo.move_total>0)
+		{
+			if(_chessInfo.currNumber>0)
+			{
+				var board = FEN_to_Board(_chessInfo.fenList[_chessInfo.currNumber-1]);
+				//console.log(board);
+				var dpxq = convertBoard2dpxq(board);
+				//console.log(dpxq);
+				var dpxq_url = "http://www.dpxq.com/hldcg/search/?site=www.dpxq.com&owner=%B6%A5%BC%E2%B6%D4%BE%D6&e=&p=" + dpxq +
+				               "tree&red=&black=&result=&title=&date=&class=&event=&open=&order=&page=1"; 
+				window.open(dpxq_url, "_blank");
+			}
 		}
 	}
 }
@@ -318,10 +389,77 @@ function onPicBtnClick()
 	document.getElementById('myModal').style.display = "block";				
 }
 
+//add function for 覆盤模式
+
+function setEditMode(is_edit_mode)
+{
+	if(is_edit_mode)
+	{
+		clearInputText();
+		document.getElementById("editModeBtn").innerHTML = "打譜模式";
+		document.getElementById("editModeBtn").style.color = "black";
+		document.getElementById("horizBtn").disabled = true;
+		document.getElementById("verticalBtn").disabled = true;
+		document.getElementById("endBtn").disabled = true;
+		document.getElementById("nextBtn").disabled = true;
+		document.getElementById("scoreBtn").disabled = true;
+	}
+	else
+	{
+		document.getElementById("editModeBtn").innerHTML = "覆盤模式";
+		document.getElementById("editModeBtn").style.color = "white";
+		document.getElementById("horizBtn").disabled = false;
+		document.getElementById("verticalBtn").disabled = false;
+		document.getElementById("endBtn").disabled = false;
+		document.getElementById("nextBtn").disabled = false;
+		document.getElementById("scoreBtn").disabled = false;
+	}
+}
+
+function onEditModeBtnClick()
+{
+	if(_chessInfo.move_total > 0 && !_chessInfo.is_edit_mode) 
+	{
+		if (confirm("打譜模式會清除當前棋局，是否繼續?"))
+		{
+			_chessInfo.is_edit_mode = true;
+			setEditMode(true);
+			resetChessInfo();	
+			removeDisplayTable();
+			resetBadRate();
+			showBoardbyNum(0);
+			$('.chartArea').removeClass('opacity9');
+		}
+	}
+	else
+	{
+		_chessInfo.is_edit_mode = !_chessInfo.is_edit_mode;
+		setEditMode(_chessInfo.is_edit_mode);
+		if(_chessInfo.is_edit_mode)
+		{
+			resetChessInfo();	
+			removeDisplayTable();
+			resetBadRate();
+			showBoardbyNum(0);
+			$('.chartArea').removeClass('opacity9');
+		}
+		else
+		{
+			_chessInfo.move_total = _chessInfo.moveList.length;
+		}
+	}
+}
+
 function setFilenameandDownload()
 {
-	var outFileName = prompt("請輸入下載檔名", "chess_file");
-
+	var t = new Date();
+	var date = t.getFullYear() + "-" + ('0' + (t.getMonth() + 1)).slice(-2) + "-" + ('0' + t.getDate()).slice(-2);
+	var time = ('0' + t.getHours()).slice(-2) + ":" + ('0' + t.getMinutes()).slice(-2) + ":" + ('0' + t.getSeconds()).slice(-2);
+	//var date = today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate();
+	//var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	var datetimestr = date+'_'+time;
+	var outFileName = prompt("請輸入下載檔名", "chessladder_"+datetimestr);
+    
 	if(outFileName == null)
 	{
 		return;
@@ -390,8 +528,9 @@ function resetChessInfo() {
 async function queryLadderDB() {
 	var hash;
 	var mytext   = document.getElementById("chessBookInput").value;	
+	_chessInfo.is_edit_mode = false;
+	setEditMode(_chessInfo.is_edit_mode);
 	disableButtons();
-	
 	removeDisplayTable();
 	resetBadRate();
 	
@@ -434,7 +573,9 @@ async function queryCloudDB() {
 		return;
 	}
 	resetChessInfo();
-	
+	_chessInfo.is_edit_mode = false;
+	setEditMode(_chessInfo.is_edit_mode);
+
     var mytext = document.getElementById("chessBookInput").value;	
 	disableButtons();
 	
@@ -535,6 +676,13 @@ function copyUrl() {
 
 function clearInputText() {
 	document.getElementById("chessBookInput").value = "";
+	if(_chessInfo.is_edit_mode)
+	{
+		_chessInfo.moveList = [];
+		_chessInfo.currNumber = 0;
+		document.getElementById("moveNumber").innerHTML = 0;
+		showBoardbyNum(0);
+	}
 }
 
 function showInfo() {
@@ -692,7 +840,7 @@ function addDisplayRow(info_list) {
 }
 
 function removeDisplayTable() {
-	document.getElementById("moveListTable").style.visibility = "visible";
+	document.getElementById("moveListTable").style.visibility = "hidden";
 	document.getElementById("moveListTableBody").innerHTML = "";
 }
 
@@ -768,14 +916,14 @@ function showBoardbyNum(num)
 	if(num == 0)
 	{
 		$('#scoreBtn').html('info');
-		new ChessBoard(chessList, null, null, null, _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
+		_chessboard = new ChessBoard(chessList, null, null, null, _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
 	}
 	else
 	{
 		if(num>3 && _chessInfo.biasList[num-1]>=200) $('#scoreBtn').html('×');
 		else if(num>3 && _chessInfo.biasList[num-1]>=50) $('#scoreBtn').html('▲');
 		else $('#scoreBtn').html('info');
-		new ChessBoard(chessList, _chessInfo.scoreList[num-1], _chessInfo.biasList[num-1], _chessInfo.recommendList[num-1], _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
+		_chessboard = new ChessBoard(chessList, _chessInfo.scoreList[num-1], _chessInfo.biasList[num-1], _chessInfo.recommendList[num-1], _chessInfo.is_horizontal_original, _chessInfo.is_vertical_original);
 	}
 	
 	if($('#chess-info').css("visibility") != "hidden") 
@@ -807,13 +955,173 @@ function showInitBoard()
 		$('#scoreBtn').html('info');
 		fen = getDefaultFEN();
 		chessList = FEN_to_ChessList(fen, null, true, true);
-		new ChessBoard(chessList, null, null, null, true, true);
+		_chessboard = new ChessBoard(chessList, null, null, null, true, true);
 	
 		if($('#chess-info').css("visibility") != "hidden") 
 		{
 			$('#scoreBtn').html('hide');
 		}
 	}		
+}
+
+function addChessBoardEvt() {
+	$list = $('#chessboard');
+	var bodyStyles = window.getComputedStyle(document.body); 
+	var preTd = bodyStyles.getPropertyValue('--grid');
+    //var dotsize = bodyStyles.getPropertyValue('--dot');
+    var dotsize = 20;
+
+	for (var i=0; i<10; i++) {
+		for (var j=0; j<9; j++) {
+			var eventLayer = $('<div class="event-layer">');
+			//eventLayer.html("口");
+			eventLayer.css({
+				width: dotsize,
+				height: dotsize,
+				left: j*preTd-dotsize/2,
+				top: i*preTd-dotsize/2,
+			});
+			eventLayer.attr({
+				'data-x': i,
+				'data-y': j
+			});
+			eventLayer.addClass('class-'+i+'-'+j);
+			$list.append(eventLayer);
+		}
+	}
+
+	$(document).on('click', '.chesspieceBlack', function(e){
+		//console.log(e);
+		//console.log(this);
+		if(!_chessInfo.is_edit_mode) return;
+
+		if(_chessboard.selectedChess)
+		{
+			var chess = _chessboard.selectedChess.data('chess');
+    		var x_bef = _chessboard.selectedChess.data('x');
+    		var y_bef = _chessboard.selectedChess.data('y');
+    		var x_aft = $(this).data('x');
+    		var y_aft = $(this).data('y');
+			if(isChessRed(chess)) _chessboard.selectedChess.removeClass('red-active');
+    		else _chessboard.selectedChess.removeClass('black-active');
+			
+			if(isChessRed(chess))
+			{
+				console.log(chess+":("+x_bef+","+y_bef+")->("+x_aft+","+y_aft+")");
+				var chessidx = _chessboard.getChessPieceIdx(x_bef, y_bef); 
+				//var movestr  = ""
+				_chessboard.selectedChess = null;
+				_chessboard.removeChess(x_aft, y_aft);
+			    _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
+				_chessboard.moveChess(chessidx, x_aft, y_aft);	
+				_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+
+				document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
+				document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+			}
+			else
+			{
+				if(x_bef == x_aft && y_bef == y_aft)
+				{
+					_chessboard.selectedChess = null;
+				}
+				else
+				{
+					$(this).addClass('black-active');
+					_chessboard.selectedChess = $(this);
+				}
+			}
+		}
+		else
+		{
+			if(_chessboard.lastmove != BLACK_MOVE)
+			{
+				$(this).addClass('black-active');
+				_chessboard.selectedChess = $(this);
+			}
+		}
+	});
+	$(document).on('click', '.chesspieceRed', function(e){
+		//console.log(e);
+		//console.log(this);
+		if(!_chessInfo.is_edit_mode) return;
+
+		if(_chessboard.selectedChess)
+		{
+			var chess = _chessboard.selectedChess.data('chess');
+    		var x_bef = _chessboard.selectedChess.data('x');
+    		var y_bef = _chessboard.selectedChess.data('y');
+    		var x_aft = $(this).data('x');
+    		var y_aft = $(this).data('y');
+    		
+    		if(isChessRed(chess)) _chessboard.selectedChess.removeClass('red-active');
+    		else _chessboard.selectedChess.removeClass('black-active');
+			
+			if(!isChessRed(chess))
+			{
+				console.log(chess+":("+x_bef+","+y_bef+")->("+x_aft+","+y_aft+")");
+				var chessidx = _chessboard.getChessPieceIdx(x_bef, y_bef); 
+				//var movestr  = ""
+				_chessboard.selectedChess = null;
+				_chessboard.removeChess(x_aft, y_aft);
+			    _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
+				_chessboard.moveChess(chessidx, x_aft, y_aft);
+				_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+
+                document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;  
+				document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+			}
+			else
+			{
+				if(x_bef == x_aft && y_bef == y_aft)
+				{
+					_chessboard.selectedChess = null;
+				}
+				else
+				{
+					$(this).addClass('red-active');
+					_chessboard.selectedChess = $(this);
+				}	
+			}
+		}
+		else
+		{
+			if(_chessboard.lastmove != RED_MOVE)
+			{
+				$(this).addClass('red-active');
+				_chessboard.selectedChess = $(this);
+			}
+		}
+	});
+    $(document).on('click', '.event-layer', function(e){
+    	if(!_chessInfo.is_edit_mode) return;
+
+    	if(_chessboard.selectedChess) //if(checkmove(chess, x_bef, y_bef, x_aft, y_aft))
+    	{
+    		var chess = _chessboard.selectedChess.data('chess');
+    		var x_bef = _chessboard.selectedChess.data('x');
+    		var y_bef = _chessboard.selectedChess.data('y');
+    		var x_aft = $(this).data('x');
+    		var y_aft = $(this).data('y');
+    		var chessidx = _chessboard.getChessPieceIdx(x_bef, y_bef); 
+			//var movestr  = ""
+  
+            console.log(chess+":("+x_bef+","+y_bef+")->("+x_aft+","+y_aft+")");
+
+    		_chessboard.selectedChess.removeClass();
+    		_chessboard.selectedChess = null;
+			_chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
+			_chessboard.moveChess(chessidx, x_aft, y_aft);
+			_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+
+			document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
+			document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+    	}
+    	else
+		{
+
+		}
+	});
 }
 
 window.onload = showInitBoard;

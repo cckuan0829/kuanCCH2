@@ -104,6 +104,16 @@ function Board_to_FEN(board)
     return fen;
 }
 
+function Board_Chess_to_FEN(board, is_red)
+{
+    var fen = Board_to_FEN(board);
+    if (is_red)
+        fen = fen+'%20b';
+    else
+        fen = fen+'%20w';
+    return fen;
+}
+
 function FEN_to_Board(fen)
 {
     var board = Array(10).fill(0).map(x => Array(9).fill('0'))
@@ -1587,5 +1597,4 @@ function generate_pgn_file(move_list, red_score, score_bias, recommend_list)
     }
     
     return pgn_str;
-    
 }

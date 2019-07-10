@@ -1,6 +1,11 @@
+var RED_MOVE   = 2;
+var BLACK_MOVE = 1;
+var NONE_MOVE  = 0;
+
 var chessType = {
 	'X':'',
 	'Y':'',
+	'0':'',
 	'K':'帥',
 	'k':'將',
 	'A':'仕',
@@ -17,6 +22,10 @@ var chessType = {
 	'p':'卒',
 };
 
+var BLACK_NORMAL_VIEW   = 0;
+var BLACK_OPPOSITE_VIEW = 1
+var RED_OPPOSITE_VIEW   = 2;
+var RED_NORMAL_VIEW     = 3;
 var _chessBoardNumber = 
 [['1', '2', '3', '4', '5', '6', '7', '8', '9'],
  ['9', '8', '7', '6', '5', '4', '3', '2', '1'],
@@ -24,17 +33,20 @@ var _chessBoardNumber =
  ['九', '八', '七', '六', '五', '四', '三', '二', '一'],
 ];
 
-var ChessPiece = function(x ,y, chess) {
-	this.x = x;
-	this.y = y;
+var ChessPiece = function(chess, x ,y) {
 	this.chess = chess;
-	this.placement();
+	this.x = x; // x is the row index in the board, top is 0 
+	this.y = y; // y is the column index in the bord, left is 0
 };
+
 //把棋子放置在页面中
 ChessPiece.prototype.placement = function() {
 	var bodyStyles = window.getComputedStyle(document.body); 
 	var preChessPiece = bodyStyles.getPropertyValue('--chess');
 	var preTd = bodyStyles.getPropertyValue('--grid');
+
+	if(this.chess == '0')
+		return;
 
 	if(this.chess == 'X')
 	{
@@ -46,21 +58,53 @@ ChessPiece.prototype.placement = function() {
 	}
 	else
 	{
-		if(this.chess == this.chess.toUpperCase()) this.DOM = $('<i class="chesspieceRed textcolor">');
+		if(isChessRed(this.chess)) this.DOM = $('<i class="chesspieceRed textcolor">');
 		else this.DOM = $('<i class="chesspieceBlack textcolor">');
 	}
-	
+
 	this.DOM.html(chessType[this.chess]);
 	this.DOM.css({
 		left: this.y*preTd - preChessPiece/2,
 		top: this.x*preTd - preChessPiece/2,
 	});
+	this.DOM.attr({
+				'data-chess' : this.chess,
+				'data-x': this.x,
+				'data-y': this.y
+			});
 	$list.append(this.DOM);
+};
+
+ChessPiece.prototype.move = function(x, y) {
+	var bodyStyles = window.getComputedStyle(document.body); 
+	var preChessPiece = bodyStyles.getPropertyValue('--chess');
+	var preTd = bodyStyles.getPropertyValue('--grid');
+
+	this.DOM.css({
+		left: this.y*preTd - preChessPiece/2,
+		top: this.x*preTd - preChessPiece/2,
+	});
+	this.DOM.attr({
+				'data-chess' : this.chess,
+				'data-x': this.x,
+				'data-y': this.y
+			});
 };
 
 var ChessBoard = function(chessList, score, bias, recommend, is_horiz_ori, is_vertical_ori) {
 	$info= $('#chess-info');
+	var chesspiecelist = [];
 	var recommend_text = "";
+	var listlen = chessList.length;
+    var board = Array(10).fill(0).map(x => Array(9).fill('0'));
+
+    for (var i = 0; i < listlen; i++) {
+
+    	var chess_info = chessList[i];
+        chesspiecelist.push(new ChessPiece(chess_info[0], chess_info[1], chess_info[2]));
+        board[chess_info[1]][chess_info[2]] = chess_info[0];
+    }
+
 	if(recommend != null && recommend != "") recommend_text = "，推薦："+recommend;
 	
 	if(score != null && bias != null)
@@ -77,7 +121,10 @@ var ChessBoard = function(chessList, score, bias, recommend, is_horiz_ori, is_ve
 		$info.html("");
 	}
 	
-	this.chessList = chessList;
+	this.board = board;
+	this.chesspiecelist = chesspiecelist;
+	this.selectedChess = null;
+	this.lastmove = NONE_MOVE;
 	this.initBoard(is_horiz_ori, is_vertical_ori);
 	this.placementAll();
 	
@@ -99,15 +146,19 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 	var bot_num = 0;
 	if(is_hori_ori)
 	{
+		//BLACK_NORMAL_VIEW   = 0;
+		//BLACK_OPPOSITE_VIEW = 1
+		//RED_OPPOSITE_VIEW   = 2;
+		//RED_NORMAL_VIEW     = 3;
 		if(is_vert_ori)
 		{
-			top_num = 0;
-			bot_num = 3;
+			top_num = BLACK_NORMAL_VIEW;
+			bot_num = RED_NORMAL_VIEW;
 		}
 		else
 		{
-			top_num = 3;
-			bot_num = 0;
+			top_num = RED_NORMAL_VIEW;
+			bot_num = BLACK_NORMAL_VIEW;
 		}
 	}
 	else
@@ -115,13 +166,13 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 
 		if(is_vert_ori)
 		{
-			top_num = 1;
-			bot_num = 2;
+			top_num = BLACK_OPPOSITE_VIEW;
+			bot_num = RED_OPPOSITE_VIEW;
 		}
 		else
 		{
-			top_num = 2;
-			bot_num = 1;
+			top_num = RED_OPPOSITE_VIEW;
+			bot_num = BLACK_OPPOSITE_VIEW;
 		}
 	}
 	
@@ -146,17 +197,96 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 		});
 		$axi_bot.append(this.DOM);
 	}
-
+    
 }
 
 ChessBoard.prototype.placementAll = function() {
-	var ChessPieceList; 
-		
-	for(var i = 0; i < this.chessList.length; i++)
+
+	for(var i = 0; i < 32; i++)
 	{
-		var chess_info = this.chessList[i];
+		this.chesspiecelist[i].placement();
+	}
+};
+
+ChessBoard.prototype.setActiveClass = function(bool) {
+	if(this.selectedChess)
+	{
+		if(isChessRed(this.selectedChess.chess))
+		{
+			if(bool) this.selectedChess.addClass('red-active');
+			else this.selectedChess.removeChess('red-active');
+		}
+		else
+		{
+			if(bool) this.selectedChess.addClass('black-active');
+			else this.selectedChess.removeChess('black-active');
+		}
+	}
+}
+
+ChessBoard.prototype.getChessPieceIdx = function(x, y) {
+	//var chesspiece = this.getChessPiece(chess, x, y);
+	//chesspiece.move(x, y);;
+	for(var i = 0; i < this.chesspiecelist.length; i++)
+	{
+		if(x == this.chesspiecelist[i].x && y == this.chesspiecelist[i].y)
+		{
+			return i;
+		}
+	}
+	return -1;
+};
+
+ChessBoard.prototype.getMoveStr = function(chesspiece_idx, x, y) {
+	//var chesspiece = this.getChessPiece(chess, x_o, y_o);
+	//chesspiece.move(x_n, y_n);
+	var movestr = "";
+	
+	if(chesspiece_idx >= 0) 
+	{
+		var chess = this.chesspiecelist[chesspiece_idx].chess;
+		var x_bef = this.chesspiecelist[chesspiece_idx].x;
+		var y_bef = this.chesspiecelist[chesspiece_idx].y;
+		movestr = generateMoveText(this.board, chess, x_bef, y_bef, x, y);
+	}
+
+	return movestr;
+};
+
+ChessBoard.prototype.moveChess = function(chesspiece_idx, x, y) {
+	//var chesspiece = this.getChessPiece(chess, x_o, y_o);
+	//chesspiece.move(x_n, y_n);
+	
+	if(chesspiece_idx >= 0) 
+	{
+		var chess = this.chesspiecelist[chesspiece_idx].chess;
+		var x_bef = this.chesspiecelist[chesspiece_idx].x;
+		var y_bef = this.chesspiecelist[chesspiece_idx].y;
+
+		this.chesspiecelist[chesspiece_idx].x = x;
+		this.chesspiecelist[chesspiece_idx].y = y;
+		this.board[x_bef][y_bef] = '0';
+		this.board[x][y] = chess;
+        this.initBoard(true, true);
+		this.placementAll();
+		if(isChessRed(chess)) this.lastmove = RED_MOVE; 
+		else this.lastmove = BLACK_MOVE;
+	}
+
+};
+
+ChessBoard.prototype.removeChess = function(x, y) {
+	//var chesspiece = this.getChessPiece(chess, x_o, y_o);
+	//chesspiece.move(x_n, y_n);
+	var chesspiece_idx = this.getChessPieceIdx(x, y);
+	if(chesspiece_idx >= 0) 
+	{
+		this.chesspiecelist[chesspiece_idx].x = 0;
+		this.chesspiecelist[chesspiece_idx].y = 0;
+		this.chesspiecelist[chesspiece_idx].chess = '0';
 		
-		new ChessPiece(chess_info[0], chess_info[1], chess_info[2]);
+ 	    this.initBoard(true, true);
+		this.placementAll();
 	}
 };
 
@@ -181,7 +311,7 @@ function FEN_to_ChessList(fen, curve, is_horiz_ori, is_vertical_ori)
 			{
 				var x = is_vertical_ori ? i : 9-i;
 				var y = is_horiz_ori ? index : 8-index;
-                chesslist.push([x, y, cha]);
+                chesslist.push([cha, x, y]);
                 index = index + 1;
 			}
 		}
@@ -211,9 +341,109 @@ function FEN_to_ChessList(fen, curve, is_horiz_ori, is_vertical_ori)
 			x_2 = 9-curve[2];
 		}
 		
-		chesslist.push([x_1, y_1, 'X']);
-		chesslist.push([x_2, y_2, 'Y']);
+		chesslist.push(['X', x_1, y_1]);
+		chesslist.push(['Y', x_2, y_2]);
 	}
 	
     return chesslist;
+}
+
+function isChessRed(chess)
+{
+	return (chess == chess.toUpperCase() ? true : false);
+}
+
+function generateMoveText(board, chess, x_bef, y_bef, x_aft, y_aft)
+{
+	var chessUp = chess.toUpperCase();
+    var movestr = "";
+    var isred = isChessRed(chess);
+    var chessstr = conver_english_chess(chess);
+    var ismultiple = false;
+    var movedir = "平";
+    var chess_num_in_col = 0;
+	var is_first_show = true;
+
+    if(x_bef != x_aft)
+    {
+    	if((isred && x_bef > x_aft ) || (!isred && x_bef < x_aft) ) movedir = "進"; 
+    	else movedir = "退";
+    }
+
+    for(var x = 0; x < 10; x ++)
+    {
+    	if(board[x][y_bef] == chess) 
+    	{
+    		if(chess_num_in_col == 0)
+    		{
+    			if(x == x_bef) is_first_show = true; //紅:前, 黑:後
+    			else           is_first_show = false;//紅:後, 黑:前
+    		}
+    		chess_num_in_col++;
+    	}
+    }
+    
+    if(chess_num_in_col > 1)
+    {
+    	if((isred && is_first_show) || (!isred && !is_first_show))
+    	{
+    		movestr = '前' + chessstr;
+    	}
+    	else
+    	{
+    		movestr = '後' + chessstr;
+    	}
+    }
+    else
+    {
+    	if(isred)
+    	{
+    		movestr = chessstr+_chessBoardNumber[RED_NORMAL_VIEW][y_bef];
+    	}
+    	else
+    	{
+    		movestr = chessstr+_chessBoardNumber[BLACK_NORMAL_VIEW][y_bef];
+    	}
+    }
+
+    if(isred)
+    {
+    	if(movedir == "平")
+    	{
+    		movestr += movedir+_chessBoardNumber[RED_NORMAL_VIEW][y_aft];
+    	}
+    	else
+    	{
+			if(chessUp == 'K' || chessUp == 'P' || chessUp == 'R' || chessUp == 'C') //直線兵種: 帥 兵 車 炮
+			{
+				movestr += movedir+convert_english_num(Math.abs(x_bef-x_aft));
+			}
+			else //斜線兵種: 士 相 馬
+			{
+				movestr += movedir+_chessBoardNumber[RED_NORMAL_VIEW][y_aft];
+			}
+    	}    	
+    }
+    else
+    {
+    	if(movedir == "平")
+    	{
+    		movestr += movedir+_chessBoardNumber[BLACK_NORMAL_VIEW][y_aft];
+    	}
+    	else
+    	{
+    		if(chessUp == 'K' || chessUp == 'P' || chessUp == 'R' || chessUp == 'C') //直線兵種: 帥 兵 車 炮
+			{
+				movestr += movedir+Math.abs(x_bef-x_aft);
+			}
+			else //斜線兵種: 士 相 馬
+			{
+				movestr += movedir+_chessBoardNumber[BLACK_NORMAL_VIEW][y_aft];
+			}
+    	}  
+    }
+
+    console.log(movestr);
+
+    return movestr;
 }

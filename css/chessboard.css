@@ -1,4 +1,4 @@
-body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
+body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; --dot: 12;}
 
 #chessboard {
 	position: relative;
@@ -141,10 +141,31 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
 	line-height: 20px;
 	background: Black;
 }
-#chessboard .active {
+
+#chessboard .event-layer {
+	cursor: pointer;
+	position: absolute;
+}
+
+#chessboard .event-layer:hove {
 	background: #f40;
-	color: #fff;
-	border-color: #f40;
+	border-radius: 50%;
+}
+
+#chesslist .red-active {
+	background: white;
+	color: red;
+	border-color: black;
+	border: 1px solid;
+	z-index: 3;
+}
+
+#chesslist .black-active {
+	background: white;
+	color: black;
+	border-color: black;
+	border: 1px solid;
+	z-index: 3;
 }
 
 #chessNumCtrl {
@@ -156,8 +177,22 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26;}
 	width: 50px;
 }
 
+.boardBtn:disabled,
+.boardBtn[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
 .boardBtn2 {
 	width: 45px;
+}
+
+.boardBtn2:disabled,
+.boardBtn2[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 
 #moveNumber {
@@ -250,6 +285,7 @@ body {
 	body{
 		--chess: 52;
 		--grid: 60;
+		--dot: 24;
 	}
 	
 	#chessNumCtrl {
