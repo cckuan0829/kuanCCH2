@@ -967,9 +967,8 @@ function showInitBoard()
 function addChessBoardEvt() {
 	$list = $('#chessboard');
 	var bodyStyles = window.getComputedStyle(document.body); 
-	var preTd = bodyStyles.getPropertyValue('--grid');
-    //var dotsize = bodyStyles.getPropertyValue('--dot');
-    var dotsize = 20;
+	var preTd = parseInt(bodyStyles.getPropertyValue('--grid'));
+    var dotsize = parseInt(bodyStyles.getPropertyValue('--dot'));
 
 	for (var i=0; i<10; i++) {
 		for (var j=0; j<9; j++) {
