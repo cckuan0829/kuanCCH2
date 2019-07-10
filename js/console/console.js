@@ -396,8 +396,7 @@ function setEditMode(is_edit_mode)
 	if(is_edit_mode)
 	{
 		clearInputText();
-		document.getElementById("editModeBtn").innerHTML = "打譜模式";
-		document.getElementById("editModeBtn").style.color = "black";
+		document.getElementById("editModeBtn").innerHTML = "觀棋模式";
 		document.getElementById("horizBtn").disabled = true;
 		document.getElementById("verticalBtn").disabled = true;
 		document.getElementById("endBtn").disabled = true;
@@ -406,8 +405,7 @@ function setEditMode(is_edit_mode)
 	}
 	else
 	{
-		document.getElementById("editModeBtn").innerHTML = "覆盤模式";
-		document.getElementById("editModeBtn").style.color = "white";
+		document.getElementById("editModeBtn").innerHTML = "手動打譜";
 		document.getElementById("horizBtn").disabled = false;
 		document.getElementById("verticalBtn").disabled = false;
 		document.getElementById("endBtn").disabled = false;
@@ -420,7 +418,7 @@ function onEditModeBtnClick()
 {
 	if(_chessInfo.move_total > 0 && !_chessInfo.is_edit_mode) 
 	{
-		if (confirm("打譜模式會清除當前棋局，是否繼續?"))
+		if (confirm("進入打譜模式會清除當前棋局，是否繼續?"))
 		{
 			_chessInfo.is_edit_mode = true;
 			setEditMode(true);
