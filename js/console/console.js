@@ -402,6 +402,8 @@ function setEditMode(is_edit_mode)
 		document.getElementById("endBtn").disabled = true;
 		document.getElementById("nextBtn").disabled = true;
 		document.getElementById("scoreBtn").disabled = true;
+		document.getElementById("firstBtn").innerHTML = "初始";
+		document.getElementById("prevBtn").innerHTML = "back";
 	}
 	else
 	{
@@ -411,6 +413,8 @@ function setEditMode(is_edit_mode)
 		document.getElementById("endBtn").disabled = false;
 		document.getElementById("nextBtn").disabled = false;
 		document.getElementById("scoreBtn").disabled = false;
+		document.getElementById("firstBtn").innerHTML = "|<";
+		document.getElementById("prevBtn").innerHTML = "<";
 	}
 }
 
@@ -531,11 +535,12 @@ async function queryLadderDB() {
 	disableButtons();
 	removeDisplayTable();
 	resetBadRate();
-	
+	$('.chartArea').removeClass('opacity9');
+
 	if (mytext == "" || mytext ===  placeholder)
 	{
 		alert("請輸入棋譜!");
-		drawScore([], [], []);
+		//drawScore([], [], []);
 	}
 	else
 	{
@@ -555,7 +560,7 @@ async function queryLadderDB() {
 		else
 		{
 			alert("輸入格式有誤!");
-			drawScore([], [], []);
+			//drawScore([], [], []);
 		}
 	}
 	
@@ -580,6 +585,7 @@ async function queryCloudDB() {
 	removeDisplayTable();
 	resetBadRate();
 	
+	$('.chartArea').removeClass('opacity9');
     $("#copyEgBtn").attr("disabled", true);
 	
 	if (mytext == "" || mytext === placeholder)
