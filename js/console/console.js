@@ -122,7 +122,10 @@ $(document).ready(function() {
 	
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
-		document.getElementById("chessBookInput").value = inputExample;	
+        if(!_chessInfo.is_edit_mode)
+        {
+        	document.getElementById("chessBookInput").value = inputExample;	
+        }
     });
 	
 	// When the user clicks on <span> (x), close the modal
@@ -584,7 +587,7 @@ async function queryCloudDB() {
 	
 	removeDisplayTable();
 	resetBadRate();
-	
+
 	$('.chartArea').removeClass('opacity9');
     $("#copyEgBtn").attr("disabled", true);
 	
