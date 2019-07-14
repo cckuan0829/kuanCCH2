@@ -312,10 +312,6 @@
         width: 85%;
         margin: 3% 0 1% 0;
     }
-
-    .chessBookInputArea {
-        width: 90%;
-    }
 	
 	.outputTable {
 		font-size: 24px;
@@ -323,7 +319,7 @@
 	
 	.TableBody {
         position: relative;
-		height: 30vh;
+		height: 40vh;
 		display:block;
 	}
     .chartArea {

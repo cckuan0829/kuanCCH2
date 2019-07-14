@@ -210,12 +210,12 @@ body {
 	}
 	
 	#chessboard .chess-center {
-		height: 80px; /* 60px;*/
+		height: 60px;
 	}
 
 	#chessboard .chess-td {
-		width: 80px; /* 60px;*/
-		height: 80px; /* 60px;*/
+		width: 60px;
+		height: 60px;
 	}
 
 	#chessboard .chess-axi-top {
@@ -229,35 +229,35 @@ body {
 	#chessboard .chess-axi-bot {
 		bottom: -50px;
 		left: -5px;
-		width: 80px; /* 60px;*/
-		height: 53px; /* 40px;*/
+		width: 60px;
+		height: 40px;
 		font-size: 24px;
 	}
 	
 	#chessboard .chess-td-trans {
-		width: 227px; /* 170px; */
+		width: 170px;
 	}
 	#chessboard .trans-top-1 {
-		left: 208px; /* 156px;*/
-		top: 80px; /* 60px;*/
+		left: 156px;
+		top: 60px;
 	}
 	#chessboard .trans-top-2 {
-		left: 208px; /* 156px;*/
-		top: 80px; /* 60px;*/
+		left: 156px;
+		top: 60px;
 	}
 	#chessboard .trans-bottom-1 {
-		left: 208px; /* 156px;*/
-		bottom: 80px; /* 60px;*/
+		left: 156px;
+		bottom: 60px;
 	}
 	#chessboard .trans-bottom-2 {
-		left: 208px; /* 156px;*/
-		bottom: 80px; /* 60px;*/
+		left: 156px;
+		bottom: 60px;
 	}
 
 	#chessboard-name{
-		left: 227px; /*170px;*/
-		top: 368px; /*244px;*/
-		font-size: 48px;/*36px;*/
+		left: 170px;
+		top: 244px;
+		font-size: 36px;
 	}
 
 	#chess-info{
@@ -266,14 +266,14 @@ body {
 	}
 	
 	#chesslist .chesspieceRed, .chesspieceBlack{
-		width: 69px; /*52px;*/
-		height: 69px; /*52px;*/
-		font-size: 45px; /*34px;*/
+		width: 52px;
+		height: 52px;
+		font-size: 34px;
 	}
 
 	#chesslist .chesscurrent{
-		width: 69px; /*52px;*/
-		height: 69px; /*52px;*/
+		width: 52px;
+		height: 52px;
 	}
 
 	#chesslist .chesspieceMovingCurve{
@@ -283,9 +283,9 @@ body {
 	}
 	
 	body{
-		--chess: 80px; /* 52px;*/
-		--grid: 80px; /* 60px;*/
-		--dot: 64px; /* 48px;*/
+		--chess: 52;
+		--grid: 60;
+		--dot: 48;
 	}
 	
 	#chessNumCtrl {
