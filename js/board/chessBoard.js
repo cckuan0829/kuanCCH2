@@ -42,8 +42,8 @@ var ChessPiece = function(chess, x ,y) {
 //把棋子放置在页面中
 ChessPiece.prototype.placement = function() {
 	var bodyStyles = window.getComputedStyle(document.body); 
-	var preChessPiece = bodyStyles.getPropertyValue('--chess');
-	var preTd = bodyStyles.getPropertyValue('--grid');
+	var preChessPiece = parseInt(bodyStyles.getPropertyValue('--chess'));
+	var preTd = parseInt(bodyStyles.getPropertyValue('--grid'));
 
 	if(this.chess == '0')
 		return;
@@ -77,8 +77,8 @@ ChessPiece.prototype.placement = function() {
 
 ChessPiece.prototype.move = function(x, y) {
 	var bodyStyles = window.getComputedStyle(document.body); 
-	var preChessPiece = bodyStyles.getPropertyValue('--chess');
-	var preTd = bodyStyles.getPropertyValue('--grid');
+	var preChessPiece = parseInt(bodyStyles.getPropertyValue('--chess'));
+	var preTd = parseInt(bodyStyles.getPropertyValue('--grid'));
 
 	this.DOM.css({
 		left: this.y*preTd - preChessPiece/2,
@@ -141,7 +141,7 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 	$axi_bot.empty();
 	
 	var bodyStyles = window.getComputedStyle(document.body); 
-	var preTd = bodyStyles.getPropertyValue('--grid');
+	var preTd = parseInt(bodyStyles.getPropertyValue('--grid'));
 	var top_num = 0;
 	var bot_num = 0;
 	if(is_hori_ori)
@@ -202,7 +202,7 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 
 ChessBoard.prototype.placementAll = function() {
 
-	for(var i = 0; i < 32; i++)
+	for(var i = 0; i < this.chesspiecelist.length; i++)
 	{
 		this.chesspiecelist[i].placement();
 	}

@@ -308,6 +308,15 @@
 }
 
 @media (orientation: portrait) {
+    .titleText {
+        font-size: 45px;
+    }
+
+    #chessboardPic {
+        width: 780px;
+        height: 920px;
+    }
+
     .chessBookInputArea {
         width: 90%;
     }
@@ -318,7 +327,7 @@
     }
 	
 	.outputTable {
-		font-size: 24px;
+		font-size: 28px;
 	}
 	
 	.TableBody {
@@ -330,16 +339,12 @@
 		position: relative;
         width: 85%;
 		height: 40vh;
-		margin-bottom: 5vh;
+		margin-top: -10vh;
+        margin-bottom: 5vh;
     }
 	
 	#chessboard {
-		top: 40px;
-	}
-	
-	#chessboardPic {
-		width: 580px;
-		height: 660px;
+		top: 80px;
 	}
 }
 
