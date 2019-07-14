@@ -64,7 +64,12 @@
 	position: relative;
 	
 }
-	
+
+.TableNum {
+    width: 40px;
+    font-size: 14px;
+}
+
 .TableBody {
 	text-align: center;
 	overflow-y:scroll;
@@ -330,6 +335,11 @@
 		font-size: 28px;
 	}
 	
+    .TableNum {
+        width: 65px;
+        font-size: 28px;
+    }
+
 	.TableBody {
         position: relative;
 		height: 40vh;

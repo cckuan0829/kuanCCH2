@@ -834,6 +834,7 @@ function addDisplayRow(info_list) {
 	if(info_list[5]!="")
 	{
 		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
+		$('#infoList'+info_list[0]).addClass("TableNum");
 		$('#infoList'+info_list[0]).bind("click", function() {
 			 showBoardbyNum(info_list[0]); 
 			 $("#main").scrollTop(0);
@@ -843,6 +844,11 @@ function addDisplayRow(info_list) {
 			cell_move.innerHTML = '<a href="'+_cloudUrl+info_list[5]+'" target="_blank" style="color:red">'+move_str+'</a>';
 		else
 			cell_move.innerHTML = '<a href="'+_cloudUrl+info_list[5]+'" target="_blank" style="color:blue">'+move_str+'</a>';
+
+		$('#infoList'+info_list[0]).bind("click", function() {
+			 showBoardbyNum(info_list[0]); 
+			 $("#main").scrollTop(0);
+		});
 		
 	}
 	else
