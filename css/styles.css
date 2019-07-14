@@ -308,7 +308,11 @@
 }
 
 @media (orientation: portrait) {
-	.chessBookOutptArea {
+    .chessBookInputArea {
+        width: 90%;
+    }
+
+    .chessBookOutptArea {
         width: 85%;
         margin: 3% 0 1% 0;
     }
