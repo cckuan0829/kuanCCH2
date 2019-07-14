@@ -10,6 +10,7 @@ function getParameterHandler(val) {
 	   if( data.includes("yes"))
 	   {
 		   is_exist = true;
+		   _chessInfo.is_in_cloud_db = true;
 	   }
 	   else
 	   {
@@ -86,11 +87,11 @@ function getParameterHandler(val) {
        });
 }
 
-function checkUrlExist(val) {
+async function checkUrlExist(val) {
 	
-	$.post(_chessDbUrl, 
+	await $.post(_chessDbUrl, 
 	{url:val, query:"yes"},
-	function(data){
+	 function(data){
 	   if( data.includes("yes"))
 	   {
 		   return true;
@@ -100,6 +101,12 @@ function checkUrlExist(val) {
 		   return false;
 	   }
 	});
+}
+
+function getCartProduct(id, callback){
+    $.post('core/ajax/getCartProduct.ajax.php', {id: parseInt(id)}, function(data){
+        callback(data);
+    });
 }
 
 function insert2mysql(chessInfo) {
@@ -118,6 +125,7 @@ function insert2mysql(chessInfo) {
 	{url:hash, record:jstr, account:""},
 	function(data){
 		alert("上傳雲梯成功!");
+		_chessInfo.is_in_cloud_db = true;
 	});
 }
 

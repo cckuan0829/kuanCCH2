@@ -82,6 +82,7 @@ var _chessInfo =
 	inQuety: false,
 	is_not_complete: false,
 	is_got_result: false,
+	is_in_cloud_db: false,
 	is_edit_mode: false,
 	is_vertical_original: true,
 	is_horizontal_original: true,
@@ -518,6 +519,7 @@ function resetChessInfo() {
 	_chessInfo.inQuety = false;
 	_chessInfo.is_not_complete = false;
 	_chessInfo.is_got_result = false;
+	_chessInfo.is_in_cloud_db = false;
 	_chessInfo.is_vertical_original = true;
 	_chessInfo.is_horizontal_original = true;
 	_chessInfo.engmoveList = [];
@@ -535,6 +537,7 @@ async function queryLadderDB() {
 	var mytext   = document.getElementById("chessBookInput").value;	
 	_chessInfo.is_edit_mode = false;
 	setEditMode(_chessInfo.is_edit_mode);
+	resetChessInfo();
 	disableButtons();
 	removeDisplayTable();
 	resetBadRate();
@@ -637,6 +640,10 @@ async function queryCloudDB() {
 		updateBadRate(calBadRate(_chessInfo.biasList));
 		$('.chartArea').addClass('opacity9');
 		drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
+        
+        var eng_move_list_str = _chessInfo.engmoveList.join(",");
+	    var hash = hash2INT32(eng_move_list_str);
+		_chessInfo.is_in_cloud_db = checkUrlExist(hash);
 	}
 	enableButtons();
 	_chessInfo.inQuety = false;
@@ -670,15 +677,23 @@ function copyUrl() {
 		alert("沒有有效的URL可以複製!");
 		return;
 	}
-  	
-	const el = document.createElement('textarea');
-    el.value = _ladderUrl+hash;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    alert("已複製URL : "+ el.value);
-
+	else
+	{
+		if(_chessInfo.is_in_cloud_db == true)
+		{
+			const el = document.createElement('textarea');
+		    el.value = _ladderUrl+hash;
+		    document.body.appendChild(el);
+		    el.select();
+		    document.execCommand('copy');
+		    document.body.removeChild(el);
+		    alert("已複製URL : "+ el.value);
+		}
+		else
+		{
+			alert("需先上傳雲梯後才能分享棋局");
+		}
+	}
 }
 
 function clearInputText() {
@@ -693,7 +708,6 @@ function clearInputText() {
 }
 
 function showInfo() {
-
 	alert("操作步驟:\
 	     \n\t1. 從象棋橋或是東萍匯出文字棋譜。\
 	     \n\t2. 將文字棋譜貼至本網頁上，然後按下'雲庫查詢'。\
@@ -822,6 +836,7 @@ function addDisplayRow(info_list) {
 		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
 		$('#infoList'+info_list[0]).bind("click", function() {
 			 showBoardbyNum(info_list[0]); 
+			 $("#main").scrollTop(0);
 		});
 		
 		if(info_list[6] == true)

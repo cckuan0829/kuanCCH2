@@ -24,6 +24,8 @@ $(document).ready(function() {
 
 function drawScore(move_list, score_list, score_bias) {
 	dataAry = [];
+	var bodyStyles = window.getComputedStyle(document.body); 
+	var scale = parseFloat(bodyStyles.getPropertyValue('--markerscale'));
 	_max = Math.max(...score_list);
 	_min = Math.min(...score_list);
 	_size = 0
@@ -47,7 +49,7 @@ function drawScore(move_list, score_list, score_bias) {
 			point.markerType = "cross";	
 			point.markerBorderColor = "black"; //change color here
 			point.markerBorderThickness = 1;
-			point.markerSize = 16;
+			point.markerSize = 16*scale;
 		}
 		else if(score_bias[i]>50)
 		{
@@ -57,13 +59,13 @@ function drawScore(move_list, score_list, score_bias) {
 			point.markerType = "triangle";
 			point.markerBorderColor = "black"; //change color here
             point.markerBorderThickness = 1;
-			point.markerSize = 16;
+			point.markerSize = 16*scale;
 		}
 		else
 		{
 			point.markerColor = "black";
 			point.markerType = "circle";
-			point.markerSize = 8;
+			point.markerSize = 8*scale;
 		}
 		
 		if(isNaN(score_list[i]))
@@ -83,7 +85,8 @@ function drawScore(move_list, score_list, score_bias) {
 
 function drawChart() {
     $('.chartArea').addClass('opacity9');
-
+    var bodyStyles = window.getComputedStyle(document.body); 
+	var scale = parseFloat(bodyStyles.getPropertyValue('--titlescale'));
 	var end_positive = 30000;
 	var end_negative = -30000;
 	if(_max > 1700)  end_positive = _max-200;
@@ -96,8 +99,8 @@ function drawChart() {
 		exportEnabled: true,
         title: {
             text:　$('#badRate').html(),
-            fontSize: 20,
-            maxWidth: 320,
+            fontSize: 20*scale,
+            maxWidth: 320*scale,
             padding: 5,
             margin:5,
             //borderThickness: 1,
@@ -131,9 +134,10 @@ function drawChart() {
         data: [{
 			click: function(e){
 				showBoardbyNum(e.dataPointIndex+1);
+				$("#main").scrollTop(0);
 			},
 			lineColor: "black",
-			lineThickness: 2,
+			lineThickness: 2*scale,
             type: "line",
             connectNullData: true,
             nullDataLineDashType:"dot",
