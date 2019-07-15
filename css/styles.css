@@ -270,9 +270,9 @@
     display:none;
 }
 
-#queryBtn {
+/*#queryBtn {
     font-size: 24px;
-}
+}*/
 
 @media only screen and (max-width: 1024px) {
     .titleText {
@@ -307,9 +307,10 @@
         left: calc(160 / 1024 * 100vw);
         padding: calc(60 / 1024 * 100vw) calc(20 / 1024 * 100vw);
     }
+    /*
     #queryBtn {
         font-size: calc(24 / 1024 * 100vw);
-    }
+    }*/
 }
 
 @media (orientation: portrait) {
@@ -317,9 +318,24 @@
         font-size: 45px;
     }
 
+    .fbLink {
+        font-size: 30px;
+        margin-top: -40px;
+    }
+
+    .consoleBtn {
+        width: 140px;
+        height: 90px;
+        font-size: 30px;
+     }
+
     #chessboardPic {
         width: 780px;
         height: 920px;
+    }
+
+    .inputArea {
+        height: 14vw;
     }
 
     .chessBookInputArea {
@@ -327,7 +343,7 @@
     }
 
     .chessBookOutptArea {
-        width: 85%;
+        width: 90%;
         margin: 3% 0 1% 0;
     }
 	
@@ -347,7 +363,7 @@
 	}
     .chartArea {
 		position: relative;
-        width: 85%;
+        width: 90%;
 		height: 40vh;
 		margin-top: -10vh;
         margin-bottom: 5vh;

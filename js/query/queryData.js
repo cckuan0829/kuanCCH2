@@ -156,7 +156,7 @@ async function queryByMoveList(chess_manual)
         res.fen_list.push(fen);
 
         _chessInfo.move_curr = i+1;
-        _chessInfo.status_str = "進度:" + _chessInfo.move_curr + "/" + _chessInfo.move_total;
+        _chessInfo.status_str = "" + _chessInfo.move_curr + "/" + _chessInfo.move_total;
         showResult();
         addDisplayRow([_chessInfo.move_curr, res.move_list[i], res.red_score_list[i], res.score_bias_list[i], res.first_recommend_list[i], res.fen_list[i], is_red_before]);
 

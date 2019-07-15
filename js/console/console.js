@@ -611,7 +611,7 @@ async function queryCloudDB() {
 			var query_result = [];
 			_chessInfo.inQuety = true;
 			_chessInfo.is_got_result = true;
-			_chessInfo.status_str = "進度:" + 0 + "/" + list_num;
+			_chessInfo.status_str = "" + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
 			_chessInfo.moveList  = query_result.move_list;
@@ -806,7 +806,7 @@ function showDisplayHeader(){
 	var th_score = document.getElementById("th_score");
 	var th_bias = document.getElementById("th_bias");
 	var th_recom = document.getElementById("th_recom");
-	th_num.classList.add("wid_70");
+	th_num.classList.add("wid_120");
 	th_move.classList.add("wid_120");
 	th_score.classList.add("wid_120");
 	th_bias.classList.add("wid_120");
@@ -860,7 +860,7 @@ function addDisplayRow(info_list) {
 	cell_bias.innerHTML = info_list[3];
 	cell_recommend.innerHTML = info_list[4];
 	
-	cell_round.classList.add("wid_70");
+	cell_round.classList.add("wid_120");
 	cell_move.classList.add("wid_120");
 	cell_score.classList.add("wid_120");
 	cell_bias.classList.add("wid_120");
