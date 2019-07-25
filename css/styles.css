@@ -313,7 +313,7 @@
     }*/
 }
 
-@media (orientation: portrait) {
+@media only screen and (min-width: 800px) and (max-width: 1024px) {
     .titleText {
         font-size: 45px;
     }
@@ -337,37 +337,6 @@
     .inputArea {
         height: 14vw;
     }
-
-    .chessBookInputArea {
-        width: 90%;
-    }
-
-    .chessBookOutptArea {
-        width: 90%;
-        margin: 3% 0 1% 0;
-    }
-	
-	.outputTable {
-		font-size: 28px;
-	}
-	
-    .TableNum {
-        width: 65px;
-        font-size: 28px;
-    }
-
-	.TableBody {
-        position: relative;
-		height: 40vh;
-		display:block;
-	}
-    .chartArea {
-		position: relative;
-        width: 90%;
-		height: 40vh;
-		margin-top: -10vh;
-        margin-bottom: 5vh;
-    }
 	
 	#chessboard {
 		top: 80px;
@@ -379,4 +348,30 @@
         height: calc(50 / 420 * 100vh);
         margin-bottom: calc(10 / 420 * 100vh);
     }
+}
+
+@media (orientation: portrait) {
+
+    .chessBookInputArea {
+        width: 90%;
+    }
+
+    .chessBookOutptArea {
+        width: 90%;
+        margin: 3% 0 1% 0;
+    }
+
+    .TableBody {
+        position: relative;
+        height: 40vh;
+        display:block;
+    }
+    .chartArea {
+        position: relative;
+        width: 90%;
+        height: 40vh;
+        margin-top: -10vh;
+        margin-bottom: 5vh;
+    }
+
 }

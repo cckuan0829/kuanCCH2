@@ -206,7 +206,7 @@ body {
 }
 
 
-@media (orientation: portrait) {
+@media only screen and (min-width: 800px) and (max-width: 1024px) and (orientation: portrait) {
     #chessboard table {
 		margin-top: 20px;
 	}
@@ -317,3 +317,4 @@ body {
 		width: 100px;
 	}
 }
+
