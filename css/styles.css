@@ -341,6 +341,15 @@
 	#chessboard {
 		top: 80px;
 	}
+
+    .outputTable {
+        font-size: 28px;
+    }
+    
+    .TableNum {
+        width: 65px;
+        font-size: 28px;
+    }
 }
 
 @media only screen and (max-height: 420px) {
