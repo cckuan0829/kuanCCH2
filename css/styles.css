@@ -313,7 +313,7 @@
     }*/
 }
 
-@media only screen and (min-width: 800px) and (max-width: 1024px) {
+@media only screen and (min-width: 800px) and (max-width: 1024px) and (orientation: portrait){
     .titleText {
         font-size: 45px;
     }
