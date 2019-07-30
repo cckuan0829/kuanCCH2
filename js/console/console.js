@@ -45,6 +45,7 @@ var picBtn = document.getElementById("picBtn");
 var editModeBtn = document.getElementById("editModeBtn");
 var closeModal = document.getElementsByClassName("close")[0];
 var modal = document.getElementById('myModal');
+var fblink = document.getElementById('fblk');
 
 var buttonList = [
 	queryBtn,
@@ -156,6 +157,8 @@ $(document).ready(function() {
 	}); 
     addChessBoardEvt();
     initPlaceholder();
+
+    fblink.innerHTML = '<a href="'+"https://www.facebook.com/象棋雲梯-1502149653262884"+'" target="_blank" style="color:blue">'+"粉絲專業"+'</a>';
 });
 
 function onUploadBtnClick() {
