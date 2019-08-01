@@ -158,7 +158,7 @@ $(document).ready(function() {
     addChessBoardEvt();
     initPlaceholder();
 
-    fblink.innerHTML = '<a href="'+"https://www.facebook.com/象棋雲梯-1502149653262884"+'" target="_blank" style="color:blue">'+"粉絲專業"+'</a>';
+    fblink.innerHTML = '<a href="'+"https://www.facebook.com/象棋雲梯-1502149653262884"+'" target="_blank" style="color:blue">'+"粉絲專頁"+'</a>';
 });
 
 function onUploadBtnClick() {
