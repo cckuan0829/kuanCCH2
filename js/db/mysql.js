@@ -25,10 +25,8 @@ function getParameterHandler(val) {
     {url: val},
     function(data) {
 
-	   var res = data.toString().split(";");
-	   console.log(res[0]); //account
-	   console.log(res[1]); //record
-	   var obj = JSON.parse(res[1]);
+	   var res = data.toString()
+	   var obj = JSON.parse(res);
 	   var fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
 	   var out_str = "";
 	   
