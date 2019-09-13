@@ -120,7 +120,7 @@ function insert2mysql(chessInfo) {
 	var jstr = JSON.stringify(jobj);
 	   
 	$.post(_chessDbUrl, 
-	{url:hash, record:jstr, account:""},
+	{url:hash, record:jstr},
 	function(data){
 		alert("上傳雲梯成功!");
 		_chessInfo.is_in_cloud_db = true;
