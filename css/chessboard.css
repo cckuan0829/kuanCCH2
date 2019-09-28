@@ -175,6 +175,10 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; -
 	z-index: 2;
 }
 
+.longboardBtn {
+	width: 65px;
+}
+
 .boardBtn {
 	width: 50px;
 }
@@ -300,9 +304,15 @@ body {
 		font-size: 32px;
 	}
 	
+   .longboardBtn {
+		width: 160px;
+		height: 70px;
+		font-size: 35px;
+	}
+
 	.boardBtn {
-		width: 140px;
-		height: 65px;
+		width: 120px;
+		height: 70px;
 		font-size: 35px;
 	}
 
