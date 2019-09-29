@@ -305,7 +305,7 @@
     #content {
         width: calc( 100vw - (160 / 1024 * 100vw) - 40px);
         left: calc(160 / 1024 * 100vw);
-        padding: calc(60 / 1024 * 100vw) calc(20 / 1024 * 100vw);
+        padding: calc(70 / 1024 * 100vw) calc(20 / 1024 * 100vw);
     }
     /*
     #queryBtn {
@@ -339,7 +339,7 @@
     }
 	
 	#chessboard {
-		top: 80px;
+		top: 90px;
 	}
 
     .outputTable {
@@ -360,9 +360,9 @@
 }
 
 @media (orientation: portrait) {
-
-    .chessBookInputArea {
-        width: 90%;
+   
+    #content {
+        padding: 80px 20px;
     }
 
     .chessBookOutptArea {
