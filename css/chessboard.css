@@ -175,30 +175,48 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; -
 	z-index: 2;
 }
 
+
+.chessBoardBtn {
+	height: 26px;
+	margin-right: 1px;
+	margin-left: 1px;
+	background-color: #638cc7;
+	color: #ffffff;
+	border: 0.5px solid #000000;
+	border-radius: 6px;
+}
+
+.chessBoardBtn:disabled {
+    opacity: 0.65; 
+    cursor: not-allowed;
+  }
+
+.chessBoardBtn:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+	background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+	background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+	background-color:#476e9e;
+}
+
+.chessBoardBtn:active {
+	position:relative;
+	top:1px;
+}
+
 .longboardBtn {
 	width: 65px;
+
 }
 
 .boardBtn {
 	width: 50px;
 }
 
-.boardBtn:disabled,
-.boardBtn[disabled]{
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-}
-
 .boardBtn2 {
 	width: 45px;
-}
-
-.boardBtn2:disabled,
-.boardBtn2[disabled]{
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
 }
 
 #moveNumber {
@@ -304,23 +322,40 @@ body {
 		font-size: 32px;
 	}
 	
+	.chessBoardBtn:active {
+	    top:2px;
+    }
+
+
    .longboardBtn {
 		width: 160px;
 		height: 70px;
+		margin-right: 2px;
+	    margin-left: 2px;
 		font-size: 35px;
+		border:1px solid #000000;
+		border-radius: 12px;
 	}
 
 	.boardBtn {
 		width: 120px;
 		height: 70px;
+		margin-right: 2px;
+	    margin-left: 2px;
 		font-size: 35px;
+		border:1px solid #000000;
+		border-radius: 12px;
 	}
 
 	.boardBtn2 {
 		margin-top: 40px;
 		width: 110px;
 		height: 65px;
+		margin-right: 2px;
+	    margin-left: 2px;
 		font-size: 35px;
+		border:1px solid #000000;
+		border-radius: 12px;
 	}
 
 	#moveNumber {
