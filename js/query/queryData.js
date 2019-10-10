@@ -56,6 +56,9 @@ async function queryByMove(prev_fen, move)
 	prev_recommend_list = await query_cloud(prev_fen);
     recommend_list = await query_cloud(res.fen);
 
+    res.red_score = await query_score(res.fen);
+	if(!is_red_before) res.red_score *= -1;
+
 	fisrt_recommend_move_text = "";
 
 	var qurey_list = []; 
@@ -84,7 +87,7 @@ async function queryByMove(prev_fen, move)
 			if(j == 0) fisrt_recommend_move_text = move;
 		}
 	}
-    
+
     if(res.red_score != NaN)
     {
 		if(is_red_before)
