@@ -298,7 +298,7 @@
 		width: 45%;
 	}
     .btnList {
-        top: 0px;
+        top: 50px;
         width: calc(160 / 1024 * 100vw) ;
         padding: calc(50 / 1024 * 100vw) 0 0 0;
     }
