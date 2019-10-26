@@ -367,6 +367,7 @@
 
     .chessBookInputArea {
         width: 90%;
+        margin-top: calc(10 / 420 * 100vh);
     }
 
     .chessBookOutptArea {
