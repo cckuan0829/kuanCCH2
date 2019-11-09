@@ -315,12 +315,12 @@ function onUploadBtnClick() {
 		{
 			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
 			{
-				uploadresult(_chessInfo);
+				uploadresult(_chessInfo, _gameInfo);
 			}
 		}
 		else
 		{
-			uploadresult(_chessInfo);
+			uploadresult(_chessInfo, _gameInfo);
 		}
 	}
 }
