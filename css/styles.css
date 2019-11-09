@@ -417,6 +417,10 @@ div.ui-datepicker{
 }
 
 @media (orientation: portrait) {
+   #my-signin2 {
+        margin-top: 3px;
+        font-size: 35px;
+   }
 
    #signOut {
         position: absolute;
