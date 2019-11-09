@@ -1,5 +1,32 @@
 var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
 
+function getUserInfo(val) {
+
+	//CHECK the url is belong to user's personal or not.
+	if(_chessInfo.is_login)
+	{
+		$.get(
+   			_chessDbUrl,
+    		{pers: true, url: val, account: _userInfo.accountID},
+    		function(data) {
+
+    		if(data != undefined)
+    		{
+    			console.log(data);
+    			var res = data.toString();
+	            var arr = JSON.parse(res);
+	            var info = JSON.parse(arr[0].info);
+	            
+	            document.getElementById("datepicker").value = info.date;
+	            document.getElementById("game_name").value = info.game_name;
+	            document.getElementById("round").value = info.round;
+	            document.getElementById("red_name").value = info.r_name;
+				document.getElementById("black_name").value = info.b_name;
+    		}
+    	});
+	}
+}
+
 function getParameterHandler(val) {
 	
 	var is_exist = false;
@@ -84,29 +111,8 @@ function getParameterHandler(val) {
 
        });
 
-	//CHECK the url is belong to user's personal or not.
-	if(_chessInfo.is_login)
-	{
-		$.get(
-   			_chessDbUrl,
-    		{pers: true, url: val, account: _userInfo.accountID},
-    		function(data) {
+	getUserInfo(val);
 
-    		if(data != undefined)
-    		{
-    			console.log(data);
-    			var res = data.toString();
-	            var arr = JSON.parse(res);
-	            var info = JSON.parse(arr[0].info);
-	            
-	            document.getElementById("datepicker").value = info.date;
-	            document.getElementById("game_name").value = info.game_name;
-	            document.getElementById("round").value = info.round;
-	            document.getElementById("red_name").value = info.r_name;
-				document.getElementById("black_name").value = info.b_name;
-    		}
-    	});
-	}
 }
 
 async function checkUrlExist(val) {

@@ -236,6 +236,11 @@ function onSignInOut(is_login)
        document.getElementById("personalRecordBtn").style.display = "block";
        document.getElementById("gameinfo").style.display = "block";
        document.getElementById("signOut").style.visibility = "visible";
+       
+       var url = window.location.search;
+	   var res = url.split('&').join('?').split('?')
+	   var url = res[1];
+	   if(url>0) getUserInfo(url);
     }
     else
     {
