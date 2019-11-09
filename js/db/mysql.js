@@ -22,6 +22,44 @@ function getUserInfo(val) {
 	            document.getElementById("round").value = info.round;
 	            document.getElementById("red_name").value = info.r_name;
 				document.getElementById("black_name").value = info.b_name;
+
+				if(info.play_side != undefined && info.play_side != null)
+				{
+					switch(info.play_side)
+					{
+						case 0: //none
+							document.getElementById("unknown_turn").checked = true;
+							break;
+						case 1: //red
+							document.getElementById("red_turn").checked = true;
+							break;
+						case 2: //black
+							document.getElementById("black_turn").checked = true;
+							break;
+						default:
+					}
+
+				}
+
+				if(info.result != undefined && info.result != null)
+				{
+					switch(info.result) //1 red win, 2 draw, 3 black win, 0 unknown
+					{
+						case 0: 
+							document.getElementById("unknown_win").checked = true;
+							break;
+						case 1: 
+							document.getElementById("draw").checked = true;
+							break;
+						case 2: 
+							document.getElementById("red_win").checked = true;
+							break;
+						case 3: 
+							document.getElementById("black_win").checked = true;
+							break;
+						default:
+					}
+				}
     		}
     	});
 	}
