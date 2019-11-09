@@ -95,6 +95,15 @@ function getParameterHandler(val) {
     		if(data != undefined)
     		{
     			console.log(data);
+    			var res = data.toString();
+	            var arr = JSON.parse(res);
+	            var info = JSON.parse(arr[0].info);
+	            
+	            document.getElementById("datepicker").value = info.date;
+	            document.getElementById("game_name").value = info.game_name;
+	            document.getElementById("round").value = info.round;
+	            document.getElementById("red_name").value = info.r_name;
+				document.getElementById("black_name").value = info.b_name;
     		}
     	});
 	}
