@@ -39,9 +39,10 @@
 
 		    <script>
 		    function renderButton() {
+		    	var bodyStyles = window.getComputedStyle(document.body);
 		        gapi.signin2.render('my-signin2', {
 	          		'scope': 'profile email',
-	          		'width': 200*parseInt(bodyStyles.getPropertyValue('--Gscale')),
+	          		'width': 180*parseInt(bodyStyles.getPropertyValue('--Gscale')),
 	         		'height': 35*parseInt(bodyStyles.getPropertyValue('--Gscale')),
 	          		'longtitle': false,
 	          		'theme': 'dark',
