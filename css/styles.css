@@ -418,16 +418,16 @@ div.ui-datepicker{
 
 @media (orientation: portrait) {
    #my-signin2 {
-        width: 400px,
-        height: 70px,
+        margin-top: 10px;
+        font-size: 30px;
    }
 
    #signOut {
         position: absolute;
         right: 210px;
-        margin-top: 0px;
+        margin-top: 10px;
         font-size: 30px;
-        z-index: 2;
+        z-index: 3;
     }
 
     .fbLink {
