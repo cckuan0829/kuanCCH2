@@ -49,10 +49,10 @@ function getUserInfo(val) {
 							document.getElementById("unknown_win").checked = true;
 							break;
 						case 1: 
-							document.getElementById("draw").checked = true;
+							document.getElementById("red_win").checked = true;
 							break;
 						case 2: 
-							document.getElementById("red_win").checked = true;
+							document.getElementById("draw").checked = true;
 							break;
 						case 3: 
 							document.getElementById("black_win").checked = true;
