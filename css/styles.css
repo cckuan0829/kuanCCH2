@@ -417,6 +417,11 @@ div.ui-datepicker{
 }
 
 @media (orientation: portrait) {
+   #my-signin2 {
+        width: 400px,
+        height: 80px,
+   }
+
    #signOut {
         position: absolute;
         right: 210px;
