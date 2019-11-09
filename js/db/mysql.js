@@ -25,7 +25,7 @@ function getParameterHandler(val) {
     {url: val},
     function(data) {
 
-	   var res = data.toString()
+	   var res = data.toString();
 	   var obj = JSON.parse(res);
 	   var fen = 'rnbakabnr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RNBAKABNR%20w';
 	   var out_str = "";
@@ -107,27 +107,108 @@ function getCartProduct(id, callback){
     });
 }
 
+function deleteRecord(myurl, myaccount) {
+   $.post(_chessDbUrl, 
+	{url:myurl, account:myaccount, delete:"delete"},
+	function(data){
+		document.getElementById("personalrecordBody").innerHTML = "";
+
+		$.get(
+    	_chessDbUrl,
+   		{account: _userInfo.accountID},
+    	function(data) {
+	   		console.log(data);
+	   			if(data)
+	   			{
+	      			var jarr = JSON.parse(data);
+	      			for(var i = 0; i < jarr.length; i++)
+	      			{
+	   	    			console.log(jarr[i]);
+	   	    			addPersonalRecordRow(jarr[i]); 
+	      			}
+	   			}
+		});
+	});
+}
+
+function loginChessLadder(userInfo) {
+	var id    = userInfo.accountID;
+	var name  = userInfo.username;
+	var email = userInfo.email;
+
+	$.post(_chessDbUrl, 
+	{login:"login", accountID: id, name: name, email: email},
+	function(data){
+		//alert("hi "+name);
+		console.log(data);
+	});
+}
+
 function insert2mysql(chessInfo) {
     var movestr = chessInfo.engmoveList.join(",");
 	var hash = hash2INT32(movestr);
-	var jobj = {
+	var jobj_record = {
 		 "move_num": chessInfo.move_total,
 		 "move_list": chessInfo.moveList,
 		 "score": chessInfo.scoreList,
 		 "bias": chessInfo.biasList,
 		 "recommend": chessInfo.recommendList
 	   };
-	var jstr = JSON.stringify(jobj);
-	   
+
+	var record_str = JSON.stringify(jobj_record);
+
 	$.post(_chessDbUrl, 
-	{url:hash, record:jstr},
+	{url:hash, record: record_str},
 	function(data){
 		alert("上傳雲梯成功!");
 		_chessInfo.is_in_cloud_db = true;
 	});
 }
 
-function uploadresult(chessInfo) {
+function insert2mysqlwithAccoutInfo(chessInfo, gameInfo) {
+    var movestr = chessInfo.engmoveList.join(",");
+	var hash = hash2INT32(movestr);
+	var jobj_record = {
+		 "move_num": chessInfo.move_total,
+		 "move_list": chessInfo.moveList,
+		 "score": chessInfo.scoreList,
+		 "bias": chessInfo.biasList,
+		 "recommend": chessInfo.recommendList
+	   };
+
+	var jobj_info = {
+         "date": gameInfo.date,
+   		 "game_name": gameInfo.game_name,
+   		 "round": gameInfo.round,
+   		 "play_side": gameInfo.play_side, //0: none, 1: red, 2: black 
+		 "r_name": gameInfo.r_name,
+		 "b_name": gameInfo.b_name,
+		 "r_bad_rate1": gameInfo.r_bad_rate1,
+		 "r_bad_rate2": gameInfo.r_bad_rate2,
+		 "b_bad_rate1": gameInfo.b_bad_rate1,
+		 "b_bad_rate2": gameInfo.b_bad_rate2,
+		 "result": gameInfo.result,
+	   };
+
+	var record_str = JSON.stringify(jobj_record);
+	var info_str = JSON.stringify(jobj_info);
+	var id = (parseInt(chessInfo.accountID) % 65535) + (parseInt(hash) % 65535) * 65535;
+
+	$.post(_chessDbUrl, 
+	{url: hash, record: record_str},
+	function(data){
+		alert("上傳雲梯成功!");
+		_chessInfo.is_in_cloud_db = true;
+	});
+
+	$.post(_chessDbUrl, 
+	{id: id, url: hash, account: chessInfo.accountID, info: info_str},
+	function(data){
+
+	});
+}
+
+function uploadresult(chessInfo, gameInfo) {
 	var movestr = chessInfo.engmoveList.join(",");
 	var hash = hash2INT32(movestr);
 	
@@ -138,12 +219,18 @@ function uploadresult(chessInfo) {
 	   {
 		   if (confirm("該棋局已存在，是否要覆蓋?"))
 		   {
-		       insert2mysql(chessInfo);
+		   	   if(chessInfo.is_login)
+		   	      insert2mysqlwithAccoutInfo(chessInfo, gameInfo);
+		       else
+		          insert2mysql(chessInfo);
 		   }
 	   }
 	   else
 	   {
-		   insert2mysql(chessInfo);
+		   if(chessInfo.is_login)
+		      insert2mysqlwithAccoutInfo(chessInfo, gameInfo);
+		   else
+		      insert2mysql(chessInfo);
 	   }
 	});
 }

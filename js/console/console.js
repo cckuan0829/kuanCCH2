@@ -21,6 +21,7 @@ var inputExample =
 var placeholder = "在這輸入或貼上棋譜，例如：\n\n" + inputExample;
 
 // should put all buttons to consoleConfig file
+var persBtn = document.getElementById("personalRecordBtn");
 var queryBtn = document.getElementById("queryBtn");
 var queryLadderBtn = document.getElementById("queryLadderBtn");
 var copyBtn = document.getElementById("copyBtn");
@@ -48,6 +49,7 @@ var modal = document.getElementById('myModal');
 var fblink = document.getElementById('fblk');
 
 var buttonList = [
+	persBtn,
 	queryBtn,
 	queryLadderBtn,
 	copyBtn,
@@ -71,8 +73,17 @@ var buttonList = [
 	editModeBtn
 ];
 
+var _userInfo =
+{
+	accountID: "",
+	username: "",
+	nickname: "",
+	email: "",
+}
+
 var _chessInfo =
 {
+	accountID: "",
 	pgn_str: "",
 	copy_str: "",
 	status_str: "",
@@ -87,6 +98,7 @@ var _chessInfo =
 	is_edit_mode: false,
 	is_vertical_original: true,
 	is_horizontal_original: true,
+	is_login: false,
 	moveList: [],
 	engmoveList: [],
 	moveCurveList: [],
@@ -97,7 +109,24 @@ var _chessInfo =
 	badRate: [0, 0, 0, 0], //red NG, red BAD, black NG, black BAD 
 }
 
+var _gameInfo = 
+{
+	title: "",
+	date: "2020/1/1", //比賽時間
+   	game_name: "", //比賽名稱
+    round: 1, //比賽輪次
+    play_side: 0,
+	r_name: "--",
+	b_name : "--",
+    r_bad_rate1: 0,
+	r_bad_rate2: 0,
+	b_bad_rate1: 0,
+	b_bad_rate2: 0,
+    result: 0 //勝負結果
+}
+
 $(document).ready(function() {
+	persBtn.addEventListener("click", persFun);
     queryBtn.addEventListener("click", queryCloudDB);
     $("#queryBtn").val($("#queryBtn").html());
     queryLadderBtn.addEventListener("click", queryLadderDB);
@@ -161,6 +190,100 @@ $(document).ready(function() {
     fblink.innerHTML = '<a href="'+"https://www.facebook.com/象棋雲梯-1502149653262884"+'" target="_blank" style="color:blue">'+"粉絲專頁"+'</a>';
 });
 
+function persFun() {
+	if(document.getElementById("personalresult").style.visibility == "hidden")
+	{
+		var header = document.getElementById("personalrecordHeader");
+		document.getElementById("personalRecordBtn").innerHTML = "回主畫面";
+		removePersonaRecordlTable();
+		document.getElementById("personalresult").style.visibility = "visible";
+   		document.getElementById("content").style.visibility = "hidden";
+   		document.getElementById("moveListTable").style.visibility = "hidden";
+
+    	console.log("ID : "+_userInfo.accountID);
+
+		$.get(
+    	_chessDbUrl,
+   		{account: _userInfo.accountID},
+    	//{url: 695251003},
+    	function(data) {
+	   		console.log(data);
+	   			if(data)
+	   			{
+	      			var jarr = JSON.parse(data);
+	      			for(var i = 0; i < jarr.length; i++)
+	      			{
+	   	    			console.log(jarr[i]);
+	   	    			addPersonalRecordRow(jarr[i]); 
+	      			}
+	   			}
+		});
+	}
+	else
+	{
+		document.getElementById("personalRecordBtn").innerHTML = "個人棋局";
+		document.getElementById("personalresult").style.visibility = "hidden";
+		document.getElementById("content").style.visibility = "visible";
+		if(_chessInfo.move_total > 0) document.getElementById("moveListTable").style.visibility = "visible";
+
+	}
+}
+
+function onSignInOut(is_login)
+{
+    if(is_login)
+    {
+       document.getElementById("personalRecordBtn").style.display = "block";
+       document.getElementById("gameinfo").style.display = "block";
+       document.getElementById("signOut").style.visibility = "visible";
+    }
+    else
+    {
+       document.getElementById("personalRecordBtn").style.display = "none";
+       document.getElementById("gameinfo").style.display = "none";
+       document.getElementById("signOut").style.visibility = "hidden";
+
+       if(document.getElementById("personalresult").style.visibility == "visible")
+       {
+          document.getElementById("personalRecordBtn").innerHTML = "個人棋局";
+	      document.getElementById("personalresult").style.visibility = "hidden";
+	      document.getElementById("content").style.visibility = "visible";
+	      if(_chessInfo.move_total > 0) document.getElementById("moveListTable").style.visibility = "visible";
+       }
+    }
+}
+
+function onSideRadioClick(myRadio) 
+{
+	console.log(myRadio.value);
+	var val = parseInt(myRadio.value);
+	if(val == 1) //red
+	{
+		_gameInfo.play_side = 1;
+		document.getElementById("red_name").value = _userInfo.username;
+		document.getElementById("black_name").value = "";
+	}
+	else if(val == 2) // black
+	{
+		_gameInfo.play_side = 2;
+		document.getElementById("red_name").value ="";
+		document.getElementById("black_name").value = _userInfo.username;
+	}
+	else
+	{
+		_gameInfo.play_side = 0;
+        document.getElementById("red_name").value = "";
+		document.getElementById("black_name").value = "";
+	}
+
+}
+
+function onResultRadioClick(myRadio)
+{
+	var val = parseInt(myRadio.value);
+    _gameInfo.result = val;
+}
+
 function onUploadBtnClick() {
     
 	if(_chessInfo.move_total == 0 )
@@ -168,7 +291,21 @@ function onUploadBtnClick() {
 		alert('搜尋後才能上傳!');
 	}
 	else
-	{　　	　
+	{　　
+		if(_chessInfo.is_login)
+	    {
+	    	_gameInfo.date = document.getElementById('datepicker').value;
+	    	_gameInfo.game_name   = document.getElementById('game_name').value; 
+	    	_gameInfo.round       = document.getElementById('round').value; 
+			_gameInfo.r_name      = document.getElementById('red_name').value;
+			_gameInfo.b_name      = document.getElementById('black_name').value; 
+			_gameInfo.r_bad_rate1 = _chessInfo.badRate[0];
+			_gameInfo.r_bad_rate2 = _chessInfo.badRate[1];
+			_gameInfo.b_bad_rate1 = _chessInfo.badRate[2];
+			_gameInfo.b_bad_rate2 = _chessInfo.badRate[3];
+
+	    }
+		　
 		if(_chessInfo.is_not_complete)
 		{
 			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
@@ -194,19 +331,7 @@ function onDownloadBtnClick() {
 		alert('搜尋後才能下載!');
 	}
 	else {
-		/*	
-		if(_chessInfo.is_not_complete)
-		{
-			if (confirm("盤面分析未完整，是否仍要下載pgn檔?"))
-			{
-				setFilenameandDownload();
-			}
-		}
-		else
-		{
-			setFilenameandDownload();
-		}
-		*/
+
 		setFilenameandDownload();
 	}
 }
@@ -358,6 +483,7 @@ function onDpxqBtnClick()
 function onVerticalBtnClick()
 {
 	_chessInfo.is_vertical_original = ! _chessInfo.is_vertical_original;
+	_chessInfo.is_horizontal_original = ! _chessInfo.is_horizontal_original;
 	showBoardbyNum(_chessInfo.currNumber);
 	
 }
@@ -700,6 +826,22 @@ function copyUrl() {
 }
 
 function clearInputText() {
+
+    document.getElementById("datepicker").value = "";
+	document.getElementById("game_name").value = "";
+	document.getElementById("round").value = "";
+	document.getElementById("red_name").value = "";
+	document.getElementById("black_name").value = "";
+    
+    document.getElementById("red_turn").checked = false;
+    document.getElementById("black_turn").checked = false;
+    document.getElementById("unknown_turn").checked = false;
+
+    document.getElementById("red_win").checked = false;
+    document.getElementById("draw").checked = false;
+    document.getElementById("black_win").checked = false;
+    document.getElementById("unknown_win").checked = false;
+
 	document.getElementById("chessBookInput").value = "";
 	if(_chessInfo.is_edit_mode)
 	{
@@ -713,15 +855,14 @@ function clearInputText() {
 function showInfo() {
 	alert("操作步驟:\
 	     \n\t1. 從象棋橋或是東萍匯出文字棋譜。\
-	     \n\t2. 將文字棋譜貼至本網頁上，然後按下'雲庫查詢'。\
-		 \n\t3. 或選'開啟檔案'，然後選欲開啟之pgn檔，再按下'雲庫查詢'。\
-		 \n\t4. 查詢完成後，按下本網頁上的'複製結果'。\
-		 \n\t5. 可將複製結果匯入象棋橋：在象棋橋按'匯入'=>'文字棋譜'。\
+	     \n\t2. 將文字棋譜貼至本網頁上，然後按下'逐步查詢'。\
+		 \n\t3. 建議使用Chrome瀏覽器。\
+	     \n\t4. 可至粉絲專頁獲取更多使用資訊。\
 		 \n輸出說明:\
 		 \n\t1. 盤面分數正分代表紅優，負分則為黑優。\
-		 \n\t2. 分數偏差是指和最佳應著之間的偏差絕對值，越小越好。\
+		 \n\t2. 分數偏差是指和雲庫最佳應著之間的偏差絕對值。\
 		 \n\t3. 分數偏差大於50記為緩著，大於200記為失著。\
-		 \n\t4. NaN代表雲庫查無資料。");
+		 \n\t4. NaN代表雲庫查無資料，建議按下'逐步查詢'重新查詢。");
 }
 
 function initPlaceholder() {
@@ -875,6 +1016,92 @@ function removeDisplayTable() {
 	document.getElementById("moveListTableBody").innerHTML = "";
 }
 
+function addPersonalRecordRow(jobj) {
+    var table = document.getElementById("personalrecordTable");
+	var tbody = document.getElementById("personalrecordBody");	
+	tbody.classList.add("TableBody");
+	var row = tbody.insertRow(0);
+    
+    var cell_date       = row.insertCell(0);
+    var cell_game       = row.insertCell(1);
+	var cell_round      = row.insertCell(2);
+	var cell_red_name   = row.insertCell(3); 
+	var cell_black_name = row.insertCell(4);
+	var cell_result     = row.insertCell(5); //1 red win, 2 draw, 3 black win, 0 unknown
+	var cell_r_badrate  = row.insertCell(6);
+	var cell_b_badrate  = row.insertCell(7);
+	var cell_url        = row.insertCell(8);
+	var cell_delete     = row.insertCell(9);
+	var result, side;
+	var jinfo = JSON.parse(jobj.info);
+
+	cell_date.classList.add("wid_100");
+	cell_game.classList.add("wid_120");
+	cell_round.classList.add("wid_50");
+	cell_red_name.classList.add("wid_150");
+	cell_black_name.classList.add("wid_150");
+	cell_result.classList.add("wid_60");
+	cell_r_badrate.classList.add("wid_100");
+	cell_b_badrate.classList.add("wid_100");
+	cell_url.classList.add("wid_120");
+	cell_delete.classList.add("wid_50");
+
+	cell_url.innerHTML = '<a href="'+_ladderUrl+jobj.url+'" target="_blank">'+jobj.url+'</a>';
+	if(jinfo.date) cell_date.innerHTML = jinfo.date;
+	if(jinfo.game_name) cell_game.innerHTML = jinfo.game_name;
+	if(jinfo.round) cell_round.innerHTML = jinfo.round;
+	switch(parseInt(jinfo.result))
+	{
+		case 1:
+			result = '紅勝';
+			break;
+		case 2:
+			result = '和棋';
+			break;
+		case 3:
+			result = '黑勝';
+			break;
+		default:
+			result = '--';
+			break;
+	}
+	cell_result.innerHTML = result;
+
+	switch(parseInt(jinfo.play_side))
+	{
+		case 1:
+			side = '執紅';
+			break;
+		case 2:
+			side = '執黑';
+			break;
+		default:
+			side = '--';
+			break;
+	}
+ 
+	if(jinfo.r_name != undefined) cell_red_name.innerHTML = jinfo.r_name;
+	if(jinfo.b_name != undefined) cell_black_name.innerHTML = jinfo.b_name;
+	if(jinfo.r_bad_rate1 != undefined) cell_r_badrate.innerHTML = jinfo.r_bad_rate1+" / ";
+	if(jinfo.r_bad_rate2 != undefined) cell_r_badrate.innerHTML += jinfo.r_bad_rate2+"%";
+	if(jinfo.b_bad_rate1 != undefined) cell_b_badrate.innerHTML = jinfo.b_bad_rate1+" / ";
+	if(jinfo.b_bad_rate2 != undefined) cell_b_badrate.innerHTML += jinfo.b_bad_rate2+"%";
+
+	cell_delete.innerHTML = "<Button id = 'recordList" + jobj.url + "' >" + "X" + "</Button>";
+		$('#recordList'+jobj.url).addClass("TableNum");
+		$('#recordList'+jobj.url).bind("click", function() {
+			if (confirm("確定要把 URL:"+jobj.url+" 從個人棋局中移除嗎?"))
+			{
+			   deleteRecord(jobj.url, _chessInfo.accountID); 
+			}
+		});
+}
+
+function removePersonaRecordlTable() {
+    document.getElementById("personalresult").style.visibility = "hidden";
+    document.getElementById("personalrecordBody").innerHTML = "";
+}
+
 function updateBadRate(badrate) {
 	var badratetext = document.getElementById("badRate");
 	badratetext.classList.add("rateArea");
@@ -993,6 +1220,8 @@ function showInitBoard()
 			$('#scoreBtn').html('hide');
 		}
 	}		
+
+	onSignInOut(false);
 }
 
 function addChessBoardEvt() {
@@ -1152,6 +1381,18 @@ function addChessBoardEvt() {
 
 		}
 	});
+}
+
+function signOut() {
+	var auth2 = gapi.auth2.getAuthInstance();
+	auth2.signOut().then(function () {
+	   console.log('User signed out.');
+	   _chessInfo.is_login = false;
+	   //_chessInfo.accountID = "";
+	   onSignInOut(false);
+	});
+
+	auth2.disconnect();
 }
 
 window.onload = showInitBoard;

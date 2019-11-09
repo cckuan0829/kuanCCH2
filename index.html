@@ -5,12 +5,26 @@
 	<meta content="user-scalable=no" name="viewport" /> 
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="313692014803-5nm5c5sk2pjd4beoqdb87b1etedt5jj5.apps.googleusercontent.com">
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
 		gtag('config', 'UA-127983579-1');
 	</script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+     $( function() {
+     $( "#datepicker" ).datepicker(
+     	{
+     	   dateFormat: 'yy/mm/dd',
+     	});
+     } );
+    </script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
 	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="css/modal.css">
 	<link rel="stylesheet" href="css/chessboard.css">
@@ -20,26 +34,93 @@
 <body>
     <div id="main">
 		<div class = "titleBar">
-				<p id="title" class = "titleText">象棋雲梯</p>
-				<p id="fblk" class = "fbLink">粉絲專頁</p>
+
+		    <div style="position: absolute; right: 0px" id="my-signin2"></div>	
+		    <a href="#" onclick="signOut();" id="signOut">Sign out</a>
+
+		    <script>
+		    function renderButton() {
+		        gapi.signin2.render('my-signin2', {
+	          		'scope': 'profile email',
+	          		'width': 200,
+	          		'height': 40,
+	          		'longtitle': false,
+	          		'theme': 'dark',
+	          		'onsuccess': onSignIn,
+	          		'onfailure': onFailure
+		        });
+		    }
+
+		    function onFailure(error) {
+		        console.log("onFailure");
+		    }
+
+			function onSignIn(googleUser) {
+				var profile = googleUser.getBasicProfile();
+				var id_token = googleUser.getAuthResponse().id_token;
+				console.log('ID_token: ' + id_token);
+				console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+				console.log('Name: ' + profile.getName());
+				console.log('Image URL: ' + profile.getImageUrl());
+				console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+				
+			    _userInfo.accountID = profile.getId();
+			    _userInfo.username = profile.getName();
+			    _userInfo.email = profile.getEmail();
+
+				loginChessLadder(_userInfo);
+				_chessInfo.is_login = true;
+				_chessInfo.accountID = _userInfo.accountID;
+				onSignInOut(true);
+			}
+
+        	</script>
+
+        	<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+			<p id="title" class = "titleText">象棋雲梯</p>
+			<p id="fblk" class = "fbLink">粉絲專頁</p>
+
 		</div>
 
 		<div id="buttonList" class="btnList">
 
+			    <button id="personalRecordBtn" class="consoleBtn">個人棋局</button>
+
 				<button id = "openfileBtn" class = "consoleBtn">開啟檔案</button>
 				<input id="openfileInput" type=file   accept="text/plain" > 
 				
-				<button id="copyEgBtn" class="consoleBtn">範例棋譜</button>
-				
-				<button id="copyBtn" class="consoleBtn">複製結果</button>
-
-				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
-				
+				<!--<button id="copyEgBtn" class="consoleBtn">範例棋譜</button>-->
 				<button id="uploadBtn" class="consoleBtn">上傳雲梯</button>
 				
 				<button id="copyURLBtn" class="consoleBtn">棋局分享</button>
 
+				<button id="copyBtn" class="consoleBtn">複製結果</button>
+
+				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
+
 				<button id="infoBtn" class="consoleBtn">使用說明</button>
+		</div>
+
+		<div id = "personalresult" style="visibility:hidden">
+				<table id="personalrecordTable" class="persTable">
+					<thead id="personalrecordHeader">
+						<tr>
+						<th id = "th_TIME"  class="wid_100">時間</th>
+						<th id = "th_GAME"  class="wid_120">比賽</th>
+						<th id = "th_NUM"   class="wid_50">輪次</th>
+						<th id = "th_RED"   class="wid_150">紅方</th>
+						<th id = "th_BLACK" class="wid_150">黑方</th>
+						<th id = "th_RES"   class="wid_60">結果</th>
+						<th id = "th_R_BAD" class="wid_100">紅緩/失著率</th>
+						<th id = "th_B_BAD" class="wid_100">黑緩/失著率</th>
+						<th id = "th_URL"   class="wid_120">URL</th>
+						<th id = "th_DEL"   class="wid_50">刪除</th>
+						</tr>
+					</thead>
+					<tbody class = "personalTableBody" id="personalrecordBody">
+					</tbody>
+				</table>
 		</div>
 
 		<div id = "content">
@@ -183,11 +264,37 @@
 				</div>
 				
 				<div class = "chessBookInputArea">
-						<textarea id="chessBookInput" class = "inputArea"></textarea>
-						<button id="queryBtn" class="consoleBtn">逐步查詢</button>
-						<button id="queryLadderBtn" class="consoleBtn">雲梯查詢</button>
-						<button id="clearBtn" class="consoleBtn">清空輸入</button>
-						<button id="editModeBtn" class="consoleBtn">手動打譜</button>
+
+					<div id = "gameinfo" class="gameinfo">
+					    日期 <input type="text" class="gameinfo_sub" id="datepicker"><br>
+                        比賽 <input type="text" class="gameinfo_sub" id="game_name" value="">
+						輪次 <input type="text" class="gameinfo_sub" id="round" value=""><br>
+						<form>
+						  是本人的對局嗎?
+						  <input type="radio" id="red_turn" class="gameinfo_sub2" name="side" onclick="onSideRadioClick(this);" value=1>執紅
+						  <input type="radio" id="black_turn" class="gameinfo_sub2" name="side" onclick="onSideRadioClick(this);" value=2>執黑
+						  <input type="radio" id="unknown_turn" class="gameinfo_sub2" name="side" onclick="onSideRadioClick(this);" value=0>非本人對局
+						</form>
+                        紅方 <input type="text" class="gameinfo_sub" id="red_name" value="">
+                        黑方 <input type="text" class="gameinfo_sub" id="black_name" value="">
+                        <form>
+  						  勝負結果
+						  <input type="radio" id="red_win" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
+						  value=1>紅勝
+						  <input type="radio" id="draw" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
+						  value=2>和棋
+						  <input type="radio" id="black_win" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
+						  value=3>黑勝
+						  <input type="radio" id="unknown_win" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
+						  value=0>未知
+						</form>
+					</div>
+
+					<textarea id="chessBookInput" class = "inputArea"></textarea>
+					<button id="queryBtn" class="consoleBtn">逐步查詢</button>
+					<button id="queryLadderBtn" class="consoleBtn">雲梯查詢</button>
+					<button id="clearBtn" class="consoleBtn">清空輸入</button>
+					<button id="editModeBtn" class="consoleBtn">手動打譜</button>
 				</div>
 				
 				<div class = "chessOutput">
