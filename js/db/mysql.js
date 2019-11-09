@@ -83,6 +83,21 @@ function getParameterHandler(val) {
        $("#queryBtn").html($("#queryBtn").val());
 
        });
+
+	//CHECK the url is belong to user's personal or not.
+	if(_chessInfo.is_login)
+	{
+		$.get(
+   			_chessDbUrl,
+    		{pers: true, url: val, account: _userInfo.accountID},
+    		function(data) {
+
+    		if(data != undefined)
+    		{
+    			console.log(data);
+    		}
+    	});
+	}
 }
 
 async function checkUrlExist(val) {
