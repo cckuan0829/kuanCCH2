@@ -436,13 +436,27 @@ div.ui-datepicker{
     }/*added by kuan*/
 
     #personalrecordTable {
-        margin-top: 70px;
+        margin-top: 80px;
     }
 
     .persTable {
         font-size: 20px;
         overflow: auto;
+        width: 100%;
+        height: 100%;
         table-layout: automatic;
+
+    }
+
+    .persTable thead {
+ 
+        position: absolute;
+    }
+
+    .personalTableBody {
+        margin-top: 50px;
+        position: absolute;
+
     }
 
     .gameinfo{
