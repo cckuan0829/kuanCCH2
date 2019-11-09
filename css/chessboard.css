@@ -1,5 +1,5 @@
 body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; --dot: 24; 
-     --titlescale: 1; --markerscale: 1;}
+     --titlescale: 1; --markerscale: 1; --Gscale: 1;}
 
 #chessboard {
 	position: relative;
@@ -314,6 +314,7 @@ body {
 		--dot: 64;/*48;*/
 		--titlescale: 1.5; 
 		--markerscale: 2;
+		--Gscale: 1.5;
 	}
 	
 	#chessNumCtrl {
