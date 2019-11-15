@@ -1049,7 +1049,7 @@ function removeDisplayTable() {
 function addPersonalRecordRow(jobj) {
     var table = document.getElementById("personalrecordTable");
 	var tbody = document.getElementById("personalrecordBody");	
-	tbody.classList.add("TableBody");
+	//tbody.classList.add("TableBody");
 	var row = tbody.insertRow(0);
     
     var cell_date       = row.insertCell(0);
