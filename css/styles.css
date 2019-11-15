@@ -47,24 +47,24 @@
 #personalrecordTable {
     position: absolute;
     margin-top: 50px;
-    left: 165px;
-    width: 80%;
-    height: 80vh;
+    margin-left: 165px;
+    width: 85%;
 }
 
 .persTable {
     border-collapse: collapse;
     font-size: 15px;
-    overflow: auto;
     text-align: center;
     table-layout: fixed;
-    position: relative;
+    position: fixed;
+    overflow-y:scroll;
 
 }
 
 .persTable thead {
     position: relative;
     text-align: center;
+    table-layout: fixed;
     background: black;
     color: white;
 }
@@ -72,9 +72,7 @@
 .personalTableBody {
     text-align: center;
     overflow-y:scroll;
-    width: 100%
-    height: 100%;
-    position: absolute;
+    position: relative;
 }
 
 .outputTable {
