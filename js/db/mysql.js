@@ -186,6 +186,7 @@ function deleteRecord(myurl, myaccount) {
    		{account: _userInfo.accountID},
     	function(data) {
 	   		console.log(data);
+		   		showPersonalHeader();
 	   			if(data)
 	   			{
 	      			var jarr = JSON.parse(data);

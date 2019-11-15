@@ -1016,6 +1016,31 @@ function addDisplayRow(info_list) {
 	cell_recommend.classList.add("wid_180");
 }
 
+function showPersonalHeader(){
+
+	var th_time = document.getElementById("th_TIME");
+	var th_game = document.getElementById("th_GAME");
+	var th_num = document.getElementById("th_NUM");
+	var th_red = document.getElementById("th_RED");
+	var th_black = document.getElementById("th_BLACK");
+	var th_res = document.getElementById("th_RES");
+	var th_r_bad = document.getElementById("th_R_BAD");
+	var th_b_bad = document.getElementById("th_B_BAD");
+	var th_url = document.getElementById("th_URL");
+	var th_del = document.getElementById("th_DEL");
+
+	th_time.classList.add("m_wid_8");
+	th_game.classList.add("m_wid_8");
+	th_num.classList.add("m_wid_6");
+	th_red.classList.add("m_wid_15");
+	th_black.classList.add("m_wid_15");
+	th_res.classList.add("m_wid_6");
+	th_r_bad.classList.add("m_wid_10");
+	th_b_bad.classList.add("m_wid_10");
+	th_url.classList.add("m_wid_12");
+	th_del.classList.add("m_wid_6");
+}
+
 function removeDisplayTable() {
 	document.getElementById("moveListTable").style.visibility = "hidden";
 	document.getElementById("moveListTableBody").innerHTML = "";
@@ -1040,16 +1065,16 @@ function addPersonalRecordRow(jobj) {
 	var result, side;
 	var jinfo = JSON.parse(jobj.info);
 
-	cell_date.classList.add("wid_100");
-	cell_game.classList.add("wid_120");
-	cell_round.classList.add("wid_50");
-	cell_red_name.classList.add("wid_150");
-	cell_black_name.classList.add("wid_150");
-	cell_result.classList.add("wid_60");
-	cell_r_badrate.classList.add("wid_100");
-	cell_b_badrate.classList.add("wid_100");
-	cell_url.classList.add("wid_120");
-	cell_delete.classList.add("wid_50");
+	cell_date.classList.add("m_wid_8");
+	cell_game.classList.add("m_wid_8");
+	cell_round.classList.add("m_wid_6");
+	cell_red_name.classList.add("m_wid_15");
+	cell_black_name.classList.add("m_wid_15");
+	cell_result.classList.add("m_wid_6");
+	cell_r_badrate.classList.add("m_wid_10");
+	cell_b_badrate.classList.add("m_wid_10");
+	cell_url.classList.add("m_wid_12");
+	cell_delete.classList.add("m_wid_6");
 
 	cell_url.innerHTML = '<a href="'+_ladderUrl+jobj.url+'" target="_blank">'+jobj.url+'</a>';
 	if(jinfo.date) cell_date.innerHTML = jinfo.date;

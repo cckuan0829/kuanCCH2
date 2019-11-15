@@ -119,6 +119,14 @@
 .wid_160{width: 160px;}
 .wid_180{width: 180px;}
 
+.m_wid_6 {min-width: 6%;}
+.m_wid_8 {min-width: 8%;}
+.m_wid_10{min-width: 10%;}
+.m_wid_12{min-width: 12%;}
+.m_wid_15{min-width: 15%;}
+.m_wid_16{min-width: 16%;}
+.m_wid_18{min-width: 18%;}
+
 .rateArea {
 	display: none;
 }
