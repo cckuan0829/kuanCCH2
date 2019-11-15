@@ -1,4 +1,5 @@
 var _cloudUrl = "http://www.chessdb.cn/query/?";
+var _cloudBackUpUrl = 'http://www.voo0.com/yunku/?';
 var _ladderUrl = "http://chessladder.nctu.me/?";
 var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
 var _chessboard;
@@ -428,14 +429,22 @@ function onFenBtnClick()
 	}
 }
 
-function onCloudBtnClick()
+async function onCloudBtnClick()
 {
 	if(_chessInfo.is_edit_mode)
 	{
 		if(_chessInfo.fenList.length > 0)
 		{
 			console.log(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
-			window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
+			var data = await httpGet(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
+			if(data == "网站正在备案中，暂时不能打开")
+			{
+				window.open(_cloudBackUpUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
+			}
+			else
+			{
+				window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
+			}
 		}
 	}
 	else
@@ -444,11 +453,27 @@ function onCloudBtnClick()
 		{
 			if(_chessInfo.currNumber>0)
 			{
-				window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
+				var data = await httpGet(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
+				if(data == "网站正在备案中，暂时不能打开")
+				{
+					window.open(_cloudBackUpUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
+				}
+				else
+				{
+					window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
+				}
 			}
 			else
 			{
-				window.open(_cloudUrl+getDefaultFEN(), "_blank");
+				var data = await httpGet(_cloudUrl+getDefaultFEN());
+				if(data == "网站正在备案中，暂时不能打开")
+				{
+					window.open(_cloudBackUpUrl+getDefaultFEN(), "_blank");
+				}
+				else
+				{
+					window.open(_cloudUrl+getDefaultFEN(), "_blank");
+				}
 			}
 		}
 	}
