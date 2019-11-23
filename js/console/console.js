@@ -436,14 +436,14 @@ async function onCloudBtnClick()
 		if(_chessInfo.fenList.length > 0)
 		{
 			console.log(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
-			var data = await httpGet(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
-			if(data == "网站正在备案中，暂时不能打开")
+			//var data = await httpGet(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1]);
+			//if(data == "网站正在备案中，暂时不能打开")
 			{
 				window.open(_cloudBackUpUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
 			}
-			else
+			//else
 			{
-				window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
+				//window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.fenList.length-1], "_blank");
 			}
 		}
 	}
@@ -453,26 +453,26 @@ async function onCloudBtnClick()
 		{
 			if(_chessInfo.currNumber>0)
 			{
-				var data = await httpGet(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1]);
-				if(data == "网站正在备案中，暂时不能打开")
+				//var data = await httpGet(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1]);
+				//if(data == "网站正在备案中，暂时不能打开")
 				{
 					window.open(_cloudBackUpUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
 				}
-				else
+				//else
 				{
-					window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
+					//window.open(_cloudUrl+_chessInfo.fenList[_chessInfo.currNumber-1], "_blank");
 				}
 			}
 			else
 			{
-				var data = await httpGet(_cloudUrl+getDefaultFEN());
-				if(data == "网站正在备案中，暂时不能打开")
+				//var data = await httpGet(_cloudUrl+getDefaultFEN());
+				//if(data == "网站正在备案中，暂时不能打开")
 				{
 					window.open(_cloudBackUpUrl+getDefaultFEN(), "_blank");
 				}
-				else
+				//else
 				{
-					window.open(_cloudUrl+getDefaultFEN(), "_blank");
+					//window.open(_cloudUrl+getDefaultFEN(), "_blank");
 				}
 			}
 		}
