@@ -31,9 +31,8 @@ async function query_score(fen)
         return NaN;
 }
 
-async function queryByMove(prev_fen, move_str, val)
+async function queryByMove(prev_fen, move_str)
 {
-	var a = val;
 	var recommend_list;
 	var prev_recommend_list;
 	var is_red_before = false;
@@ -149,11 +148,9 @@ async function queryByMoveList(chess_manual)
 		prev_fen  = fen;
 		prev_recommend_list = recommend_list;
 		recommend_list = await query_cloud(fen);
-		var move_str1 = res.move_list[i];
-		var move_str2 = res.move_list[i];
         is_red_before  = (fen.indexOf('w') >= 0);
         fen = Update_FEN(fen, move_str1);
-		res_per_move = await queryByMove(prev_fen, move_str2, i);
+		res_per_move = await queryByMove(prev_fen, res.move_list[i]);
         res.red_score_list.push(res_per_move.red_score);
         res.score_bias_list.push(res_per_move.score_bias); 
         res.first_recommend_list.push(res_per_move.recommend); 
