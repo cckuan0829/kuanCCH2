@@ -148,9 +148,10 @@ async function queryByMoveList(chess_manual)
 		prev_fen  = fen;
 		prev_recommend_list = recommend_list;
 		recommend_list = await query_cloud(fen);
+		move_str = res.move_list[i];
         is_red_before  = (fen.indexOf('w') >= 0);
-        fen = Update_FEN(fen, res.move_list[i]);
-		res_per_move = await queryByMove(prev_fen, res.move_list[i]);
+        fen = Update_FEN(fen, move_str);
+		res_per_move = await queryByMove(prev_fen, move_str);
         res.red_score_list.push(res_per_move.red_score);
         res.score_bias_list.push(res_per_move.score_bias); 
         res.first_recommend_list.push(res_per_move.recommend); 
