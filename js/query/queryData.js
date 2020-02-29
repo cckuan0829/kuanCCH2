@@ -31,7 +31,7 @@ async function query_score(fen)
         return NaN;
 }
 
-async function queryByMove(prev_fen, move, val)
+async function queryByMove(prev_fen, move_str, val)
 {
 	var a = val;
 	var recommend_list;
@@ -51,8 +51,8 @@ async function queryByMove(prev_fen, move, val)
        recommend_str:"",
 	};
 		
-	res.curve = get_Curve(prev_fen, move);
-	res.fen = Update_FEN(prev_fen, move);
+	res.curve = get_Curve(prev_fen, move_str);
+	res.fen = Update_FEN(prev_fen, move_str);
 	is_red_before  = (res.fen.indexOf('w') >= 0);
 	prev_recommend_list = await query_cloud(prev_fen);
     recommend_list = await query_cloud(res.fen);
