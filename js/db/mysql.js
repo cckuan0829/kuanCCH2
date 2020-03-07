@@ -192,8 +192,10 @@ function deleteRecord(myurl, myaccount) {
 	      			var jarr = JSON.parse(data);
 	      			for(var i = 0; i < jarr.length; i++)
 	      			{
-	   	    			console.log(jarr[i]);
-	   	    			addPersonalRecordRow(jarr[i]); 
+	   	    			//console.log(jarr[i]);
+	   	    			_personInfo[i] = JSON.parse(jarr[i].info);
+	   	    			_personInfo[i].url = jarr[i].url;
+	   	    			addPersonalRecordRow(_personInfo[i]); 
 	      			}
 	   			}
 		});

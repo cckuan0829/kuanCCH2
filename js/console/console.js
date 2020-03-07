@@ -48,6 +48,10 @@ var editModeBtn = document.getElementById("editModeBtn");
 var closeModal = document.getElementsByClassName("close")[0];
 var modal = document.getElementById('myModal');
 var fblink = document.getElementById('fblk');
+var timeBtn = document.getElementById('timeBtn');
+var gamenameBtn = document.getElementById('gamenameBtn');
+var rednameBtn = document.getElementById('rednameBtn');
+var blackBtn = document.getElementById('blackBtn');
 
 var buttonList = [
 	persBtn,
@@ -71,7 +75,11 @@ var buttonList = [
 	horizBtn,
 	scoreBtn,
 	//picBtn,
-	editModeBtn
+	editModeBtn,
+	timeBtn,
+	gamenameBtn,
+	rednameBtn,
+	blackBtn
 ];
 
 var _userInfo =
@@ -126,6 +134,10 @@ var _gameInfo =
     result: 0 //勝負結果
 }
 
+var _personInfo = [];
+
+var _sortState = [false, false, false, false];
+
 $(document).ready(function() {
 	persBtn.addEventListener("click", persFun);
     queryBtn.addEventListener("click", queryCloudDB);
@@ -151,7 +163,11 @@ $(document).ready(function() {
 	scoreBtn.addEventListener('click', onScoreBtnClick);
 	//picBtn.addEventListener('click', onPicBtnClick);
 	editModeBtn.addEventListener('click', onEditModeBtnClick);
-	
+	timeBtn.addEventListener('click', onTimeBtnClick);
+	gamenameBtn.addEventListener('click', onGamenameClick);
+	rednameBtn.addEventListener('click', onRednameBtnClick);
+	blacknameBtn.addEventListener('click', onBlacknameBtnClick);
+
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
         if(!_chessInfo.is_edit_mode)
@@ -202,7 +218,7 @@ function persFun() {
    		document.getElementById("moveListTable").style.visibility = "hidden";
 
     	console.log("ID : "+_userInfo.accountID);
-
+        
 		$.get(
     	_chessDbUrl,
    		{account: _userInfo.accountID},
@@ -212,10 +228,13 @@ function persFun() {
 	   			if(data)
 	   			{
 	      			var jarr = JSON.parse(data);
+	      			_personInfo = [];
 	      			for(var i = 0; i < jarr.length; i++)
 	      			{
 	   	    			console.log(jarr[i]);
-	   	    			addPersonalRecordRow(jarr[i]); 
+	   	    			_personInfo[i] = JSON.parse(jarr[i].info);
+	   	    			_personInfo[i].url = jarr[i].url;
+	   	    			addPersonalRecordRow(_personInfo[i]); 
 	      			}
 	   			}
 		});
@@ -612,6 +631,54 @@ function onEditModeBtnClick()
 		{
 			_chessInfo.move_total = _chessInfo.moveList.length;
 		}
+	}
+}
+
+function onTimeBtnClick()
+{
+	document.getElementById("personalrecordBody").innerHTML = "";
+	_sortState[0] = !_sortState[0];
+	console.log("time sort:"+_personInfo.sort(sort_by('date', _sortState[0], String)));
+    for(var i = 0; i<_personInfo.length; i++)
+	{
+		console.log(_personInfo[i]);
+		addPersonalRecordRow(_personInfo[i]);
+	}
+}
+
+function onGamenameClick()
+{
+	document.getElementById("personalrecordBody").innerHTML = "";
+	_sortState[1] = !_sortState[1];
+	console.log("game sort:"+_personInfo.sort(sort_by('game_name', _sortState[1], String)));
+    for(var i = 0; i<_personInfo.length; i++)
+	{
+		console.log(_personInfo[i]);
+		addPersonalRecordRow(_personInfo[i]);
+	}
+}
+
+function onRednameBtnClick()
+{
+	document.getElementById("personalrecordBody").innerHTML = "";
+	_sortState[2] = !_sortState[2];
+	console.log("red sort:"+_personInfo.sort(sort_by('r_name', _sortState[2], String)));
+    for(var i = 0; i<_personInfo.length; i++)
+	{
+		console.log(_personInfo[i]);
+		addPersonalRecordRow(_personInfo[i]);
+	}
+}
+
+function onBlacknameBtnClick()
+{
+	document.getElementById("personalrecordBody").innerHTML = "";
+	_sortState[3] = !_sortState[3];
+	console.log("black sort:"+_personInfo.sort(sort_by('b_name', _sortState[3], String)));
+    for(var i = 0; i<_personInfo.length; i++)
+	{
+		console.log(_personInfo[i]);
+		addPersonalRecordRow(_personInfo[i]);
 	}
 }
 
@@ -1088,7 +1155,7 @@ function addPersonalRecordRow(jobj) {
 	var cell_url        = row.insertCell(8);
 	var cell_delete     = row.insertCell(9);
 	var result, side;
-	var jinfo = JSON.parse(jobj.info);
+	//var jinfo = JSON.parse(jobj.info);
 
 	cell_date.classList.add("m_wid_8");
 	cell_game.classList.add("m_wid_8");
@@ -1102,10 +1169,10 @@ function addPersonalRecordRow(jobj) {
 	cell_delete.classList.add("m_wid_6");
 
 	cell_url.innerHTML = '<a href="'+_ladderUrl+jobj.url+'" target="_blank">'+jobj.url+'</a>';
-	if(jinfo.date) cell_date.innerHTML = jinfo.date;
-	if(jinfo.game_name) cell_game.innerHTML = jinfo.game_name;
-	if(jinfo.round) cell_round.innerHTML = jinfo.round;
-	switch(parseInt(jinfo.result))
+	if(jobj.date) cell_date.innerHTML = jobj.date;
+	if(jobj.game_name) cell_game.innerHTML = jobj.game_name;
+	if(jobj.round) cell_round.innerHTML = jobj.round;
+	switch(parseInt(jobj.result))
 	{
 		case 1:
 			result = '紅勝';
@@ -1122,7 +1189,7 @@ function addPersonalRecordRow(jobj) {
 	}
 	cell_result.innerHTML = result;
 
-	switch(parseInt(jinfo.play_side))
+	switch(parseInt(jobj.play_side))
 	{
 		case 1:
 			side = '執紅';
@@ -1135,12 +1202,12 @@ function addPersonalRecordRow(jobj) {
 			break;
 	}
  
-	if(jinfo.r_name != undefined) cell_red_name.innerHTML = jinfo.r_name;
-	if(jinfo.b_name != undefined) cell_black_name.innerHTML = jinfo.b_name;
-	if(jinfo.r_bad_rate1 != undefined) cell_r_badrate.innerHTML = jinfo.r_bad_rate1+" / ";
-	if(jinfo.r_bad_rate2 != undefined) cell_r_badrate.innerHTML += jinfo.r_bad_rate2+"%";
-	if(jinfo.b_bad_rate1 != undefined) cell_b_badrate.innerHTML = jinfo.b_bad_rate1+" / ";
-	if(jinfo.b_bad_rate2 != undefined) cell_b_badrate.innerHTML += jinfo.b_bad_rate2+"%";
+	if(jobj.r_name != undefined) cell_red_name.innerHTML = jobj.r_name;
+	if(jobj.b_name != undefined) cell_black_name.innerHTML = jobj.b_name;
+	if(jobj.r_bad_rate1 != undefined) cell_r_badrate.innerHTML = jobj.r_bad_rate1+" / ";
+	if(jobj.r_bad_rate2 != undefined) cell_r_badrate.innerHTML += jobj.r_bad_rate2+"%";
+	if(jobj.b_bad_rate1 != undefined) cell_b_badrate.innerHTML = jobj.b_bad_rate1+" / ";
+	if(jobj.b_bad_rate2 != undefined) cell_b_badrate.innerHTML += jobj.b_bad_rate2+"%";
 
 	cell_delete.innerHTML = "<Button id = 'recordList" + jobj.url + "' >" + "X" + "</Button>";
 		$('#recordList'+jobj.url).addClass("TableNum");
