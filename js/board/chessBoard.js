@@ -229,7 +229,7 @@ ChessBoard.prototype.getChessPieceIdx = function(x, y) {
 	//chesspiece.move(x, y);;
 	for(var i = 0; i < this.chesspiecelist.length; i++)
 	{
-		if(x == this.chesspiecelist[i].x && y == this.chesspiecelist[i].y)
+		if(x == this.chesspiecelist[i].x && y == this.chesspiecelist[i].y && this.chesspiecelist[i].chess != 0)
 		{
 			return i;
 		}
