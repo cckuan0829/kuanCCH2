@@ -75,11 +75,7 @@ var buttonList = [
 	horizBtn,
 	scoreBtn,
 	//picBtn,
-	editModeBtn,
-	timeBtn,
-	gamenameBtn,
-	rednameBtn,
-	blackBtn
+	editModeBtn
 ];
 
 var _userInfo =
