@@ -213,6 +213,9 @@ function persFun() {
    		document.getElementById("content").style.visibility = "hidden";
    		document.getElementById("moveListTable").style.visibility = "hidden";
 
+   		$info.css('visibility', 'hidden');
+		$('#scoreBtn').html('info');
+
     	console.log("ID : "+_userInfo.accountID);
         
 		$.get(
@@ -635,7 +638,8 @@ function onTimeBtnClick()
 {
 	document.getElementById("personalrecordBody").innerHTML = "";
 	_sortState[0] = !_sortState[0];
-	console.log("time sort:"+_personInfo.sort(sort_by('date', _sortState[0], String)));
+	console.log("time sort:"+_personInfo.sort(sort_by({name:'date', primer: String, reverse: _sortState[0]}, {name:'round', primer: String, reverse: _sortState[0]})));
+
     for(var i = 0; i<_personInfo.length; i++)
 	{
 		console.log(_personInfo[i]);
@@ -647,7 +651,7 @@ function onGamenameClick()
 {
 	document.getElementById("personalrecordBody").innerHTML = "";
 	_sortState[1] = !_sortState[1];
-	console.log("game sort:"+_personInfo.sort(sort_by('game_name', _sortState[1], String)));
+	console.log("game sort:"+_personInfo.sort(sort_by({name:'game_name', primer: String, reverse: _sortState[1]}, {name:'round', primer: String, reverse: _sortState[0]})));
     for(var i = 0; i<_personInfo.length; i++)
 	{
 		console.log(_personInfo[i]);
@@ -659,7 +663,7 @@ function onRednameBtnClick()
 {
 	document.getElementById("personalrecordBody").innerHTML = "";
 	_sortState[2] = !_sortState[2];
-	console.log("red sort:"+_personInfo.sort(sort_by('r_name', _sortState[2], String)));
+	console.log("red sort:"+_personInfo.sort(sort_by({name:'r_name', primer: String, reverse: _sortState[2]}, {name:'round', primer: String, reverse: _sortState[0]})));
     for(var i = 0; i<_personInfo.length; i++)
 	{
 		console.log(_personInfo[i]);
@@ -671,7 +675,7 @@ function onBlacknameBtnClick()
 {
 	document.getElementById("personalrecordBody").innerHTML = "";
 	_sortState[3] = !_sortState[3];
-	console.log("black sort:"+_personInfo.sort(sort_by('b_name', _sortState[3], String)));
+	console.log("black sort:"+_personInfo.sort(sort_by({name:'b_name', primer: String, reverse: _sortState[3]}, {name:'round', primer: String, reverse: _sortState[0]})));
     for(var i = 0; i<_personInfo.length; i++)
 	{
 		console.log(_personInfo[i]);
