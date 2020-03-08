@@ -100,6 +100,8 @@
 				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
 
 				<button id="infoBtn" class="consoleBtn">使用說明</button>
+
+				<button id="hideBtn" class="consoleBtn">部分顯示</button>
 		</div>
 
 		<div id = "personalresult" style="visibility:hidden">
@@ -263,7 +265,7 @@
 					
 				</div>
 				
-				<div class = "chessBookInputArea">
+				<div class = "chessBookInputArea" id="gameInfoArea">
 
 					<div id = "gameinfo" class="gameinfo">
 					    日期 <input type="text" class="gameinfo_sub" id="datepicker"><br>
@@ -298,7 +300,7 @@
 				</div>
 				
 				<div class = "chessOutput">
-					<div class = "chessBookOutptArea">
+					<div class = "chessBookOutptArea" id="chessTable">
 						<table class = "outputTable" id="moveListTable" style="visibility:hidden">
 							<thead id="moveListTableHeader">
 								<tr>

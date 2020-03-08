@@ -52,6 +52,7 @@ var timeBtn = document.getElementById('timeBtn');
 var gamenameBtn = document.getElementById('gamenameBtn');
 var rednameBtn = document.getElementById('rednameBtn');
 var blackBtn = document.getElementById('blackBtn');
+var hideBtn = document.getElementById('hideBtn');
 
 var buttonList = [
 	persBtn,
@@ -75,7 +76,8 @@ var buttonList = [
 	horizBtn,
 	scoreBtn,
 	//picBtn,
-	editModeBtn
+	editModeBtn,
+	hideBtn
 ];
 
 var _userInfo =
@@ -104,6 +106,7 @@ var _chessInfo =
 	is_vertical_original: true,
 	is_horizontal_original: true,
 	is_login: false,
+	is_hide: true,
 	moveList: [],
 	engmoveList: [],
 	moveCurveList: [],
@@ -163,6 +166,7 @@ $(document).ready(function() {
 	gamenameBtn.addEventListener('click', onGamenameClick);
 	rednameBtn.addEventListener('click', onRednameBtnClick);
 	blacknameBtn.addEventListener('click', onBlacknameBtnClick);
+	hideBtn.addEventListener('click', onHideBtnClick);
 
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
@@ -251,6 +255,28 @@ function persFun() {
 		if(_chessInfo.move_total > 0) document.getElementById("moveListTable").style.visibility = "visible";
 
 	}
+}
+
+function onHideBtnClick()
+{
+    if(_chessInfo.is_hide == true)
+    {
+    	document.getElementById("moveListTable").style.visibility = "hidden";
+    	document.getElementById("chessTable").style.display = "none";
+    	document.getElementById("gameInfoArea").style.visibility = "hidden";
+    	//document.getElementById("gameInfoArea").style.display = "none";
+    	document.getElementById("hideBtn").innerHTML = "完整顯示";
+    	_chessInfo.is_hide = false;
+    }
+    else
+    {
+    	document.getElementById("moveListTable").style.visibility = "visible";
+    	document.getElementById("chessTable").style.display = "inline-block";
+    	document.getElementById("gameInfoArea").style.visibility = "visible";
+    	//document.getElementById("gameInfoArea").style.display = "block";
+    	document.getElementById("hideBtn").innerHTML = "部分顯示";
+    	_chessInfo.is_hide = true;
+    }
 }
 
 function onSignInOut(is_login)
@@ -877,9 +903,11 @@ async function queryCloudDB() {
 	    var hash = hash2INT32(eng_move_list_str);
 		_chessInfo.is_in_cloud_db = checkUrlExist(hash);
 
-		if(_chessInfo.is_login)
+		if(_chessInfo.is_login && 
+		   document.getElementById('datepicker').value != "" &&
+		   document.getElementById('game_name').value != "")
 	    {
-	    	_gameInfo.date = document.getElementById('datepicker').value;
+	    	_gameInfo.date        = document.getElementById('datepicker').value;
 	    	_gameInfo.game_name   = document.getElementById('game_name').value; 
 	    	_gameInfo.round       = document.getElementById('round').value; 
 			_gameInfo.r_name      = document.getElementById('red_name').value;
@@ -889,9 +917,13 @@ async function queryCloudDB() {
 			_gameInfo.b_bad_rate1 = _chessInfo.badRate[2];
 			_gameInfo.b_bad_rate2 = _chessInfo.badRate[3];
 
+	        insert2mysqlwithAccoutInfo(_chessInfo, _gameInfo);
+	    }
+	    else
+	    {
+	    	insert2mysql(_chessInfo);
 	    }
 		
-        uploadresult(_chessInfo, _gameInfo);
 	}
 	enableButtons();
 	_chessInfo.inQuety = false;
@@ -1345,6 +1377,8 @@ function showInitBoard()
 		if(res[1]>0)
 		{
 			getParameterHandler(res[1]);
+			_chessInfo.is_hide = true;
+			onHideBtnClick();
 		}
 		else
 		{
