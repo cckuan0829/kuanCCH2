@@ -877,9 +877,11 @@ async function queryCloudDB() {
 	    var hash = hash2INT32(eng_move_list_str);
 		_chessInfo.is_in_cloud_db = checkUrlExist(hash);
 
-		if(_chessInfo.is_login)
+		if(_chessInfo.is_login && 
+		   document.getElementById('datepicker').value != "" &&
+		   document.getElementById('game_name').value != "")
 	    {
-	    	_gameInfo.date = document.getElementById('datepicker').value;
+	    	_gameInfo.date        = document.getElementById('datepicker').value;
 	    	_gameInfo.game_name   = document.getElementById('game_name').value; 
 	    	_gameInfo.round       = document.getElementById('round').value; 
 			_gameInfo.r_name      = document.getElementById('red_name').value;
@@ -889,9 +891,13 @@ async function queryCloudDB() {
 			_gameInfo.b_bad_rate1 = _chessInfo.badRate[2];
 			_gameInfo.b_bad_rate2 = _chessInfo.badRate[3];
 
+	        insert2mysqlwithAccoutInfo(_chessInfo, _gameInfo);
+	    }
+	    else
+	    {
+	    	insert2mysql(_chessInfo);
 	    }
 		
-        uploadresult(_chessInfo, _gameInfo);
 	}
 	enableButtons();
 	_chessInfo.inQuety = false;
