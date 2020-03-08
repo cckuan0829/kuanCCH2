@@ -231,7 +231,7 @@ function insert2mysql(chessInfo) {
 	$.post(_chessDbUrl, 
 	{url:hash, record: record_str},
 	function(data){
-		alert("上傳雲梯成功!");
+		//alert("上傳雲梯成功!");
 		_chessInfo.is_in_cloud_db = true;
 	});
 }
@@ -268,7 +268,7 @@ function insert2mysqlwithAccoutInfo(chessInfo, gameInfo) {
 	$.post(_chessDbUrl, 
 	{url: hash, record: record_str},
 	function(data){
-		alert("上傳雲梯成功!");
+		//alert("上傳雲梯成功!");
 		_chessInfo.is_in_cloud_db = true;
 	});
 
@@ -280,9 +280,15 @@ function insert2mysqlwithAccoutInfo(chessInfo, gameInfo) {
 }
 
 function uploadresult(chessInfo, gameInfo) {
-	var movestr = chessInfo.engmoveList.join(",");
-	var hash = hash2INT32(movestr);
+	//var movestr = chessInfo.engmoveList.join(",");
+	//var hash = hash2INT32(movestr);
 	
+    if(chessInfo.is_login)
+	   insert2mysqlwithAccoutInfo(chessInfo, gameInfo);
+	else
+	   insert2mysql(chessInfo);
+
+	/*
 	$.post(_chessDbUrl, 
 	{url:hash, query:"yes"},
 	function(data){
@@ -304,4 +310,5 @@ function uploadresult(chessInfo, gameInfo) {
 		      insert2mysql(chessInfo);
 	   }
 	});
+	*/
 }

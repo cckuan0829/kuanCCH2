@@ -56,9 +56,9 @@ var blackBtn = document.getElementById('blackBtn');
 var buttonList = [
 	persBtn,
 	queryBtn,
-	queryLadderBtn,
+	//queryLadderBtn,
 	copyBtn,
-	copyURLBtn,
+	//copyURLBtn,
 	clearBtn,
 	infoBtn,
 	downloadBtn,
@@ -138,9 +138,9 @@ $(document).ready(function() {
 	persBtn.addEventListener("click", persFun);
     queryBtn.addEventListener("click", queryCloudDB);
     $("#queryBtn").val($("#queryBtn").html());
-    queryLadderBtn.addEventListener("click", queryLadderDB);
+    //queryLadderBtn.addEventListener("click", queryLadderDB);
     copyBtn.addEventListener("click", copyQueryResult);
-	copyURLBtn.addEventListener("click", copyUrl);
+	//copyURLBtn.addEventListener("click", copyUrl);
     clearBtn.addEventListener("click", clearInputText);
 	infoBtn.addEventListener("click", showInfo);
 	downloadBtn.addEventListener("click", onDownloadBtnClick);
@@ -326,18 +326,19 @@ function onUploadBtnClick() {
 			_gameInfo.b_bad_rate2 = _chessInfo.badRate[3];
 
 	    }
-		　
-		if(_chessInfo.is_not_complete)
-		{
-			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
-			{
-				uploadresult(_chessInfo, _gameInfo);
-			}
-		}
-		else
-		{
-			uploadresult(_chessInfo, _gameInfo);
-		}
+		
+        uploadresult(_chessInfo, _gameInfo);
+
+        var movestr = _chessInfo.engmoveList.join(",");
+	    var hash = hash2INT32(movestr);
+    
+		const el = document.createElement('textarea');
+		el.value = _ladderUrl+hash;
+		document.body.appendChild(el);
+		el.select();
+		document.execCommand('copy');
+		document.body.removeChild(el);
+		alert("上傳成功，已複製URL : "+ el.value);
 	}
 }
 
@@ -866,6 +867,22 @@ async function queryCloudDB() {
         var eng_move_list_str = _chessInfo.engmoveList.join(",");
 	    var hash = hash2INT32(eng_move_list_str);
 		_chessInfo.is_in_cloud_db = checkUrlExist(hash);
+
+		if(_chessInfo.is_login)
+	    {
+	    	_gameInfo.date = document.getElementById('datepicker').value;
+	    	_gameInfo.game_name   = document.getElementById('game_name').value; 
+	    	_gameInfo.round       = document.getElementById('round').value; 
+			_gameInfo.r_name      = document.getElementById('red_name').value;
+			_gameInfo.b_name      = document.getElementById('black_name').value; 
+			_gameInfo.r_bad_rate1 = _chessInfo.badRate[0];
+			_gameInfo.r_bad_rate2 = _chessInfo.badRate[1];
+			_gameInfo.b_bad_rate1 = _chessInfo.badRate[2];
+			_gameInfo.b_bad_rate2 = _chessInfo.badRate[3];
+
+	    }
+		
+        uploadresult(_chessInfo, _gameInfo);
 	}
 	enableButtons();
 	_chessInfo.inQuety = false;
