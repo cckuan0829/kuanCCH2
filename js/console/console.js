@@ -233,6 +233,11 @@ function persFun() {
 	   	    			console.log(jarr[i]);
 	   	    			_personInfo[i] = JSON.parse(jarr[i].info);
 	   	    			_personInfo[i].url = jarr[i].url;
+	      			}
+
+	      		    _personInfo.sort(sort_by({name:'date', primer: String, reverse: _sortState[0]}, {name:'round', primer: String, reverse: _sortState[0]}));
+	      		    for(var i = 0; i < jarr.length; i++)
+	      			{
 	   	    			addPersonalRecordRow(_personInfo[i]); 
 	      			}
 	   			}
