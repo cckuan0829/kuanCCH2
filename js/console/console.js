@@ -264,7 +264,7 @@ function onHideBtnClick()
     	document.getElementById("moveListTable").style.visibility = "hidden";
     	document.getElementById("chessTable").style.display = "none";
     	document.getElementById("gameInfoArea").style.visibility = "hidden";
-    	//document.getElementById("gameInfoArea").style.display = "none";
+    	document.getElementById("gameInfoArea").style.display = "none";
     	document.getElementById("hideBtn").innerHTML = "完整顯示";
     	_chessInfo.is_hide = false;
     }
@@ -273,7 +273,7 @@ function onHideBtnClick()
     	document.getElementById("moveListTable").style.visibility = "visible";
     	document.getElementById("chessTable").style.display = "inline-block";
     	document.getElementById("gameInfoArea").style.visibility = "visible";
-    	//document.getElementById("gameInfoArea").style.display = "block";
+    	document.getElementById("gameInfoArea").style.display = "inline-block";
     	document.getElementById("hideBtn").innerHTML = "部分顯示";
     	_chessInfo.is_hide = true;
     }
