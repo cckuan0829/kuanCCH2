@@ -506,8 +506,8 @@ div.ui-datepicker{
     .chartArea {
         position: relative;
         width: 90%;
-        height: 40vh;
-        margin-top: -10vh;
+        height: 25vh;
+        margin-top: -5vh;
         margin-bottom: 5vh;
     }
     
