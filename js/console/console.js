@@ -216,7 +216,7 @@ function persFun() {
 		document.getElementById("personalresult").style.visibility = "visible";
    		document.getElementById("content").style.visibility = "hidden";
    		document.getElementById("moveListTable").style.visibility = "hidden";
-   		hideOrShow(false);
+   		hideOrShow(true);
 
    		$info.css('visibility', 'hidden');
 		$('#scoreBtn').html('info');
