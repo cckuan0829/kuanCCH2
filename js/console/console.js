@@ -216,6 +216,7 @@ function persFun() {
 		document.getElementById("personalresult").style.visibility = "visible";
    		document.getElementById("content").style.visibility = "hidden";
    		document.getElementById("moveListTable").style.visibility = "hidden";
+   		hideOrShow(false);
 
    		$info.css('visibility', 'hidden');
 		$('#scoreBtn').html('info');
@@ -237,11 +238,6 @@ function persFun() {
 	   	    			console.log(jarr[i]);
 	   	    			_personInfo[i] = JSON.parse(jarr[i].info);
 	   	    			_personInfo[i].url = jarr[i].url;
-	      			}
-
-	      		    _personInfo.sort(sort_by({name:'date', primer: String, reverse: _sortState[0]}, {name:'round', primer: String, reverse: _sortState[0]}));
-	      		    for(var i = 0; i < jarr.length; i++)
-	      			{
 	   	    			addPersonalRecordRow(_personInfo[i]); 
 	      			}
 	   			}
@@ -252,31 +248,36 @@ function persFun() {
 		document.getElementById("personalRecordBtn").innerHTML = "個人棋局";
 		document.getElementById("personalresult").style.visibility = "hidden";
 		document.getElementById("content").style.visibility = "visible";
+		hideOrShow(_chessInfo.is_hide);
 		if(_chessInfo.move_total > 0) document.getElementById("moveListTable").style.visibility = "visible";
 
 	}
 }
 
-function onHideBtnClick()
+function hideOrShow(is_hide)
 {
-    if(_chessInfo.is_hide == true)
-    {
-    	document.getElementById("moveListTable").style.visibility = "hidden";
+	if(is_hide)
+	{
+		document.getElementById("moveListTable").style.visibility = "hidden";
     	document.getElementById("chessTable").style.display = "none";
     	document.getElementById("gameInfoArea").style.visibility = "hidden";
     	document.getElementById("gameInfoArea").style.display = "none";
     	document.getElementById("hideBtn").innerHTML = "完整顯示";
-    	_chessInfo.is_hide = false;
-    }
-    else
-    {
-    	document.getElementById("moveListTable").style.visibility = "visible";
+	}
+	else
+	{
+		document.getElementById("moveListTable").style.visibility = "visible";
     	document.getElementById("chessTable").style.display = "inline-block";
     	document.getElementById("gameInfoArea").style.visibility = "visible";
     	document.getElementById("gameInfoArea").style.display = "inline-block";
     	document.getElementById("hideBtn").innerHTML = "部分顯示";
-    	_chessInfo.is_hide = true;
-    }
+	}
+}
+
+function onHideBtnClick()
+{
+	_chessInfo.is_hide = !_chessInfo.is_hide;
+    hideOrShow(_chessInfo.is_hide);
 }
 
 function onSignInOut(is_login)
@@ -1378,7 +1379,7 @@ function showInitBoard()
 		{
 			getParameterHandler(res[1]);
 			_chessInfo.is_hide = true;
-			onHideBtnClick();
+			hideOrShow(_chessInfo.is_hide);
 		}
 		else
 		{
