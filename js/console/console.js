@@ -1492,12 +1492,15 @@ function addChessBoardEvt() {
 				//var movestr  = ""
 				_chessboard.selectedChess = null;
 				_chessboard.removeChess(x_aft, y_aft);
-			    _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
-				_chessboard.moveChess(chessidx, x_aft, y_aft);	
-				_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+			    if(_chessInfo.is_edit_mode) _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
+				_chessboard.moveChess(chessidx, x_aft, y_aft);
+				if(_chessInfo.is_edit_mode) _chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
 
-				document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
-				document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+				if(_chessInfo.is_edit_mode)
+				{
+                	document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;  
+					document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+				}
 			}
 			else
 			{
@@ -1544,12 +1547,15 @@ function addChessBoardEvt() {
 				//var movestr  = ""
 				_chessboard.selectedChess = null;
 				_chessboard.removeChess(x_aft, y_aft);
-			    _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
+			    if(_chessInfo.is_edit_mode) _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
 				_chessboard.moveChess(chessidx, x_aft, y_aft);
-				_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+				if(_chessInfo.is_edit_mode) _chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
 
-                document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;  
-				document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+				if(_chessInfo.is_edit_mode)
+				{
+                	document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;  
+					document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+				}
 			}
 			else
 			{
@@ -1590,16 +1596,15 @@ function addChessBoardEvt() {
 
     		_chessboard.selectedChess.removeClass();
     		_chessboard.selectedChess = null;
+			if(_chessInfo.is_edit_mode) _chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
 			_chessboard.moveChess(chessidx, x_aft, y_aft);
-            
-            if(_chessInfo.is_edit_mode) 
-            {
-				_chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
-				_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
-			}
+			if(_chessInfo.is_edit_mode) _chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
 
-			document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
-			document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+			if(_chessInfo.is_edit_mode)
+			{
+				document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
+				document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
+			}
     	}
     	else
 		{
