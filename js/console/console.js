@@ -100,7 +100,7 @@ var _chessInfo =
 	currNumber: 0,
 	toStop: false,
 	inQuety: false,
-	is_not_complete: false,
+	is_complete: false,
 	is_got_result: false,
 	is_in_cloud_db: false,
 	is_edit_mode: false,
@@ -364,7 +364,7 @@ function onUploadBtnClick() {
 	    }
 
 		var is_upload = false;
-        if(_chessInfo.is_not_complete)
+        if(!_chessInfo.is_complete)
 		{
 			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
 			{
@@ -807,7 +807,7 @@ function resetChessInfo() {
 	_chessInfo.currNumber = 0;
 	_chessInfo.toStop = false;
 	_chessInfo.inQuety = false;
-	_chessInfo.is_not_complete = false;
+	_chessInfo.is_complete = false;
 	_chessInfo.is_got_result = false;
 	_chessInfo.is_in_cloud_db = false;
 	_chessInfo.is_vertical_original = true;
@@ -868,7 +868,6 @@ async function queryCloudDB() {
 	if(_chessInfo.inQuety)
 	{
 		_chessInfo.inQuety = false;
-		_chessInfo.is_not_complete = true;
 		stopQuery();
 		return;
 	}
@@ -917,17 +916,15 @@ async function queryCloudDB() {
 			_chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, query_result.recommend_str_list]);       
 			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
 		    
-		    if(_chessInfo.scoreList.findIndex(Number.isNaN) >= 0)
-				_chessInfo.is_not_complete = true;
-			else
-				_chessInfo.is_not_complete = false;
+		    if(_chessInfo.scoreList.findIndex(Number.isNaN) < 0)
+				_chessInfo.is_complete = true;
 		}
 		else
 		{
 			alert("輸入格式有誤!");
 		}
 	}
-	if(_chessInfo.is_got_result && !_chessInfo.is_not_complete)
+	if(_chessInfo.is_got_result && _chessInfo.is_complete)
 	{
 		showResult();  
 		showBoardbyNum(0);
