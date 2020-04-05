@@ -862,6 +862,7 @@ async function queryCloudDB() {
 	if(_chessInfo.inQuety)
 	{
 		_chessInfo.inQuety = false;
+		_chessInfo.is_not_complete = true;
 		stopQuery();
 		return;
 	}
@@ -912,6 +913,8 @@ async function queryCloudDB() {
 		    
 		    if(_chessInfo.scoreList.findIndex(Number.isNaN) >= 0)
 				_chessInfo.is_not_complete = true;
+			else
+				_chessInfo.is_not_complete = false;
 		}
 		else
 		{
