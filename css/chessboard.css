@@ -94,7 +94,7 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; -
 	font-size: 17px;
 	font-weight: 800;
 	cursor: pointer;
-	z-index: 1;
+	z-index: 2;
 	
     display: -webkit-flex;
 	display: flex;
@@ -111,7 +111,7 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; -
 	height: 26px;
 	border: 1px solid #737373;
 	cursor: pointer;
-	z-index: 2;
+	z-index: 1;
 	display: flex;
 	justify-content: center; /* align horizontal */
 	align-items: center; /* align vertical */

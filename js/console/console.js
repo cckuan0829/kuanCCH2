@@ -94,6 +94,7 @@ var _chessInfo =
 	pgn_str: "",
 	copy_str: "",
 	status_str: "",
+	init_fen: "",
 	move_total: 0,
 	move_curr: 0,
 	currNumber: 0,
@@ -362,7 +363,17 @@ function onUploadBtnClick() {
 
 	    }
 		
-        uploadresult(_chessInfo, _gameInfo);
+        if(_chessInfo.is_not_complete)
+		{
+			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
+			{
+				uploadresult(_chessInfo, _gameInfo);
+			}
+		}
+		else
+		{
+			uploadresult(_chessInfo, _gameInfo);
+		}
 
         var movestr = _chessInfo.engmoveList.join(",");
 	    var hash = hash2INT32(movestr);
@@ -463,6 +474,11 @@ function onFenBtnClick()
 		{
 			copyToClipboard("此盤面FEN碼", _chessInfo.fenList[_chessInfo.fenList.length-1].replace("%20", " "));
 		}
+		else
+		{
+            var init_fen = prompt("請輸入盤面初始FEN", "");
+            //_chessInfo.init_fen = init_fen.split(" ")[0];
+		}
 	}
 	else
 	{
@@ -476,6 +492,15 @@ function onFenBtnClick()
 			{
 				copyToClipboard("此盤面FEN碼", getDefaultFEN().replace("%20", " "));
 			}
+		}
+		else
+		{
+            var init_fen = prompt("請輸入盤面初始FEN", "");
+            _chessInfo.init_fen = init_fen.split(" ");
+
+            chessList = FEN_to_ChessList(_chessInfo.init_fen[0], null, true, true);
+		    _chessboard = new ChessBoard(chessList, null, null, null, true, true);
+	
 		}
 	}
 }
@@ -873,6 +898,7 @@ async function queryCloudDB() {
 			_chessInfo.status_str = "" + 0 + "/" + list_num;
 			showResult();
 			query_result = await queryByMoveList(mytext);
+			_chessInfo.init_fen = fen;
 			_chessInfo.moveList  = query_result.move_list;
 			_chessInfo.move_total = query_result.move_list.length;
 			_chessInfo.engmoveList = convert2engmovelist(_chessInfo.moveList);
@@ -1341,7 +1367,14 @@ function showBoardbyNum(num)
 	}
 	else 
 	{
-		fen = getDefaultFEN();
+		if(_chessInfo.init_fen != "")
+		{
+           fen = _chessInfo.init_fen;
+		}
+		else
+		{
+		   fen = getDefaultFEN();
+		}
 		curve = null;
 	}
 	chessList = FEN_to_ChessList(fen, curve, _chessInfo.is_horizontal_original , _chessInfo.is_vertical_original);
@@ -1431,7 +1464,7 @@ function addChessBoardEvt() {
 	$(document).on('click', '.chesspieceBlack', function(e){
 		//console.log(e);
 		//console.log(this);
-		if(!_chessInfo.is_edit_mode) return;
+		//if(!_chessInfo.is_edit_mode) return;
 
 		if(_chessboard.selectedChess)
 		{
@@ -1482,7 +1515,7 @@ function addChessBoardEvt() {
 	$(document).on('click', '.chesspieceRed', function(e){
 		//console.log(e);
 		//console.log(this);
-		if(!_chessInfo.is_edit_mode) return;
+		//if(!_chessInfo.is_edit_mode) return;
 
 		if(_chessboard.selectedChess)
 		{
@@ -1532,7 +1565,7 @@ function addChessBoardEvt() {
 		}
 	});
     $(document).on('click', '.event-layer', function(e){
-    	if(!_chessInfo.is_edit_mode) return;
+    	//if(!_chessInfo.is_edit_mode) return;
 
     	if(_chessboard.selectedChess) //if(checkmove(chess, x_bef, y_bef, x_aft, y_aft))
     	{
@@ -1548,9 +1581,13 @@ function addChessBoardEvt() {
 
     		_chessboard.selectedChess.removeClass();
     		_chessboard.selectedChess = null;
-			_chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
 			_chessboard.moveChess(chessidx, x_aft, y_aft);
-			_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+            
+            if(_chessInfo.is_edit_mode) 
+            {
+				_chessInfo.moveList.push(_chessboard.getMoveStr(chessidx, x_aft, y_aft));
+				_chessInfo.fenList.push(Board_Chess_to_FEN(_chessboard.board, isChessRed(chess)));
+			}
 
 			document.getElementById("moveNumber").innerHTML = _chessInfo.moveList.length;
 			document.getElementById("chessBookInput").value = _chessInfo.moveList.join(" ");
