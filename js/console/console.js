@@ -362,29 +362,35 @@ function onUploadBtnClick() {
 			_gameInfo.b_bad_rate2 = _chessInfo.badRate[3];
 
 	    }
-		
+
+		var is_upload = false;
         if(_chessInfo.is_not_complete)
 		{
 			if (confirm("盤面分析未完整，是否仍要上傳棋局結果?"))
 			{
 				uploadresult(_chessInfo, _gameInfo);
+				is_upload = true;
 			}
 		}
 		else
 		{
 			uploadresult(_chessInfo, _gameInfo);
+			is_upload = true;
 		}
 
-        var movestr = _chessInfo.engmoveList.join(",");
-	    var hash = hash2INT32(movestr);
+		if(is_upload)
+		{
+        	var movestr = _chessInfo.engmoveList.join(",");
+	    	var hash = hash2INT32(movestr);
     
-		const el = document.createElement('textarea');
-		el.value = _ladderUrl+hash;
-		document.body.appendChild(el);
-		el.select();
-		document.execCommand('copy');
-		document.body.removeChild(el);
-		alert("上傳成功，已複製URL : "+ el.value);
+			const el = document.createElement('textarea');
+			el.value = _ladderUrl+hash;
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+			alert("上傳成功，已複製URL : "+ el.value);
+		}
 	}
 }
 
