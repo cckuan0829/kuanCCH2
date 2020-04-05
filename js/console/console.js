@@ -918,7 +918,7 @@ async function queryCloudDB() {
 			alert("輸入格式有誤!");
 		}
 	}
-	if(_chessInfo.is_got_result)
+	if(_chessInfo.is_got_result && !_chessInfo.is_not_complete)
 	{
 		showResult();  
 		showBoardbyNum(0);
