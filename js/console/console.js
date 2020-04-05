@@ -916,8 +916,9 @@ async function queryCloudDB() {
 			_chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, query_result.recommend_str_list]);       
 			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
 		    
-		    if(_chessInfo.scoreList.findIndex(Number.isNaN) < 0)
-				_chessInfo.is_complete = true;
+		    if(_chessInfo.scoreList.length == _chessInfo.move_total &&
+		       _chessInfo.scoreList.findIndex(Number.isNaN) < 0)
+			   _chessInfo.is_complete = true;
 		}
 		else
 		{
