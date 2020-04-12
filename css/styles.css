@@ -393,6 +393,7 @@ div.ui-datepicker{
      }
 
     #chessboardPic {
+        left:  5px;
         width: 780px;
         height: 920px;
     }
@@ -500,7 +501,7 @@ div.ui-datepicker{
 
     .TableBody {
         position: relative;
-        height: 40vh;
+        height: 28vh;
         display:block;
     }
     .chartArea {
