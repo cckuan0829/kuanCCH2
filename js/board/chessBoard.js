@@ -184,7 +184,7 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 		this.DOM.html(_chessBoardNumber[top_num][i]);
 		this.DOM.css({
 			left: -6+(i)*preTd,
-			top: -31,
+			top: -(1+preTd),
 		});
 		$axi_top.append(this.DOM);
 	}	
@@ -204,7 +204,7 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
     {
     	this.DOM = $('<i class="chess-table">');
 		this.DOM.css({
-			 width : 240,
+			 width : 8*preTd,
 			 left: 0,
 			 top: (j)*preTd,
 		});
@@ -218,9 +218,9 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
     	{
     		this.DOM = $('<i class="chess-table">');
 			this.DOM.css({
-			     height : 121,
+			     height : (4*preTd)+1,
 			     left: (i)*preTd,
-			     top: j*(150),
+			     top: j*(5*preTd),
 		    });
 		    this.DOM.css("border-left", "0.5px solid black");
 		    $chess_tb.append(this.DOM);
