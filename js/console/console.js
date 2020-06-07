@@ -2,6 +2,7 @@ var _cloudUrl = "http://www.chessdb.cn/query/?";
 var _cloudBackUpUrl = 'http://www.voo0.com/yunku/?';
 var _ladderUrl = "http://chessladder.nctu.me/?";
 var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
+var _BoardScale = [0.7, 0.85, 1, 1.2, 1.4];
 var _chessboard;
 
 var inputExample = 
@@ -53,6 +54,10 @@ var gamenameBtn = document.getElementById('gamenameBtn');
 var rednameBtn = document.getElementById('rednameBtn');
 var blackBtn = document.getElementById('blackBtn');
 var hideBtn = document.getElementById('hideBtn');
+var enlargeBoardBtn = document.getElementById('enlargeBtn');
+var shrinkBoardBtn = document.getElementById('shrinkBtn');
+var	scoreChartBtn = document.getElementById('scoreChartBtn');
+var	biasChartBtn = document.getElementById('biasChartBtn');
 
 var buttonList = [
 	persBtn,
@@ -77,7 +82,12 @@ var buttonList = [
 	scoreBtn,
 	//picBtn,
 	editModeBtn,
-	hideBtn
+	hideBtn,
+	enlargeBoardBtn,
+	shrinkBoardBtn,
+	scoreChartBtn,
+	biasChartBtn,
+	statChartBtn
 ];
 
 var _userInfo =
@@ -116,6 +126,9 @@ var _chessInfo =
 	biasList: [],
 	recommendList: [],
 	badRate: [0, 0, 0, 0], //red NG, red BAD, black NG, black BAD 
+    boardSizeLevel: 2, // scale = 1.0,  [0.7, 0.85, 1, 1.2, 1.4]
+    chartType: 0
+
 }
 
 var _gameInfo = 
@@ -168,6 +181,11 @@ $(document).ready(function() {
 	rednameBtn.addEventListener('click', onRednameBtnClick);
 	blacknameBtn.addEventListener('click', onBlacknameBtnClick);
 	hideBtn.addEventListener('click', onHideBtnClick);
+	enlargeBoardBtn.addEventListener('click', onEnLargeBtnClick);
+	shrinkBoardBtn.addEventListener('click', onShrinkBtnClick);
+	scoreChartBtn.addEventListener('click', onScoreChartBtnClick);
+	biasChartBtn.addEventListener('click', onBiasChartBtnClick);
+	statChartBtn.addEventListener('click', onStatChartBtnClick);
 
     $("#copyEgBtn").bind("click", function() {
         //copyToClipboard("範例棋譜",inputExample);
@@ -259,20 +277,25 @@ function hideOrShow(is_hide)
 {
 	if(is_hide)
 	{
-		document.getElementById("moveListTable").style.visibility = "hidden";
-    	document.getElementById("chessTable").style.display = "none";
+		document.getElementById("moveTb").style.visibility = "hidden";
+    	document.getElementById("moveTb").style.display = "none";
     	document.getElementById("gameInfoArea").style.visibility = "hidden";
     	document.getElementById("gameInfoArea").style.display = "none";
     	document.getElementById("hideBtn").innerHTML = "完整顯示";
 	}
 	else
 	{
-		document.getElementById("moveListTable").style.visibility = "visible";
-    	document.getElementById("chessTable").style.display = "inline-block";
+		if(_chessInfo.move_total > 0) document.getElementById("moveTb").style.visibility = "visible";
+    	document.getElementById("moveTb").style.display = "inline-block";
     	document.getElementById("gameInfoArea").style.visibility = "visible";
     	document.getElementById("gameInfoArea").style.display = "inline-block";
     	document.getElementById("hideBtn").innerHTML = "部分顯示";
 	}
+
+	if(_chessInfo.moveList.length > 0 && _chessInfo.scoreList.length > 0) 
+   	{
+   	   drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+   	}
 }
 
 function onHideBtnClick()
@@ -606,6 +629,34 @@ function onHorizBtnClick()
 	showBoardbyNum(_chessInfo.currNumber);
 }
 
+function onEnLargeBtnClick()
+{
+   if(_chessInfo.boardSizeLevel < 4)
+   {
+   	  _chessInfo.boardSizeLevel++;
+   	  var html = document.getElementsByTagName('body')[0];
+   	  html.style.setProperty("--chessboard_scale", _BoardScale[_chessInfo.boardSizeLevel]);
+   	  if(_chessInfo.moveList.length > 0 && _chessInfo.scoreList.length > 0) 
+   	  {
+   	  	 drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+   	  }
+   }
+}
+
+function onShrinkBtnClick()
+{
+   if(_chessInfo.boardSizeLevel > 0)
+   {
+   	  _chessInfo.boardSizeLevel--;
+      var html = document.getElementsByTagName('body')[0];
+      html.style.setProperty("--chessboard_scale", _BoardScale[_chessInfo.boardSizeLevel]);
+      if(_chessInfo.moveList.length > 0 && _chessInfo.scoreList.length > 0) 
+   	  {
+   	  	 drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+   	  }
+   }
+}
+
 function onScoreBtnClick()
 {
 	$info= $('#chess-info');
@@ -634,7 +685,23 @@ function onPicBtnClick()
 	document.getElementById('myModal').style.display = "block";				
 }
 
-//add function for 覆盤模式
+function onScoreChartBtnClick()
+{
+   _chessInfo.chartType = 0;
+   drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+}
+
+function onBiasChartBtnClick()
+{
+   _chessInfo.chartType = 1;
+   drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+}
+
+function onStatChartBtnClick()
+{
+   _chessInfo.chartType = 2;
+   drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+}
 
 function setEditMode(is_edit_mode)
 {
@@ -676,6 +743,7 @@ function onEditModeBtnClick()
 			resetBadRate();
 			showBoardbyNum(0);
 			$('.chartArea').removeClass('opacity9');
+			$('.chartArea').html('');
 		}
 	}
 	else
@@ -836,7 +904,6 @@ async function queryLadderDB() {
 	if (mytext == "" || mytext ===  placeholder)
 	{
 		alert("請輸入棋譜!");
-		//drawScore([], [], []);
 	}
 	else
 	{
@@ -856,7 +923,6 @@ async function queryLadderDB() {
 		else
 		{
 			alert("輸入格式有誤!");
-			//drawScore([], [], []);
 		}
 	}
 	
@@ -931,7 +997,7 @@ async function queryCloudDB() {
 		showBoardbyNum(0);
 		updateBadRate(calBadRate(_chessInfo.biasList));
 		$('.chartArea').addClass('opacity9');
-		drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
+		drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
         
         var eng_move_list_str = _chessInfo.engmoveList.join(",");
 	    var hash = hash2INT32(eng_move_list_str);
@@ -1137,8 +1203,8 @@ function showDisplayHeader(){
 	var th_score = document.getElementById("th_score");
 	var th_bias = document.getElementById("th_bias");
 	var th_recom = document.getElementById("th_recom");
-	th_num.classList.add("wid_120");
-	th_move.classList.add("wid_120");
+	th_num.classList.add("wid_70");
+	th_move.classList.add("wid_150");
 	th_score.classList.add("wid_120");
 	th_bias.classList.add("wid_120");
 	th_recom.classList.add("wid_180");
@@ -1166,6 +1232,8 @@ function addDisplayRow(info_list) {
 	{
 		cell_round.innerHTML = "<Button id = 'infoList" + info_list[0] + "' >" + info_list[0] + "</Button>";
 		$('#infoList'+info_list[0]).addClass("TableNum");
+		$('#infoList'+info_list[0]).addClass("chessBoardBtn"); 
+		$('#infoList'+info_list[0]).addClass("boardBtn3");
 		$('#infoList'+info_list[0]).bind("click", function() {
 			 showBoardbyNum(info_list[0]); 
 			 $("#main").scrollTop(0);
@@ -1191,10 +1259,10 @@ function addDisplayRow(info_list) {
 	cell_bias.innerHTML = info_list[3];
 	cell_recommend.innerHTML = info_list[4];
 	
-	cell_round.classList.add("wid_120");
-	cell_move.classList.add("wid_120");
-	cell_score.classList.add("wid_120");
-	cell_bias.classList.add("wid_120");
+	cell_round.classList.add("wid_70");
+	cell_move.classList.add("wid_150");
+	cell_score.classList.add("wid_100");
+	cell_bias.classList.add("wid_100");
 	cell_recommend.classList.add("wid_180");
 }
 
@@ -1315,16 +1383,16 @@ function removePersonaRecordlTable() {
 }
 
 function updateBadRate(badrate) {
-	var badratetext = document.getElementById("badRate");
-	badratetext.classList.add("rateArea");
-	badratetext.innerHTML = "紅方 緩著率："+_chessInfo.badRate[0]+"%， 失著率："+_chessInfo.badRate[1]+"% \n"+
-	                        "黑方 緩著率："+_chessInfo.badRate[2]+"%， 失著率："+_chessInfo.badRate[3]+"%";
+	//var badratetext = document.getElementById("badRate");
+	//badratetext.classList.add("rateArea");
+	//badratetext.innerHTML = "紅方 緩著率："+_chessInfo.badRate[0]+"%， 失著率："+_chessInfo.badRate[1]+"% \n"+
+	//                        "黑方 緩著率："+_chessInfo.badRate[2]+"%， 失著率："+_chessInfo.badRate[3]+"%";
 }
 
 function resetBadRate()
 {
-	var badratetext = document.getElementById("badRate");
-	badratetext.innerHTML = "";
+	//var badratetext = document.getElementById("badRate");
+	//badratetext.innerHTML = "";
 }
 
 function calBadRate(score_bias)
@@ -1361,8 +1429,6 @@ function calBadRate(score_bias)
 		_chessInfo.badRate[2] = parseInt(100*badRateCount[4]/badRateCount[3]);
 		_chessInfo.badRate[3] = parseInt(100*badRateCount[5]/badRateCount[3]);
 	}
-
-	return badRate;
 }
 
 function showBoardbyNum(num)

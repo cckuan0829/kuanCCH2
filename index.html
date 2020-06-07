@@ -4,18 +4,19 @@
     <title>象棋雲梯</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta content="user-scalable=no" name="viewport" /> 
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    </style>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
 	<meta name="google-signin-client_id" content="313692014803-5nm5c5sk2pjd4beoqdb87b1etedt5jj5.apps.googleusercontent.com">
+
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
 		gtag('config', 'UA-127983579-1');
 	</script>
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
     <script>
      $( function() {
      $( "#datepicker" ).datepicker(
@@ -24,7 +25,7 @@
      	}).attr('readonly','readonly');
       });
     </script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 	<link rel="stylesheet" href="css/styles.css">
 	<link rel="stylesheet" href="css/modal.css">
 	<link rel="stylesheet" href="css/chessboard.css">
@@ -37,6 +38,7 @@
 
 		    <div style="position: absolute; right: 0px; z-index: 3;" id="my-signin2"></div>		
 		    <a href="#" onclick="signOut();" id="signOut">Sign out</a>
+            
 
 		    <script>
 		    function renderButton() {
@@ -77,7 +79,6 @@
         	</script>
 
         	<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
-
 			<p id="title" class = "titleText">象棋雲梯</p>
 			<p id="fblk" class = "fbLink">粉絲專頁</p>
 
@@ -100,7 +101,9 @@
 				<button id="downloadBtn" class="consoleBtn">下載PGN</button>
 
 				<button id="infoBtn" class="consoleBtn">使用說明</button>
-
+               
+                <button id="editModeBtn" class="consoleBtn">手動打譜</button>
+                
 				<button id="hideBtn" class="consoleBtn">部分顯示</button>
 		</div>
 
@@ -126,189 +129,74 @@
 		</div>
 
 		<div id = "content">
-				<table id="funcBtnList">
-					<td align="center">
-						<button id="fenBtn" class="chessBoardBtn boardBtn2">FEN</button>
-					</td>
-					<td align="center">
-						<button id="cloudBtn" class="chessBoardBtn boardBtn2">雲庫</button>
-					</td>
-					<td align="center">
-						<button id="dpxqBtn" class="chessBoardBtn boardBtn2">東萍</button>
-					</td>
-					<td align="center">
-						<button id="horizBtn" class="chessBoardBtn boardBtn2"><-></button>
-					</td>
-					<td align="center">
-						<button id="verticalBtn" class="chessBoardBtn boardBtn2">↕</button>
-					</td>
-					<td align="center">
-						<button id="scoreBtn" class="chessBoardBtn boardBtn2">info</button>
-					</td>
-				</table>
-				<div id="wholeboard">
-					<div id ="chessboardPic">
-						<div id="chessboard">
-							<i class="chess-td-trans trans-top-1"></i>
-							<i class="chess-td-trans trans-top-2"></i>
-							<i class="chess-td-trans trans-bottom-1"></i>
-							<i class="chess-td-trans trans-bottom-2"></i>
-							<div id="chessboard-name"></div>
-							<div id="chess-info"></div>
-							<div id="axi-top" class="chess-axi-top"></div>
-							<table>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr class="chess-center">
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-								<tr>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-									<td class="chess-td"></td>
-								</tr>
-							</table>
-							<div id="axi-bot" class="chess-axi-bot"></div>
-							<div id="chesslist"></div>
+				<div id="flexContainer">
+					<div id="wholeboard">
+						<div id="chess-info"></div>
+						<table id="funcBtnList">
+							<td align="center">
+								<button id="fenBtn" class="chessBoardBtn boardBtn2">FEN</button>
+							</td>
+							<td align="center">
+								<button id="cloudBtn" class="chessBoardBtn boardBtn2">雲庫</button>
+							</td>
+							<td align="center">
+								<button id="dpxqBtn" class="chessBoardBtn boardBtn2">東萍</button>
+							</td>
+							<td align="center">
+								<button id="horizBtn" class="chessBoardBtn boardBtn2"><-></button>
+							</td>
+							<td align="center">
+								<button id="verticalBtn" class="chessBoardBtn boardBtn2">↕</button>
+							</td>
+							<td align="center">
+								<button id="scoreBtn" class="chessBoardBtn boardBtn2">info</button>
+							</td>
+						</table>
+						<div id ="chessboardPic">
+							<div id="chessboard">
+								<button id = "enlargeBtn" class="scaleBoardEnlarge">+</button>
+								<button id = "shrinkBtn"  class="scaleBoardShrink">-</button>
+								<i class="chess-td-trans trans-top-1"></i>
+								<i class="chess-td-trans trans-top-2"></i>
+								<i class="chess-td-trans trans-bottom-1"></i>
+								<i class="chess-td-trans trans-bottom-2"></i>
+								<div id="chessboard-name">象棋雲梯</div>
+								<div id="axi-top" class="chess-axi-top"></div>
+								<div id="chess-tb" class="chess-table"></div>
+								<div id="axi-bot" class="chess-axi-bot"></div>
+								<div id="chesslist"></div>
+							</div>
 						</div>
-					</div>
-					
-					<table id="chessNumCtrl">
-						<td align="center">
-							<button id="firstBtn" class="chessBoardBtn boardBtn">|<</button>
-						</td>
-						<td align="center">
-							<button id="prevBtn" class="chessBoardBtn longboardBtn"><</button>
-						</td>
-						<td align="center">
-							<button id="nextBtn" class="chessBoardBtn longboardBtn">></button>
-						</td>
-						<td align="center">
-							<button id="endBtn" class="chessBoardBtn boardBtn">>|</button>
-						</td>
-						<td align="center">
-							<p id="moveNumber">000/000</p>
-						</td>
-					</table>
-					
-				</div>
-				
-				<div class = "chessBookInputArea" id="gameInfoArea">
-
-					<div id = "gameinfo" class="gameinfo">
-					    日期 <input type="text" class="gameinfo_sub" id="datepicker"><br>
-                        比賽 <input type="text" class="gameinfo_sub" id="game_name" value="">
-						輪次 <input type="text" class="gameinfo_sub" id="round" value=""><br>
-						<form>
-						  是本人的對局嗎?
-						  <input type="radio" id="red_turn" class="gameinfo_sub2" name="side" onclick="onSideRadioClick(this);" value=1>執紅
-						  <input type="radio" id="black_turn" class="gameinfo_sub2" name="side" onclick="onSideRadioClick(this);" value=2>執黑
-						  <input type="radio" id="unknown_turn" class="gameinfo_sub2" name="side" onclick="onSideRadioClick(this);" value=0>非本人對局
-						</form>
-                        紅方 <input type="text" class="gameinfo_sub" id="red_name" value="">
-                        黑方 <input type="text" class="gameinfo_sub" id="black_name" value="">
-                        <form>
-  						  勝負結果
-						  <input type="radio" id="red_win" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
-						  value=1>紅勝
-						  <input type="radio" id="draw" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
-						  value=2>和棋
-						  <input type="radio" id="black_win" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
-						  value=3>黑勝
-						  <input type="radio" id="unknown_win" class="gameinfo_sub2" name="WDL" onclick="onResultRadioClick(this);"
-						  value=0>未知
-						</form>
+						
+						<table id="chessNumCtrl">
+							<td align="center">
+								<button id="firstBtn" class="chessBoardBtn boardBtn">|<</button>
+							</td>
+							<td align="center">
+								<button id="prevBtn" class="chessBoardBtn longboardBtn"><</button>
+							</td>
+							<td align="center">
+								<button id="nextBtn" class="chessBoardBtn longboardBtn">></button>
+							</td>
+							<td align="center">
+								<button id="endBtn" class="chessBoardBtn boardBtn">>|</button>
+							</td>
+							<td align="center">
+								<p id="moveNumber">000/000</p>
+							</td>
+						</table>
+						
 					</div>
 
-					<textarea id="chessBookInput" class = "inputArea"></textarea>
-					<button id="queryBtn" class="consoleBtn">逐步查詢</button>
-					<button id="uploadBtn" class="consoleBtn">上傳雲梯</button>
-					<button id="clearBtn" class="consoleBtn">清空輸入</button>
-					<button id="editModeBtn" class="consoleBtn">手動打譜</button>
-				</div>
-				
-				<div class = "chessOutput">
-					<div class = "chessBookOutptArea" id="chessTable">
+					<div class = "movetable" id = "moveTb">
 						<table class = "outputTable" id="moveListTable" style="visibility:hidden">
-							<thead id="moveListTableHeader">
+							<thead>
 								<tr>
 								<th id = "th_num">步數</th>
 								<th id = "th_move">著法</th>
-								<th id = "th_score">局面分數</th>
-								<th id = "th_bias">此著偏差</th>
-								<th id = "th_recom">推薦著法</th>
+								<th id = "th_score">局分</th>
+								<th id = "th_bias">偏差</th>
+								<th id = "th_recom">推薦</th>
 								</tr>
 							</thead>
 							<tbody class = "TableBody" id="moveListTableBody">
@@ -317,13 +205,110 @@
 						</table>
 					</div>
 
-					<div id = "scoreChart" class="chartArea">
-						<div id = "chartContainer" > </div>
-						<div id = "badRate" class="rateArea">
-								<font color="white"></font>
+					<div id="tabs"  class="chartArea" style="visibility:hidden">
+						<div id="taBar" class="tab">
+						  <button id="scoreChartBtn"class="tablinks">全局走勢</button>
+						  <button id="biasChartBtn" class="tablinks">著法偏差</button>
+						  <button id="statChartBtn" class="tablinks">失著統計</button>
 						</div>
+						<div id="scorechart" class="chartArea2"></div>
+						<div id="biaschart" class="chartArea2"></div>
+						<div id="statchart" class="chartArea2"></div>
 					</div>
-				</div>					
+                </div>	
+
+				<div class = "chessBookInputArea" id="gameInfoArea">                                     
+					<div id = "gameinfo" class="gameInfo">
+					    日期 <input type="text" class="gameInfoText" id="datepicker"><br>
+                        比賽 <input type="text" class="gameInfoText" id="game_name" value="">
+						輪次 <input type="text" class="gameInfoText" id="round" value=""><br>
+						<form>
+						  是本人的對局嗎?
+						  <input type="radio" id="red_turn" class="gameInfoText2" name="side" onclick="onSideRadioClick(this);" value=1>執紅
+						  <input type="radio" id="black_turn" class="gameInfoText2" name="side" onclick="onSideRadioClick(this);" value=2>執黑
+						  <input type="radio" id="unknown_turn" class="gameInfoText2" name="side" onclick="onSideRadioClick(this);" value=0>非本人對局
+						</form>
+                          紅方 <input type="text" class="gameInfoText" id="red_name" value="">
+                          黑方 <input type="text" class="gameInfoText" id="black_name" value="">
+                        <form>
+  						  勝負結果
+						  <input type="radio" id="red_win" class="gameInfoText2" name="WDL" onclick="onResultRadioClick(this);" value=1>紅勝
+						  <input type="radio" id="draw" class="gameInfoText2" name="WDL" onclick="onResultRadioClick(this);" value=2>和棋
+						  <input type="radio" id="black_win" class="gameInfoText2" name="WDL" onclick="onResultRadioClick(this);" value=3>黑勝
+						  <input type="radio" id="unknown_win" class="gameInfoText2" name="WDL" onclick="onResultRadioClick(this);" value=0>未知
+						</form>
+					</div>
+					
+					<textarea id="chessBookInput" class = "inputArea"></textarea>
+					<button id="queryBtn"    class="consoleBtn btn_s">分析</button>
+					<button id="uploadBtn"   class="consoleBtn btn_s">上傳</button>
+					<button id="clearBtn"    class="consoleBtn btn_s">清空</button>
+				</div>		
+                
+                <!--
+				<div class = "evaluateDiv">
+					<table class = "evaluateTB"> 
+						<tr class="evaluateTR">
+							<th class="evaluateTD titleCol"></th>
+							<th colspan="3" class="evaluateTD3 redSide" >紅方</th>
+							<th colspan="3" class="evaluateTD3 blackSide">黑方</th>
+						</tr>
+						<tr class="evaluateTR">
+							<th class="evaluateTD titleCol"></th>
+							<th class="evaluateTD redSide2">開局</th>
+							<th class="evaluateTD redSide2">中局</th>
+							<th class="evaluateTD redSide2">全局</th>
+							<th class="evaluateTD blackSide2">開局</th>
+							<th class="evaluateTD blackSide2">中局</th>
+							<th class="evaluateTD blackSide2">全局</th>
+						</tr>
+						<tr class="evaluateTR"> 
+							<th class="evaluateTD titleCol">緩著數</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+						</tr>
+						<tr class="evaluateTR"> 
+							<th class="evaluateTD titleCol">失著數</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+						</tr>
+						<tr class="evaluateTR"> 
+							<th class="evaluateTD titleCol">敗著數</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD redSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+							<th class="evaluateTD blackSide2">12</th>
+						</tr>
+						<tr class="evaluateTR"> 
+							<th class="evaluateTD titleCol">平均偏差</th>
+							<th class="evaluateTD redSide2">20</th>
+							<th class="evaluateTD redSide2">50</th>
+							<th class="evaluateTD redSide2">50</th>
+							<th class="evaluateTD blackSide2">20</th>
+							<th class="evaluateTD blackSide2">50</th>
+							<th class="evaluateTD blackSide2">50</th>
+						</tr>
+						<tr class="evaluateTR"> 
+							<th class="evaluateTD titleCol">評價</th>
+							<th class="evaluateTD redSide2">S</th>
+							<th class="evaluateTD redSide2">C</th>
+							<th class="evaluateTD redSide2">B</th>
+							<th class="evaluateTD blackSide2">A</th>
+							<th class="evaluateTD blackSide2">A</th>
+							<th class="evaluateTD blackSide2">A</th>
+						</tr>
+					</table>
+				</div> -->
 		</div>
 
 		<!-- The Modal -->
@@ -336,7 +321,8 @@
 		</div>
 		
 	</div>
-	<script src="js/library/html2canvas.js"></script>
+	<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+ 	<script src="js/library/html2canvas.js"></script>
 	<script src="js/library/canvas2image.js"></script>
 	<script src="js/library/require.js"></script>
     <script src="js/main.js"></script>

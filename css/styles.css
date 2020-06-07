@@ -1,49 +1,151 @@
-#main {
-    background-image: url('../assets/image/bgImage3.jpg');
-    background-size: cover;
-    position: absolute;
-    height: 100vh;
-	width: 100vw;
-    overflow: auto;
-    top:0;
-    left: 0;
+/* common setting */
+.wid_50 {width: 50px;}
+.wid_60 {width: 60px;}
+.wid_70 {width: 70px;}
+.wid_80 {width: 80px;}
+.wid_100{width: 100px;}
+.wid_120{width: 120px;}
+.wid_130{width: 130px;}
+.wid_150{width: 150px;}
+.wid_160{width: 160px;}
+.wid_180{width: 180px;}
+
+.m_wid_6 {min-width: 6%;}
+.m_wid_8 {min-width: 8%;}
+.m_wid_10{min-width: 10%;}
+.m_wid_12{min-width: 12%;}
+.m_wid_15{min-width: 15%;}
+.m_wid_16{min-width: 16%;}
+.m_wid_18{min-width: 18%;}
+
+.opacity9 {
+    opacity: 0.9 !important;
 }
 
-#bgVideo {
+body{ --chessboard_height: 430;
+      --chessboard_width : 320;
+      --chessboard_scale : 1;}
+/******************/
+
+/* title & sign-in & button list */
+.titleBar {
     position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%; 
-    min-height: 100%;
-}
-
-#showUpArea {
-    position: relative;
-    height: 70%;
-    width: 90%;
-}
-
-
-.chessBookLabel {
     display: block;
-    margin: 1em;
+    z-index: 10;
+    width: 100%;
+    background-color: #d4eaf1;
 }
 
-.inputArea, .outputArea {
-    opacity: 0.6;
-    font-size: 18px; /* modifeded by kuan */
-    color: gray;
-    position: relative;
+.titleText {
+    margin: 0px;
+    text-align: center;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: #555555;
+    font-family: cursive;
+}
+
+.loginbtn {
+    position: fixed; 
+    width: 60px;
+    height: 30px;
+    font-size: 20px;
+    right: 200px;
+}
+
+.fbLink {
+    position: absolute;
+    display: inline-block;
+    text-align: left;
+    font-size: 20px;
+    margin-top: -30px;
+    margin-left: 20px;
     width: 95%;
-    height: 10vw;
-    overflow:auto;
-	border: 3px solid #222222;
 }
 
-.outputArea {
-    opacity: 0.7;
+#signOut {
+    position: absolute;
+    right: 210px;
+    margin-top: 5px;
+    font-size: 20px;
+    z-index: 2;
 }
 
+.btnList {
+    position: fixed;
+    display: block;
+    width: 140px;
+    height: 100%;
+    top: 0px;
+    padding: 50px 0 0 0;
+    background-color: #cedee68f;
+}
+
+.consoleBtn {
+    width: 120px;
+    height: 60px;
+    letter-spacing: 1px;
+    -moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
+    -webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
+    box-shadow: 0px 0px 0px 2px #9fb4f2;
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
+    background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+    background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+    background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+    background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
+    background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+    background-color:#7892c2;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
+    border:1px solid #4e6096;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:cursive;
+    font-size: 24px;
+    margin: 10px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+}
+
+.consoleBtn:disabled {
+    opacity: 0.65; 
+    cursor: not-allowed;
+  }
+
+.consoleBtn:hover {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
+    background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+    background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+    background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+    background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
+    background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+    background-color:#476e9e;
+}
+
+.consoleBtn:active {
+    position:relative;
+    top:1px;
+}
+
+.btn_s {
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    height: 50px;
+    margin: 5px;
+}
+
+.btn_ss {
+    width: 80px;
+    height: 20px;
+    margin: 0px;
+
+}
+/******************/
+
+/* personal page */
 #personalrecordTable {
     position: absolute;
     margin-top: 50px;
@@ -74,260 +176,265 @@
     overflow-y:scroll;
     position: relative;
 }
+/******************/
 
-.outputTable {
-	border: 0px;
-	border-color: white;
-	border-collapse: collapse;
-	text-align: center;
-	font-weight:bold;
-    table-layout: fixed;
-	font-size: 14px; /* added by kuan */
-    height: 100%;
-    width: 100%;
-}
+/* main struct 
+ ---------------------
+ | Chess   | input   |
+ | board   | area    |
+ ---------------------
+ | Chess   | score   |
+ | Table   | Chart   |
+ ---------------------
+*/
 
-.outputTable thead {
-	text-align: center;
-	background:black;
-	color:#f2f2f2;
-	display: block;
-	position: relative;
-	
-}
-
-.TableNum {
-    width: 40px;
-    font-size: 14px;
-}
-
-.TableBody {
-	text-align: center;
-	overflow-y:scroll;
-    display:block;
-    height: 90%;
+#main {
+    background-image: url('../assets/image/bgImage3.jpg');
+    background-size: cover;
     position: absolute;
-}
-
-.wid_50 {width: 50px;}
-.wid_60 {width: 60px;}
-.wid_70 {width: 70px;}
-.wid_80 {width: 80px;}
-.wid_100{width: 100px;}
-.wid_120{width: 120px;}
-.wid_150{width: 150px;}
-.wid_160{width: 160px;}
-.wid_180{width: 180px;}
-
-.m_wid_6 {min-width: 6%;}
-.m_wid_8 {min-width: 8%;}
-.m_wid_10{min-width: 10%;}
-.m_wid_12{min-width: 12%;}
-.m_wid_15{min-width: 15%;}
-.m_wid_16{min-width: 16%;}
-.m_wid_18{min-width: 18%;}
-
-.rateArea {
-	display: none;
-}
-
-.opacity9 {
-    opacity: 0.9 !important;
-}
-
-#audioPlayer {
-    position: fixed;
-    opacity: 0.6;
-    width: 100px;
-    height: 50px;
-    bottom: 1px;
-    right: 1px;
-}
-
-#signOut {
-    position: absolute;
-    right: 210px;
-    margin-top: 5px;
-    font-size: 20px;
-    z-index: 2;
-}
-
-.titleBar {
-    position: fixed;
-    display: block;
-    z-index: 10;
-    width: 100%;
-    background-color: #d4eaf1;
-}
-
-.titleText {
-    margin: 0px;
-    text-align: center;
-    font-size: 30px;
-    letter-spacing: 2px;
-    color: #555555;
-    font-family: cursive;
-   
-}
-
-.loginbtn {
-    position: fixed; 
-    width: 60px;
-    height: 30px;
-    font-size: 20px;
-    right: 200px;
-}
-
-.fbLink {
-    position: absolute;
-    display: inline-block;
-    text-align: left;
-    font-size: 20px;
-    margin-top: -30px;
-    margin-left: 20px;
-    width: 95%;
-}/*added by kuan*/
-
-.btnList {
-    position: fixed;
-    display: block;
-    width: 160px;
-    height: 100%;
-    top: 0px;
-    padding: 50px 0 0 0;
-    background-color: #cedee68f;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    top:0;
+    left: 0;
 }
 
 #content {
     position: relative;
     display: block;
-    width: calc(100vw - 160px - 40px);
+    width: calc(100vw - 120px - 40px);
     height: 100%;
-    left: 160px;
-    padding: 60px 20px;
+    left: 140px;
+    padding: 40px 20px;
     z-index: 1;
     
 }
 
-/* added by kuan */
-#funcBtnList {
-	margin-top: 8px;
+#flexContainer {
+    display: -webkit-flex;
+    display: flex;
 }
 
-/* added by kuan */
+/* Chess borad */
 #wholeboard {
-	display: inline-block;
-	position: relative;
-	float: left;
-}
-
-/* modifed by kuan */
-.chessBookInputArea {
+    /*-webkit-flex: initial;
+           flex: initial;*/
     display: inline-block;
     position: relative;
-	left: 15px;
-	width: 65%;
+    
+    transform: scale(var(--chessboard_scale), var(--chessboard_scale));
+    transform-origin: 0 0;
+    height: calc(var(--chessboard_scale) * var(--chessboard_height)* 1px);
+    width:  calc(var(--chessboard_scale) * var(--chessboard_width)* 1px);
 }
 
-.gameinfo{
-    font-size: 18px;
-}
-
-.gameinfo_sub{
-    width: 250px;
-}
-
-/* added by kuan */
-#chessboardPic {
-	position: relative;
-	width: 290px;
-	height: 335px;
-}
-
-/* added by kuan */
-#chessboard {
-    position: relative;
-	top: 30px;
-	left: 25px;
-}
-
-/* added by kuan */
-.chessOutput {
-	display: inline-block;
-	position: relative;
-	width: 100%;
-	height: 55%; /* modifed by kuan */
-}
-
-.chessBookOutptArea {
-    opacity: 0.8;
-    display: inline-block;
-    position: relative;
-    height: 100%; /* modifed by kuan */
-    height: 100%;
-    width: 45%;
+/* Chess output area */
+.movetable {
+    font-size: 14px;
+    -webkit-flex: 1;
+            flex: 1;
+    min-width: 250px;
+    max-width: 500px;
 }
 
 .chartArea {
-    opacity: 0;
+    margin-right:20px;
+    -webkit-flex: 1.35;
+            flex: 1.35;
+    min-width: 300px;
+    max-width: 650px;
+    height: calc(var(--chessboard_scale) * var(--chessboard_height)* 1px);
+}
+
+.chartArea2 {
     position: relative;
-    display: inline-block;
-    height: 100%; /* modifed by kuan */
-    width: 50%;
+    margin-left: 1px;
+    margin-right: 1px;
+    height: calc(var(--chessboard_scale) * var(--chessboard_height)* 0.9px);
 }
 
-/* added by kuan */
+#chess-info{
+    position: relative;
+    display: block;
+    text-align: left;
+    color: black;
+    height: 20px;
+    font-size: 15px;
+    visibility: hidden;
+}
+
+#funcBtnList {
+    display: block;
+    position: relative;
+}
+
+#chessboardPic {
+    display: block;
+    position: relative;
+    width: 240px;
+    height: 270px;
+    margin-left: 30px;
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
+
+#chessNumCtrl {
+    position: relative;
+    display: block;
+    z-index: 2;
+}
+
+#enlarge {
+    position: absolute; 
+}
+
+#shrink {
+    position: absolute;
+}
+
+#chessboard {
+    display: table;
+}
+
+.chessBookInputArea {
+
+    display: block;
+    position: absolute;
+    width: 400px;
+}
+
+/**************/
+
+/********************/
+
+.outputTable thead {
+    text-align: center;
+    background:black;
+    color:#f2f2f2;
+    display: block;
+    position: relative;
+    
+}
+
+.TableNum {
+    width: 38px;
+    font-size: 15px;
+}
+
+.TableBody {
+    text-align: center;
+    overflow-y:scroll;
+    display:block;
+    position: relative;
+    height: calc(var(--chessboard_scale) * var(--chessboard_height)* 0.87px);
+
+}
+
+.rateArea {
+    display: none;
+}
+
 #chartContainer {
-	height: 100%;
+    height: 45vh;
+    width: 90%;
 }
 
-.consoleBtn {
-    width: 140px;
-    height: 70px;
-    letter-spacing: 1px;
-	-moz-box-shadow: 0px 0px 0px 2px #9fb4f2;
-	-webkit-box-shadow: 0px 0px 0px 2px #9fb4f2;
-	box-shadow: 0px 0px 0px 2px #9fb4f2;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #7892c2), color-stop(1, #476e9e));
-	background:-moz-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-	background:-webkit-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-	background:-o-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-	background:-ms-linear-gradient(top, #7892c2 5%, #476e9e 100%);
-	background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
-	background-color:#7892c2;
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-	border-radius:10px;
-	border:1px solid #4e6096;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-    font-family:cursive;
-    font-size: 28px;
-    margin: 10px;
-    margin-bottom: 5px;
-    white-space: nowrap;
+/* Chess input area */
+.gameInfo{
+    font-size: 16px;
 }
 
-.consoleBtn:disabled {
-    opacity: 0.65; 
-    cursor: not-allowed;
-  }
-
-.consoleBtn:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #476e9e), color-stop(1, #7892c2));
-	background:-moz-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-	background:-webkit-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-	background:-o-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-	background:-ms-linear-gradient(top, #476e9e 5%, #7892c2 100%);
-	background:linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
-	background-color:#476e9e;
+.gameInfoText{
+    width: 130px;
 }
 
-.consoleBtn:active {
-	position:relative;
-	top:1px;
+.inputArea {
+    opacity: 0.6;
+    font-size: 14px; /* modifeded by kuan */
+    color: gray;
+    position: relative;
+    width: 360px;
+    height: 75px;
+    overflow:auto;
+    border: 2px solid #222222;
 }
+
+.titleCol{
+    font-weight:bold;
+    background: #C1DDFF;
+}
+
+.redSide{
+    background: red;
+    color: white;
+}
+
+.redSide2{
+    background: white;
+}
+
+.blackSide{
+    background: black;
+    color: white;
+}
+
+.blackSide2{
+    background: white;
+}
+
+.evaluateDiv{
+    display: inline-block;
+    position: relative;
+    top: 15px;
+    left: 15px;
+}
+
+.evaluateTB .evaluateTR .evaluateTD .evaluateTD3{
+    border: 1px solid black;
+    border-collapse: collapse;
+
+}
+
+.evaluateTB {
+    display: inline-block;
+    position: relative;
+    left: 400px; 
+    max-width: 560px;
+    height: 300px;
+    font-size: 15px;
+    border-collapse: collapse;
+}
+
+.evaluateTR {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.evaluateTD {
+    width: 80px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.evaluateTD3 {
+    width: 360px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#backButton {
+    border-radius: 4px;
+    padding: 8px;
+    border: none;
+    font-size: 16px;
+    background-color: #2eacd1;
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+/*********************/
 
 #openfileInput {
     display:none;
@@ -337,17 +444,55 @@ div.ui-datepicker{
  font-size:20px;
 }
 
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid black;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: 0px solid black;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+
 @media only screen and (max-width: 1024px) {
     .titleText {
         font-size: calc(30 / 1024 * 100vw);
     }
-	
-	.fbLink {
-		font-size: calc(20 / 1024 * 100vw);
-		margin-top: calc(-30 / 1024 * 100vw);
-	}/*added by kuan*/
-	
-	.consoleBtn {
+    
+    .fbLink {
+        font-size: calc(20 / 1024 * 100vw);
+        margin-top: calc(-30 / 1024 * 100vw);
+    }/*added by kuan*/
+    
+    .consoleBtn {
         width: calc(140 / 1024 * 100vw);
         height: calc(70 / 1024 * 100vw);
         font-size: calc(28 / 1024 * 100vw);
@@ -357,9 +502,9 @@ div.ui-datepicker{
     .inputArea, .outputArea{
         font-size:  calc(20 / 1024 * 100vw);
     }
-	.chessBookInputArea {
-		width: 45%;
-	}
+    .chessBookInputArea {
+        width: 45%;
+    }
     .btnList {
         top: 0px;
         width: calc(160 / 1024 * 100vw) ;
@@ -393,7 +538,6 @@ div.ui-datepicker{
      }
 
     #chessboardPic {
-        left:  5px;
         width: 780px;
         height: 920px;
     }
@@ -401,10 +545,10 @@ div.ui-datepicker{
     .inputArea {
         height: 18vw;
     }
-	
-	#chessboard {
-		top: 90px;
-	}
+    
+    #chessboard {
+        top: 90px;
+    }
 
     .outputTable {
         font-size: 28px;
@@ -466,23 +610,8 @@ div.ui-datepicker{
 
     }
 
-    .gameinfo{
-        font-size: 30px;
-    }
-
-    .gameinfo_sub{
-        font-size: 30px;
-        width: 25vw;
-        height: 35px;
-    }
-
-    .gameinfo_sub2{
-        width:  30px;
-        height: 30px;
-    }
-
     div.ui-datepicker{
-        font-size:30px;
+        font-size:26px;
     }
 
     #content {
@@ -501,15 +630,12 @@ div.ui-datepicker{
 
     .TableBody {
         position: relative;
-        height: 28vh;
+        height: 25vh;
         display:block;
     }
     .chartArea {
         position: relative;
         width: 90%;
-        height: 30vh;
-        margin-top: 0vh;
-        margin-bottom: 5vh;
     }
     
     .btnList {

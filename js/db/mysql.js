@@ -80,7 +80,8 @@ function getParameterHandler(val) {
 	   else
 	   {
 		   alert("網址有誤!");
-		   drawScore([], [], []);
+		   drawScoreChart([]);
+
 		   return;
 	   }
 	});
@@ -139,7 +140,7 @@ function getParameterHandler(val) {
 	   showBoardbyNum(0);
 	   updateBadRate(calBadRate(_chessInfo.biasList));
 	   $('.chartArea').addClass('opacity9');
-	   drawScore(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList);
+	   drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
 
 	   enableButtons();
        _chessInfo.inQuety = false;

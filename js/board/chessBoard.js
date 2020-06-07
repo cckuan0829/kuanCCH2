@@ -27,8 +27,8 @@ var BLACK_OPPOSITE_VIEW = 1
 var RED_OPPOSITE_VIEW   = 2;
 var RED_NORMAL_VIEW     = 3;
 var _chessBoardNumber = 
-[['1', '2', '3', '4', '5', '6', '7', '8', '9'],
- ['9', '8', '7', '6', '5', '4', '3', '2', '1'],
+[['１', '２', '３', '４', '５', '６', '７', '８', '９'],
+ ['９', '８', '７', '６', '５', '４', '３', '２', '１'],
  ['一', '二', '三', '四', '五', '六', '七', '八', '九'],
  ['九', '八', '七', '六', '五', '四', '三', '二', '一'],
 ];
@@ -128,8 +128,8 @@ var ChessBoard = function(chessList, score, bias, recommend, is_horiz_ori, is_ve
 	this.initBoard(is_horiz_ori, is_vertical_ori);
 	this.placementAll();
 	
-	var title = document.getElementById("chessboard-name");
-	title.innerHTML = document.getElementById("title").innerHTML;
+	//var title = document.getElementById("chessboard-name");
+	//title.innerHTML = document.getElementById("title").innerHTML;
 };
 
 ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
@@ -137,8 +137,10 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 	$list.empty();
 	$axi_top = $('#axi-top');
 	$axi_bot = $('#axi-bot');
+	$chess_tb = $('#chess-tb');
 	$axi_top.empty();
 	$axi_bot.empty();
+	$chess_tb.empty();
 	
 	var bodyStyles = window.getComputedStyle(document.body); 
 	var preTd = parseInt(bodyStyles.getPropertyValue('--grid'));
@@ -181,7 +183,7 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 		this.DOM = $('<i class="chess-axi-top">');
 		this.DOM.html(_chessBoardNumber[top_num][i]);
 		this.DOM.css({
-			left: -5+(i)*preTd,
+			left: -6+(i)*preTd,
 			top: -31,
 		});
 		$axi_top.append(this.DOM);
@@ -192,12 +194,38 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 		this.DOM = $('<i class="chess-axi-bot">');
 		this.DOM.html(_chessBoardNumber[bot_num][i]);
 		this.DOM.css({
-			left: -5+(i)*preTd,
-			top: 14,
+			left: -6+(i)*preTd,
 		});
 		$axi_bot.append(this.DOM);
 	}
     
+
+    for(var j = 0; j < 10; j++)
+    {
+    	this.DOM = $('<i class="chess-table">');
+		this.DOM.css({
+			 width : 240,
+			 left: 0,
+			 top: (j)*preTd,
+		});
+		this.DOM.css("border-top", "0.5px solid black");
+		$chess_tb.append(this.DOM);
+    }
+
+    for(var i = 0; i < 9; i++)
+    {
+    	for(j = 0; j < 2 ; j++)
+    	{
+    		this.DOM = $('<i class="chess-table">');
+			this.DOM.css({
+			     height : 121,
+			     left: (i)*preTd,
+			     top: j*(150),
+		    });
+		    this.DOM.css("border-left", "0.5px solid black");
+		    $chess_tb.append(this.DOM);
+    	}
+    }
 }
 
 ChessBoard.prototype.placementAll = function() {
