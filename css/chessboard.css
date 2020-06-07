@@ -337,6 +337,7 @@ body {
 	#chess-info{
 		top: -5px;
 		font-size: 40px;
+		width: 800px;
 	}
 	
 	#chesslist .chesspieceRed, .chesspieceBlack{

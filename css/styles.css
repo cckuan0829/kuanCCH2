@@ -589,8 +589,14 @@ div.ui-datepicker{
        left: 20px;
     }
 
+    #chessboardPic {
+       position: relative;
+       display: block;
+       height: 840px;
+    }
+
     #chessNumCtrl {
-       top: -40px;
+       top: 20px;
 
     }
     
@@ -640,6 +646,20 @@ div.ui-datepicker{
         top: -200px;
     }
 
+    .gameInfo{
+        font-size: 30px;
+    }
+
+    .gameInfoText{
+        font-size: 30px;
+        width: 280px;
+    }
+
+    .gameInfoText2{
+        width:  30px;
+        height: 30px;
+    }
+
     .chessBookOutptArea {
         width: 90%;
         margin: 3% 0 1% 0;
@@ -658,8 +678,7 @@ div.ui-datepicker{
         width: 95%;
         max-width: 800px;
         height: 27vh;
-        top: 1850px;
-        margin-bottom: 20px;
+        top: 1750px;
     }
 
     .outputTable {
@@ -680,7 +699,7 @@ div.ui-datepicker{
     .chartArea {
         display:block;
         position: relative;
-        top: 750px;
+        top: 730px;
         height: 26vh;
         width: 95%;
         max-width: 800px;
