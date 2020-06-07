@@ -637,7 +637,7 @@ div.ui-datepicker{
         display: block;
         position: relative;
         width: 100%;
-        top: -170px;
+        top: -200px;
     }
 
     .chessBookOutptArea {
@@ -658,7 +658,8 @@ div.ui-datepicker{
         width: 95%;
         max-width: 800px;
         height: 27vh;
-        top: 1820px;
+        top: 1850px;
+        margin-bottom: 20px;
     }
 
     .outputTable {
