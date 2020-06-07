@@ -628,14 +628,27 @@ div.ui-datepicker{
         margin: 3% 0 1% 0;
     }
 
-    .TableBody {
-        position: relative;
-        height: 25vh;
-        display:block;
+    .movetable {
+       position: relative;
+       height: 25vh;
+       width: 90%;
+       display:block;
     }
+
     .chartArea {
-        position: relative;
-        width: 90%;
+       position: relative;
+       height: 25vh;
+       width: 90%;
+       display:block;
+    }
+
+    .chartArea2 {
+       position: relative;
+       height: 25vh;
+       width: 90%;
+       margin-left: 1px;
+       margin-right: 1px;
+       display:block;
     }
     
     .btnList {
