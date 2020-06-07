@@ -542,9 +542,6 @@ div.ui-datepicker{
         height: 920px;
     }
 
-    .inputArea {
-        height: 18vw;
-    }
     
     #chessboard {
         top: 90px;
@@ -587,6 +584,8 @@ div.ui-datepicker{
     }/*added by kuan*/
 
     #wholeboard {
+       position: relative;
+       display: block;
        left: 20px;
     }
 
@@ -627,9 +626,18 @@ div.ui-datepicker{
         padding: 80px 20px;
     }
 
-    .chessBookInputArea {
+    .inputArea {
+        display: block;
+        position: relative;
         width: 90%;
-        margin-top: calc(10 / 420 * 100vh);
+        height: 18vw;
+    }
+
+    .chessBookInputArea {
+        display: block;
+        position: relative;
+        width: 100%;
+        top: 120px;
     }
 
     .chessBookOutptArea {
@@ -639,27 +647,48 @@ div.ui-datepicker{
 
     #flexContainer {
         display:block;
+        position: relative;
+        width: 100%;
+        max-width: 800px;
     }
 
     .movetable {
         display:block;
         position: relative;
-        height: 25vh;
-        width: 90%;
+        width: 100%;
+        max-width: 800px;
+        height: 27vh;
+        top: 1450px;
+    }
+
+    .outputTable {
+        display:block;
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    .TableBody {
+        display:block;
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        height: 27vh;
     }
 
     .chartArea {
         display:block;
         position: relative;
         top: 750px;
-        height: 25vh;
+        height: 27vh;
         width: 100%;
+        max-width: 800px;
     }
 
     .chartArea2 {
         display:block;
         position: relative;
-        height: 25vh;
+        height: 27vh;
         width: 100%;
         margin-left: 1px;
         margin-right: 1px;
@@ -667,6 +696,17 @@ div.ui-datepicker{
     
     .btnList {
         top: 50px;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: 0px solid black;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 25px;
     }
 
 }

@@ -137,10 +137,12 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 	$list.empty();
 	$axi_top = $('#axi-top');
 	$axi_bot = $('#axi-bot');
-	$chess_tb = $('#chess-tb');
+	$chess_hor = $('#chess-hor');
+	$chess_ver = $('#chess-ver');
 	$axi_top.empty();
 	$axi_bot.empty();
-	$chess_tb.empty();
+	$chess_hor.empty();
+	$chess_ver.empty();
 	
 	var bodyStyles = window.getComputedStyle(document.body); 
 	var preTd = parseInt(bodyStyles.getPropertyValue('--grid'));
@@ -202,28 +204,26 @@ ChessBoard.prototype.initBoard = function(is_hori_ori, is_vert_ori) {
 
     for(var j = 0; j < 10; j++)
     {
-    	this.DOM = $('<i class="chess-table">');
+    	this.DOM = $('<i class="horizonLine">');
 		this.DOM.css({
 			 width : 8*preTd,
 			 left: 0,
 			 top: (j)*preTd,
 		});
-		this.DOM.css("border-top", "0.5px solid black");
-		$chess_tb.append(this.DOM);
+		$chess_hor.append(this.DOM);
     }
 
     for(var i = 0; i < 9; i++)
     {
     	for(j = 0; j < 2 ; j++)
     	{
-    		this.DOM = $('<i class="chess-table">');
+    		this.DOM = $('<i class="verticalLine">');
 			this.DOM.css({
 			     height : (4*preTd)+1,
 			     left: (i)*preTd,
 			     top: j*(5*preTd),
 		    });
-		    this.DOM.css("border-left", "0.5px solid black");
-		    $chess_tb.append(this.DOM);
+		    $chess_ver.append(this.DOM);
     	}
     }
 }

@@ -32,13 +32,6 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; -
 	top: 142px;
 }
 
-#chessboard .chess-table {
-	position: absolute;
-	display: block;
-	width: 240px;
-	height: 270px;
-}
-
 #chessboard .chess-td-trans {
 	width: 85px;
 	position: absolute;
@@ -65,6 +58,16 @@ body{font-size: 12px; font-family: "微軟正黑體"; --grid: 30; --chess: 26; -
 	top: 240px;
 	transform: rotate(-45deg);
 
+}
+#chessboard .horizonLine {
+	position: absolute;
+	display: block;
+    border-top: 0.5px solid black;
+}
+#chessboard .verticalLine {
+	position: absolute;
+	display: block;
+	border-left: 0.5px solid black;
 }
 
 .scaleBoardEnlarge {
@@ -259,7 +262,16 @@ body {
 }
 
 
-@media only screen and (min-width: 800px) and (max-width: 1024px) and (orientation: portrait) {
+@media only screen and (orientation: portrait) {
+    body{
+		--chess: 70;/*52;*/
+		--grid: 80;/*60;*/
+		--dot: 64;/*48;*/
+		--titlescale: 1.5; 
+		--markerscale: 2;
+		--Gscale: 1.5;
+	}
+
     #chessboard table {
 		margin-top: 20px;
 	}
@@ -309,7 +321,12 @@ body {
 		left: 208px; /*156px;*/
 		top: 640px; /*60px;*/
 	}
-
+	#chessboard .horizonLine {
+		border-top: 1px solid black;
+	}
+	#chessboard .verticalLine {
+		border-left: 1px solid black;
+	}
 	#chessboard-name{
 		width: 320px;
 		left: 160px;
@@ -339,15 +356,6 @@ body {
 		margin: 27px;
 		height: 15px;
 		width: 15px;
-	}
-	
-	body{
-		--chess: 70;/*52;*/
-		--grid: 80;/*60;*/
-		--dot: 64;/*48;*/
-		--titlescale: 1.5; 
-		--markerscale: 2;
-		--Gscale: 1.5;
 	}
 
 	#chessNumCtrl {

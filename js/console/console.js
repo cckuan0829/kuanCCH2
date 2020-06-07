@@ -295,6 +295,11 @@ function hideOrShow(is_hide)
     	document.getElementById("gameInfoArea").style.visibility = "visible";
     	document.getElementById("gameInfoArea").style.display = "inline-block";
     	document.getElementById("hideBtn").innerHTML = "部分顯示";
+
+    	if(window.innerHeight > window.innerWidth){
+    		document.getElementById("moveTb").style.display ="block";
+    		document.getElementById("gameInfoArea").style.display ="block";
+    	}
 	}
 
 	if(_chessInfo.moveList.length > 0 && _chessInfo.scoreList.length > 0) 
