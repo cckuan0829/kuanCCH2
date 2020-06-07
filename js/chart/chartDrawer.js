@@ -158,6 +158,8 @@ function drawBias(move_list, score_list, score_bias) {
 		point.markerType = "circle";
 		point.label2 = move_list[i];
         
+        if(score_bias[i] == undefined || Number.isNaN(score_bias[i])) break;
+
         if(score_bias[i] >= 500)
         {
            point.markerSize = 20*scale;
@@ -288,7 +290,7 @@ function drawStaticChart(score_bias){
 	var scale = parseFloat(bodyStyles.getPropertyValue('--titlescale'));
     var redbiasCnt = [0, 0, 0, 0];
     var blackbiasCnt = [0, 0, 0, 0];
-    var biasIdx = 0;
+    var biasIdx = -1;
 
     for(var i = 0; i<score_bias.length; i++)
 	{
