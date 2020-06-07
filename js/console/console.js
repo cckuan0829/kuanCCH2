@@ -236,6 +236,7 @@ function persFun() {
    		document.getElementById("content").style.visibility = "hidden";
    		document.getElementById("moveListTable").style.visibility = "hidden";
    		hideOrShow(true);
+   		drawScoreChart([]);
 
    		$info.css('visibility', 'hidden');
 		$('#scoreBtn').html('info');
@@ -268,7 +269,11 @@ function persFun() {
 		document.getElementById("personalresult").style.visibility = "hidden";
 		document.getElementById("content").style.visibility = "visible";
 		hideOrShow(_chessInfo.is_hide);
-		if(_chessInfo.move_total > 0) document.getElementById("moveListTable").style.visibility = "visible";
+		if(_chessInfo.move_total > 0) 
+		{
+			document.getElementById("moveListTable").style.visibility = "visible";
+			drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
+		}
 
 	}
 }
