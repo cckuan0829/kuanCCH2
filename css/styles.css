@@ -586,6 +586,15 @@ div.ui-datepicker{
         margin-top: -55px;
     }/*added by kuan*/
 
+    #wholeboard {
+       left: 20px;
+    }
+
+    #chessNumCtrl {
+       top: -40px;
+
+    }
+    
     #personalrecordTable {
         margin-top: 80px;
     }
@@ -628,27 +637,32 @@ div.ui-datepicker{
         margin: 3% 0 1% 0;
     }
 
+    #flexContainer {
+        display:block;
+    }
+
     .movetable {
-       position: relative;
-       height: 25vh;
-       width: 90%;
-       display:block;
+        display:block;
+        position: relative;
+        height: 25vh;
+        width: 90%;
     }
 
     .chartArea {
-       position: relative;
-       height: 25vh;
-       width: 90%;
-       display:block;
+        display:block;
+        position: relative;
+        top: 750px;
+        height: 25vh;
+        width: 100%;
     }
 
     .chartArea2 {
-       position: relative;
-       height: 25vh;
-       width: 90%;
-       margin-left: 1px;
-       margin-right: 1px;
-       display:block;
+        display:block;
+        position: relative;
+        height: 25vh;
+        width: 100%;
+        margin-left: 1px;
+        margin-right: 1px;
     }
     
     .btnList {
