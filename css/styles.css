@@ -565,6 +565,7 @@ div.ui-datepicker{
 }
 
 @media (orientation: portrait) {
+
    #my-signin2 {
         margin-top: 15px;
         font-size: 35px;
@@ -636,7 +637,7 @@ div.ui-datepicker{
         display: block;
         position: relative;
         width: 100%;
-        top: -275px;
+        top: -225px;
     }
 
     .gameInfo{

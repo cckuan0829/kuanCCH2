@@ -272,6 +272,11 @@ body {
 		--Gscale: 1.5;
 	}
 
+    .boardBtn3 {
+	   width: 65px;
+	   height: 32px;
+    }
+
     #chessboard table {
 		margin-top: 20px;
 	}
