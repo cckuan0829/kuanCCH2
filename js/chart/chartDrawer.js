@@ -337,6 +337,7 @@ function drawStaticChart(score_bias){
             margin:5,
 		},
 		axisX: {
+			interval: 1,
 			labelFontSize: 20,
 			labelFontWeight: "bold",
 		},
