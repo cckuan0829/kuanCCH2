@@ -632,21 +632,16 @@ div.ui-datepicker{
         padding: 80px 20px;
     }
 
-    .inputArea {
-        display: block;
-        position: relative;
-        width: 90%;
-        height: 200px;
-    }
-
     .chessBookInputArea {
         display: block;
         position: relative;
         width: 100%;
-        top: -200px;
+        top: -300px;
     }
 
     .gameInfo{
+        display: block;
+        position: relative;
         font-size: 30px;
     }
 
@@ -658,6 +653,13 @@ div.ui-datepicker{
     .gameInfoText2{
         width:  30px;
         height: 30px;
+    }
+    
+    .inputArea {
+        display: block;
+        position: relative;
+        width: 90%;
+        height: 200px;
     }
 
     .chessBookOutptArea {
@@ -678,7 +680,7 @@ div.ui-datepicker{
         width: 95%;
         max-width: 800px;
         height: 27vh;
-        top: 1750px;
+        top: 1840px;
     }
 
     .outputTable {
