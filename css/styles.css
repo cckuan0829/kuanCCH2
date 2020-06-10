@@ -458,9 +458,9 @@ div.ui-datepicker{
   border: 0px solid black;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
+  padding: 10px 10px;
+  transition: 0.1s;
+  font-size: 20px;
 }
 
 /* Change background color of buttons on hover */
@@ -680,7 +680,7 @@ div.ui-datepicker{
         position: relative;
         width: 95%;
         max-width: 800px;
-        height: 27vh;
+        height: 26vh;
         top: 1840px;
     }
 
@@ -696,14 +696,14 @@ div.ui-datepicker{
         position: relative;
         width: 95%;
         max-width: 800px;
-        height: 27vh;
+        height: 26vh;
     }
 
     .chartArea {
         display:block;
         position: relative;
         top: 730px;
-        height: 26vh;
+        height: 25vh;
         width: 95%;
         max-width: 800px;
     }
@@ -711,7 +711,7 @@ div.ui-datepicker{
     .chartArea2 {
         display:block;
         position: relative;
-        height: 26vh;
+        height: 25vh;
         width: 100%;
         margin-left: 1px;
         margin-right: 1px;
@@ -727,9 +727,9 @@ div.ui-datepicker{
       border: 0px solid black;
       outline: none;
       cursor: pointer;
-      padding: 14px 16px;
-      transition: 0.3s;
-      font-size: 25px;
+      padding: 16px 16px;
+      transition: 0.1s;
+      font-size: 30px;
     }
 
 }

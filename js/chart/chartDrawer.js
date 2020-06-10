@@ -80,7 +80,7 @@ function drawScore(move_list, score_list, score_bias) {
 		exportEnabled: true,
         title: {
             text:　"全局走勢",
-            fontSize: 24*scale,
+            fontSize: 26*scale,
             maxWidth: 320*scale,
             padding: 5,
             margin:5,
@@ -209,7 +209,7 @@ function drawBias(move_list, score_list, score_bias) {
 		exportEnabled: true,
 		title: {
             text:　"著法偏差",
-            fontSize: 24*scale,
+            fontSize: 26*scale,
             maxWidth: 320*scale,
             padding: 5,
             margin:5,
@@ -243,6 +243,8 @@ function drawBias(move_list, score_list, score_bias) {
 
 		legend:{
 			cursor:"pointer",
+			fontSize: 26,
+			itemclick : toggleDataSeries
 		},
 		data: [{
 			click: function(e){
@@ -272,6 +274,15 @@ function drawBias(move_list, score_list, score_bias) {
 		}]
 	});
 	chart.render();
+
+	function toggleDataSeries(e) {
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible ){
+		e.dataSeries.visible = false;
+	} else {
+		e.dataSeries.visible = true;
+	}
+	   chart.render();
+    }
 }
 
 function drawStaticChart(score_bias){
@@ -331,14 +342,14 @@ function drawStaticChart(score_bias){
 		exportEnabled: true,
 		title:{
 			text: "失著統計",
-			fontSize: 24*scale,
+			fontSize: 26*scale,
             maxWidth: 320*scale,
             padding: 5,
             margin:5,
 		},
 		axisX: {
 			interval: 1,
-			labelFontSize: 20,
+			labelFontSize: 22,
 			labelFontWeight: "bold",
 		},
 		axisY: {
@@ -348,6 +359,8 @@ function drawStaticChart(score_bias){
 		},
 		legend:{
 			cursor: "pointer",
+			fontSize: 26,
+			maxWidth: 450
 		},
 		data: [
 		{
