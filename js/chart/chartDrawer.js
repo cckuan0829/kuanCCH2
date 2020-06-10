@@ -243,7 +243,7 @@ function drawBias(move_list, score_list, score_bias) {
 
 		legend:{
 			cursor:"pointer",
-			fontSize: 26,
+			fontSize: 20*scale,
 			itemclick : toggleDataSeries
 		},
 		data: [{
@@ -349,7 +349,7 @@ function drawStaticChart(score_bias){
 		},
 		axisX: {
 			interval: 1,
-			labelFontSize: 22,
+			labelFontSize: 20*scale,
 			labelFontWeight: "bold",
 		},
 		axisY: {
@@ -359,8 +359,7 @@ function drawStaticChart(score_bias){
 		},
 		legend:{
 			cursor: "pointer",
-			fontSize: 26,
-			maxWidth: 450
+			fontSize: 18*scale,
 		},
 		data: [
 		{
