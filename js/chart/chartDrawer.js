@@ -115,7 +115,6 @@ function drawScore(move_list, score_list, score_bias) {
         data: [{
 			click: function(e){
 				showBoardbyNum(e.dataPointIndex+1);
-				$("#main").scrollTop(0);
 			},
 			lineColor: "black",
 			lineThickness: 2*scale,
@@ -162,19 +161,19 @@ function drawBias(move_list, score_list, score_bias) {
 
         if(score_bias[i] >= 500)
         {
-           point.markerSize = 20*scale;
+           point.markerSize = 24*scale;
         } 
         else if(score_bias[i] >= 200)
         {
-           point.markerSize = 15*scale;
+           point.markerSize = 18*scale;
         }
         else if(score_bias[i] >= 50)
         {
-           point.markerSize = 10*scale;
+           point.markerSize = 12*scale;
         }
         else
         {
-           point.markerSize = 5*scale;
+           point.markerSize = 6*scale;
         }
          
 		if(i % 2 == 0) // red
@@ -243,13 +242,12 @@ function drawBias(move_list, score_list, score_bias) {
 
 		legend:{
 			cursor:"pointer",
-			fontSize: 20*scale,
+			fontSize: 22*scale,
 			itemclick : toggleDataSeries
 		},
 		data: [{
 			click: function(e){
 				showBoardbyNum(2*(e.dataPointIndex)+1);
-				$("#main").scrollTop(0);
 			},
 			type: "spline",
 			toolTipContent: "{label2}: {y}",
@@ -262,7 +260,6 @@ function drawBias(move_list, score_list, score_bias) {
 		    {
 		    click: function(e){
 				showBoardbyNum(2*(e.dataPointIndex)+2);
-				$("#main").scrollTop(0);
 			},
 			type: "spline", 
 			toolTipContent: "{label2}: {y}",
