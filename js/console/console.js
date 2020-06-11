@@ -992,8 +992,7 @@ async function queryCloudDB() {
 			_chessInfo.copy_str = createCopyStr([_chessInfo.fenList, _chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, query_result.recommend_str_list]);       
 			_chessInfo.pgn_str = generate_pgn_file(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.recommendList);
 		    
-		    if(_chessInfo.scoreList.length == _chessInfo.move_total &&
-		       _chessInfo.scoreList.findIndex(Number.isNaN) < 0)
+		    if(_chessInfo.scoreList.length == _chessInfo.move_total)
 			   _chessInfo.is_complete = true;
 		}
 		else
@@ -1246,7 +1245,6 @@ function addDisplayRow(info_list) {
 		$('#infoList'+info_list[0]).addClass("boardBtn3");
 		$('#infoList'+info_list[0]).bind("click", function() {
 			 showBoardbyNum(info_list[0]); 
-			 $("#main").scrollTop(0);
 		});
 		
 		if(info_list[6] == true)
@@ -1256,7 +1254,6 @@ function addDisplayRow(info_list) {
 
 		$('#infoList'+info_list[0]).bind("click", function() {
 			 showBoardbyNum(info_list[0]); 
-			 $("#main").scrollTop(0);
 		});
 		
 	}
