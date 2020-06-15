@@ -524,19 +524,6 @@ div.ui-datepicker{
 }
 
 @media only screen and (min-width: 800px) and (max-width: 1024px) and (orientation: portrait){
-    .titleBar {
-        height: 60px;
-    }
-
-    .titleText {
-        font-size: 45px;
-    }
-
-    .fbLink {
-        font-size: 32px;
-        margin-top: -45px;
-    }
-
     .consoleBtn {
         width: 140px;
         height: 90px;
@@ -572,23 +559,32 @@ div.ui-datepicker{
 
 @media (orientation: portrait) {
 
-   #my-signin2 {
+    .titleBar {
+        height: 60px;
+    }
+
+    .titleText {
+        font-size: 45px;
+    }
+
+    .fbLink {
+        font-size: 32px;
+        margin-top: -30px;
+    }
+    
+
+    #my-signin2 {
         margin-top: 15px;
         font-size: 35px;
-   }
-
-   #signOut {
+    }
+    
+    #signOut {
         position: absolute;
         right: 210px;
         margin-top: 15px;
         font-size: 35px;
         z-index: 3;
     }
-
-    .fbLink {
-        font-size: 30px;
-        margin-top: -20px;
-    }/*added by kuan*/
 
     #wholeboard {
        position: relative;
