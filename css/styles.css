@@ -524,6 +524,10 @@ div.ui-datepicker{
 }
 
 @media only screen and (min-width: 800px) and (max-width: 1024px) and (orientation: portrait){
+    .titleBar {
+        height: 52px;
+    }
+
     .titleText {
         font-size: 45px;
     }
