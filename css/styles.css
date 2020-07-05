@@ -546,6 +546,11 @@ div.ui-datepicker{
     #queryBtn {
         font-size: calc(24 / 1024 * 100vw);
     }*/
+
+    
+    .evaluateTop {
+        display:block;
+    }
 }
 
 @media only screen and (min-width: 800px) and (max-width: 1024px) and (orientation: portrait){
@@ -757,6 +762,10 @@ div.ui-datepicker{
       padding: 16px 16px;
       transition: 0.1s;
       font-size: 30px;
+    }
+
+    .evaluateTop {
+        display:none;
     }
 
 }
