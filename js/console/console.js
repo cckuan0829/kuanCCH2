@@ -286,6 +286,8 @@ function hideOrShow(is_hide)
     	document.getElementById("moveTb").style.display = "none";
     	document.getElementById("gameInfoArea").style.visibility = "hidden";
     	document.getElementById("gameInfoArea").style.display = "none";
+    	document.getElementById("evaluate").style.visibility = "hidden";
+    	document.getElementById("evaluate").style.display = "none";
     	document.getElementById("hideBtn").innerHTML = "完整顯示";
 	}
 	else
@@ -294,6 +296,8 @@ function hideOrShow(is_hide)
     	document.getElementById("moveTb").style.display = "inline-block";
     	document.getElementById("gameInfoArea").style.visibility = "visible";
     	document.getElementById("gameInfoArea").style.display = "inline-block";
+    	document.getElementById("evaluate").style.visibility = "visible";
+    	document.getElementById("evaluate").style.display = "inline-block";
     	document.getElementById("hideBtn").innerHTML = "部分顯示";
 
     	if(window.innerHeight > window.innerWidth){
@@ -877,6 +881,310 @@ function stopQuery() {
 	_chessInfo.toStop = true;
 }
 
+function evaluateChess(is_red_first, biasList) {
+
+var red_total   = [0, 0, 0];
+var black_total = [0, 0, 0];
+
+//[b15_ng, a15_ng, tot_ng], [b15_bad, a15_bad, tot_bad], [b15_bias, a15_bias, tot_bias]
+var red_cnt     = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+var black_cnt   = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+var red_value   = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+var black_value = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+var red_max     = [0, 0, 0];
+var black_max   = [0, 0 ,0];
+
+if(biasList.length > 0)
+{
+	var is_red = false;
+	var is_b15 = false;
+	var bad_idx = 0;
+
+    for(var i = 0; i < biasList.length; i++)
+    {
+    	if(biasList[i] == undefined || Number.isNaN(biasList[i])) 
+    	{
+    		break;
+    	}
+
+    	if((is_red_first && (i%2 == 0)) || (!is_red_first && (i%2 == 1)))
+    	{ //red score
+    	   is_red = true;
+    	}
+    	else
+    	{ //black score
+    	   is_red = false;
+    	}
+
+    	if(i/2 < 15) 
+    	   is_b15 = true;
+    	else 
+    	   is_b15 = false;
+
+    	if(biasList[i] >= 200) bad_idx = 2;
+    	else if(biasList[i] >= 50) bad_idx = 1;
+    	else bad_idx = 0;
+
+    	if(is_red)
+    	{
+    	   if(is_b15)
+    	   {
+    	      red_total[0]++;
+    	      if(bad_idx == 1)
+    	      {
+                 red_cnt[0][0]++;//r b15 ng
+                 red_cnt[0][2]++;//r tot ng
+    	      }
+    	      else if(bad_idx == 2)
+    	      {
+    	      	 red_cnt[0][0]++;//r b15 ng
+    	      	 red_cnt[1][0]++;//r b15 bad
+    	      	 red_cnt[0][2]++;//r tot ng
+    	      	 red_cnt[1][2]++;//r tot bad
+    	      }
+    	      red_cnt[2][0] += biasList[i];//r b15 bias
+    	      red_max[0] = Math.max(red_max[0], biasList[i]);
+    	   }
+    	   else
+    	   { 
+    	   	  red_total[1]++;
+    	   	  if(bad_idx == 1)
+    	      {
+                 red_cnt[0][1]++;//r a15 ng
+                 red_cnt[0][2]++;//r tot ng
+    	      }
+    	      else if(bad_idx == 2)
+    	      {
+    	      	 red_cnt[0][1]++;//r a15 ng
+    	      	 red_cnt[1][1]++;//r a15 bad
+    	      	 red_cnt[0][2]++;//r tot ng
+    	      	 red_cnt[1][2]++;//r tot bad
+    	      }
+    	      red_cnt[2][1] += biasList[i];//r a15 bias
+    	      red_max[1] = Math.max(red_max[1], biasList[i]);
+    	   }
+
+    	   red_total[2]++;
+    	   red_cnt[2][2] += biasList[i];//r tot bias
+    	   red_max[2] = Math.max(red_max[2], biasList[i]);
+    	}
+    	else
+    	{
+    	   if(is_b15)
+    	   {
+    	      black_total[0]++;
+    	      if(bad_idx == 1)
+    	      {
+                 black_cnt[0][0]++;//b b15 ng
+                 black_cnt[0][2]++;//b tot ng
+    	      }
+    	      else if(bad_idx == 2)
+    	      {
+    	      	 black_cnt[0][0]++;//b b15 ng
+    	      	 black_cnt[1][0]++;//b b15 bad
+    	      	 black_cnt[0][2]++;//b tot ng
+    	      	 black_cnt[1][2]++;//b tot bad
+    	      }
+    	      black_cnt[2][0] += biasList[i];//b b15 bias
+    	      black_max[0] = Math.max(black_max[0], biasList[i]);	
+    	   }
+    	   else
+    	   { 
+    	   	  black_total[1]++;
+    	   	  if(bad_idx == 1)
+    	      {
+                 black_cnt[0][1]++;//b a15 ng
+                 black_cnt[0][2]++;//b tot ng
+    	      }
+    	      else if(bad_idx == 2)
+    	      {
+    	      	 black_cnt[0][1]++;//b a15 ng
+    	      	 black_cnt[1][1]++;//b a15 bad
+    	      	 black_cnt[0][2]++;//b tot ng
+    	      	 black_cnt[1][2]++;//b tot bad
+    	      }
+    	      black_cnt[2][1] += biasList[i];//b a15 bias
+    	      black_max[1] = Math.max(black_max[1], biasList[i]);
+    	   }
+
+    	   black_total[2]++;
+    	   black_cnt[2][2] += biasList[i];//b tot bias
+    	   black_max[2] = Math.max(black_max[2], biasList[i]);
+    	}
+    }
+    
+    /* ng rate */
+    red_value[0][0]   = 100*red_cnt[0][0]/red_total[0];
+    red_value[0][1]   = 100*red_cnt[0][1]/red_total[1];
+    red_value[0][2]   = 100*red_cnt[0][2]/red_total[2];
+    black_value[0][0] = 100*black_cnt[0][0]/black_total[0];
+    black_value[0][1] = 100*black_cnt[0][1]/black_total[1];
+    black_value[0][2] = 100*black_cnt[0][2]/black_total[2];
+    /* bad rate */
+    red_value[1][0]   = 100*red_cnt[1][0]/red_total[0];
+    red_value[1][1]   = 100*red_cnt[1][1]/red_total[1];
+    red_value[1][2]   = 100*red_cnt[1][2]/red_total[2];
+    black_value[1][0] = 100*black_cnt[1][0]/black_total[0];
+    black_value[1][1] = 100*black_cnt[1][1]/black_total[1];
+    black_value[1][2] = 100*black_cnt[1][2]/black_total[2];
+    /* bias */
+    red_value[2][0]   = red_cnt[2][0]/red_total[0];
+    red_value[2][1]   = red_cnt[2][1]/red_total[1];
+    red_value[2][2]   = red_cnt[2][2]/red_total[2];
+    black_value[2][0] = black_cnt[2][0]/black_total[0];
+    black_value[2][1] = black_cnt[2][1]/black_total[1];
+    black_value[2][2] = black_cnt[2][2]/black_total[2];
+
+	document.getElementById("red_b15_ng").innerHTML      =parseFloat(red_value[0][0]).toFixed(1);
+	document.getElementById("red_a15_ng").innerHTML      =parseFloat(red_value[0][1]).toFixed(1);
+	document.getElementById("red_ng").innerHTML          =parseFloat(red_value[0][2]).toFixed(1);
+	document.getElementById("red_b15_bad").innerHTML     =parseFloat(red_value[1][0]).toFixed(1);
+	document.getElementById("red_a15_bad").innerHTML     =parseFloat(red_value[1][1]).toFixed(1);
+	document.getElementById("red_bad").innerHTML         =parseFloat(red_value[1][2]).toFixed(1);
+	document.getElementById("red_b15_bias").innerHTML    =parseFloat(red_value[2][0]).toFixed(0);
+	document.getElementById("red_a15_bias").innerHTML    =parseFloat(red_value[2][1]).toFixed(0);
+	document.getElementById("red_bias").innerHTML        =parseFloat(red_value[2][2]).toFixed(0);
+	document.getElementById("red_b15_maxbias").innerHTML =parseFloat(red_max[0]).toFixed(0);
+	document.getElementById("red_a15_maxbias").innerHTML =parseFloat(red_max[1]).toFixed(0);
+	document.getElementById("red_maxbias").innerHTML     =parseFloat(red_max[2]).toFixed(0);
+	document.getElementById("red_b15_class").innerHTML   ="";
+	document.getElementById("red_a15_class").innerHTML   ="";
+	document.getElementById("red_class").innerHTML       ="";
+
+	document.getElementById("black_b15_ng").innerHTML    =parseFloat(black_value[0][0]).toFixed(1);
+	document.getElementById("black_a15_ng").innerHTML    =parseFloat(black_value[0][1]).toFixed(1);
+	document.getElementById("black_ng").innerHTML        =parseFloat(black_value[0][2]).toFixed(1);
+	document.getElementById("black_b15_bad").innerHTML   =parseFloat(black_value[1][0]).toFixed(1);
+	document.getElementById("black_a15_bad").innerHTML   =parseFloat(black_value[1][1]).toFixed(1);
+	document.getElementById("black_bad").innerHTML       =parseFloat(black_value[1][2]).toFixed(1);
+	document.getElementById("black_b15_bias").innerHTML  =parseFloat(black_value[2][0]).toFixed(0);
+	document.getElementById("black_a15_bias").innerHTML  =parseFloat(black_value[2][1]).toFixed(0);
+	document.getElementById("black_bias").innerHTML      =parseFloat(black_value[2][2]).toFixed(0);
+	document.getElementById("black_b15_maxbias").innerHTML =parseFloat(black_max[0]).toFixed(0);
+	document.getElementById("black_a15_maxbias").innerHTML =parseFloat(black_max[1]).toFixed(0);
+	document.getElementById("black_maxbias").innerHTML     =parseFloat(black_max[2]).toFixed(0);
+	document.getElementById("black_b15_class").innerHTML ="";
+	document.getElementById("black_a15_class").innerHTML ="";
+	document.getElementById("black_class").innerHTML     ="";
+    
+    
+    /* ng */
+    /*
+	if(red_value[0][0] > 14) document.getElementById("red_b15_ng").classList.add('bad_color');
+	else if(red_value[0][0] > 0) document.getElementById("red_b15_ng").classList.add('normal_color');
+	else document.getElementById("red_b15_ng").classList.add('good_color');
+	if(black_value[0][0] > 14) document.getElementById("black_b15_ng").classList.add('bad_color');
+	else if(black_value[0][0] > 0) document.getElementById("black_b15_ng").classList.add('normal_color');
+	else document.getElementById("black_b15_ng").classList.add('good_color');
+
+	if(red_value[0][1] >= 40) document.getElementById("red_a15_ng").classList.add('bad_color');
+	else if(red_value[0][1] >= 20) document.getElementById("red_a15_ng").classList.add('normal_color');
+	else document.getElementById("red_a15_ng").classList.add('good_color');
+	if(black_value[0][1] >= 40) document.getElementById("black_a15_ng").classList.add('bad_color');
+	else if(black_value[0][1] >= 20) document.getElementById("black_a15_ng").classList.add('normal_color');
+	else document.getElementById("black_a15_ng").classList.add('good_color');
+    */
+	if(red_value[0][2] >= 40) document.getElementById("red_ng").classList.add('bad_color');
+	else if(red_value[0][2] >= 25) document.getElementById("red_ng").classList.add('normal_color');
+	else document.getElementById("red_ng").classList.add('good_color');
+	if(black_value[0][2] >= 40) document.getElementById("black_ng").classList.add('bad_color');
+	else if(black_value[0][2] >= 25) document.getElementById("black_ng").classList.add('normal_color');
+	else document.getElementById("black_ng").classList.add('good_color');
+    
+    /* bad */
+	/*
+	if(red_value[1][0] > 0) document.getElementById("red_b15_bad").classList.add('bad_color');
+	else document.getElementById("red_b15_bad").classList.add('good_color');
+	if(black_value[1][0] > 0) document.getElementById("black_b15_bad").classList.add('bad_color');
+	else document.getElementById("black_b15_bad").classList.add('good_color');
+
+	if(red_value[1][1] >= 15) document.getElementById("red_a15_bad").classList.add('bad_color');
+	else if(red_value[1][1] >= 7) document.getElementById("red_a15_bad").classList.add('normal_color');
+	else document.getElementById("red_a15_bad").classList.add('good_color');
+	if(black_value[1][1] >= 15) document.getElementById("black_a15_bad").classList.add('bad_color');
+	else if(black_value[1][1] >= 7) document.getElementById("black_a15_bad").classList.add('normal_color');
+	else document.getElementById("black_a15_bad").classList.add('good_color');
+	*/
+
+	if(red_value[1][2] >= 15) document.getElementById("red_bad").classList.add('bad_color');
+	else if(red_value[1][2] >= 7) document.getElementById("red_bad").classList.add('normal_color');
+	else document.getElementById("red_bad").classList.add('good_color');
+	if(black_value[1][2] >= 15) document.getElementById("black_bad").classList.add('bad_color');
+	else if(black_value[1][2] >= 7) document.getElementById("black_bad").classList.add('normal_color');
+	else document.getElementById("black_bad").classList.add('good_color');
+
+	/* bias */
+	/*
+	if(red_value[2][0] >= 30) document.getElementById("red_b15_bias").classList.add('bad_color');
+	else if(red_value[2][0] >= 15) document.getElementById("red_b15_bias").classList.add('normal_color');
+	else document.getElementById("red_b15_bias").classList.add('good_color');
+    if(black_value[2][0] >= 30) document.getElementById("black_b15_bias").classList.add('bad_color');
+	else if(black_value[2][0] >= 15) document.getElementById("black_b15_bias").classList.add('normal_color');
+	else document.getElementById("black_b15_bias").classList.add('good_color');
+
+	if(red_value[2][1] >= 60) document.getElementById("red_a15_bias").classList.add('bad_color');
+	else if(red_value[2][1] >= 40) document.getElementById("red_a15_bias").classList.add('normal_color');
+	else document.getElementById("red_a15_bias").classList.add('good_color');
+	if(black_value[2][1] >= 60) document.getElementById("black_a15_bias").classList.add('bad_color');
+	else if(black_value[2][1] >= 40) document.getElementById("black_a15_bias").classList.add('normal_color');
+	else document.getElementById("black_a15_bias").classList.add('good_color');
+	*/
+
+	if(red_value[2][2] >= 100) document.getElementById("red_bias").classList.add('bad_color');
+	else if(red_value[2][2] >= 40) document.getElementById("red_bias").classList.add('normal_color');
+	else document.getElementById("red_bias").classList.add('good_color');
+	if(black_value[2][2] >= 100) document.getElementById("black_bias").classList.add('bad_color');
+	else if(black_value[2][2] >= 40) document.getElementById("black_bias").classList.add('normal_color');
+	else document.getElementById("black_bias").classList.add('good_color');
+
+	if(red_max[2] >= 1000) document.getElementById("red_maxbias").classList.add('bad_color');
+	else if(red_max[2] >= 400) document.getElementById("red_maxbias").classList.add('normal_color');
+	else document.getElementById("red_maxbias").classList.add('good_color');
+	if(black_max[2] >= 1000) document.getElementById("black_maxbias").classList.add('bad_color');
+	else if(black_max[2] >= 400) document.getElementById("black_maxbias").classList.add('normal_color');
+	else document.getElementById("black_maxbias").classList.add('good_color');
+
+	/* class */
+	if(red_cnt[2][0] < 150) document.getElementById("red_b15_class").innerHTML       = "S";
+	else if(red_cnt[2][0] < 300) document.getElementById("red_b15_class").innerHTML  = "A";
+	else if(red_cnt[2][0] < 500) document.getElementById("red_b15_class").innerHTML  = "B";
+	else if(red_cnt[2][0] < 1000) document.getElementById("red_b15_class").innerHTML = "C";
+	else document.getElementById("red_b15_class").innerHTML = "D";
+	if(black_cnt[2][0] < 150) document.getElementById("black_b15_class").innerHTML       = "S";
+	else if(black_cnt[2][0] < 300) document.getElementById("black_b15_class").innerHTML  = "A";
+	else if(black_cnt[2][0] < 500) document.getElementById("black_b15_class").innerHTML  = "B";
+	else if(black_cnt[2][0] < 1000) document.getElementById("black_b15_class").innerHTML = "C";
+	else document.getElementById("black_b15_class").innerHTML = "D";
+
+	if(red_value[2][1] < 20) document.getElementById("red_a15_class").innerHTML       = "S";
+	else if(red_value[2][1] < 40) document.getElementById("red_a15_class").innerHTML  = "A";
+	else if(red_value[2][1] < 80) document.getElementById("red_a15_class").innerHTML  = "B";
+	else if(red_value[2][1] < 150) document.getElementById("red_a15_class").innerHTML = "C";
+	else document.getElementById("red_a15_class").innerHTML = "D";
+	if(black_value[2][1] < 20) document.getElementById("black_a15_class").innerHTML       = "S";
+	else if(black_value[2][1] < 40) document.getElementById("black_a15_class").innerHTML  = "A";
+	else if(black_value[2][1] < 80) document.getElementById("black_a15_class").innerHTML  = "B";
+	else if(black_value[2][1] < 150) document.getElementById("black_a15_class").innerHTML = "C";
+	else document.getElementById("black_a15_class").innerHTML = "D";
+
+	if(red_value[2][2] < 20 && red_max[2] < 100) document.getElementById("red_class").innerHTML = "S+";
+	else if(red_value[2][2] < 20 && red_max[2] < 200) document.getElementById("red_class").innerHTML = "S";
+	else if(red_value[2][2] < 40 && red_max[2] < 500) document.getElementById("red_class").innerHTML  = "A";
+	else if(red_value[2][2] < 80 || red_value[1][2] < 20) document.getElementById("red_class").innerHTML  = "B";
+	else if(red_value[2][2] < 150 || red_value[1][2] < 30) document.getElementById("red_class").innerHTML = "C";
+	else document.getElementById("red_class").innerHTML = "D";
+
+	if(black_value[2][2] < 20 && black_max[2] < 100) document.getElementById("black_class").innerHTML = "S+";
+	else if(black_value[2][2] < 20 && black_max[2] < 200) document.getElementById("black_class").innerHTML = "S";
+	else if(black_value[2][2] < 40 && black_max[2] < 500) document.getElementById("black_class").innerHTML  = "A";
+	else if(black_value[2][2] < 80 || black_value[0][2] < 20) document.getElementById("black_class").innerHTML  = "B";
+	else if(black_value[2][2] < 150 || black_value[0][2] < 30) document.getElementById("black_class").innerHTML = "C";
+	else document.getElementById("black_class").innerHTML = "D";
+
+}
+
+}
+
 function resetChessInfo() {
 	_chessInfo.copy_str = "";
 	_chessInfo.status_str = "";
@@ -1007,7 +1315,8 @@ async function queryCloudDB() {
 		updateBadRate(calBadRate(_chessInfo.biasList));
 		$('.chartArea').addClass('opacity9');
 		drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
-        
+        evaluateChess(true, _chessInfo.biasList);
+
         var eng_move_list_str = _chessInfo.engmoveList.join(",");
 	    var hash = hash2INT32(eng_move_list_str);
 		_chessInfo.is_in_cloud_db = checkUrlExist(hash);
@@ -1115,6 +1424,7 @@ function clearInputText() {
 }
 
 function showInfo() {
+	/*
 	alert("操作步驟:\
 	     \n\t1. 從象棋橋或是東萍匯出文字棋譜。\
 	     \n\t2. 將文字棋譜貼至本網頁上，然後按下'逐步查詢'。\
@@ -1125,6 +1435,16 @@ function showInfo() {
 		 \n\t2. 分數偏差是指和雲庫最佳應著之間的偏差絕對值。\
 		 \n\t3. 分數偏差大於50記為緩著，大於200記為失著。\
 		 \n\t4. NaN代表雲庫查無資料，建議按下'逐步查詢'重新查詢。");
+		 */
+    if (window.Worker) 
+    {
+	   const myWorker = new Worker("./js/console/worker.js");
+       myWorker.postMessage(0);
+	   console.log('Message posted to worker');
+    } else {
+	  console.log('Your browser doesn\'t support web workers.')
+    }
+
 }
 
 function initPlaceholder() {

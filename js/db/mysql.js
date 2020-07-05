@@ -141,7 +141,7 @@ function getParameterHandler(val) {
 	   updateBadRate(calBadRate(_chessInfo.biasList));
 	   $('.chartArea').addClass('opacity9');
 	   drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
-
+       evaluateChess(true, _chessInfo.biasList);
 	   enableButtons();
        _chessInfo.inQuety = false;
 	
