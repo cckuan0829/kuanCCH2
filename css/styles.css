@@ -300,6 +300,7 @@ body{ --chessboard_height: 430;
 
 .chessBookInputArea {
 
+    z-index: 2;
     display: block;
     position: absolute;
     width: 400px;
@@ -547,7 +548,7 @@ div.ui-datepicker{
         font-size: calc(24 / 1024 * 100vw);
     }*/
 
-    
+
     .evaluateTop {
         display:block;
     }
