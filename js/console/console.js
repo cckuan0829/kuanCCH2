@@ -1,6 +1,6 @@
 var _cloudUrl = "http://www.chessdb.cn/query/?";
 var _cloudBackUpUrl = 'http://www.voo0.com/yunku/?';
-var _ladderUrl = "http://chessladder.nctu.me/?";
+var _ladderUrl = "http://www.xn--b1v5bx13mg3i.xn--kpry57d/?";
 var _chessDbUrl = "https://pragmatic-byway-242913.appspot.com/chess.php";
 var _BoardScale = [0.7, 0.85, 1, 1.2, 1.4];
 var _chessboard;
@@ -881,7 +881,7 @@ function stopQuery() {
 	_chessInfo.toStop = true;
 }
 
-function evaluateChess(is_red_first, biasList) {
+function evaluateChess(is_red_first, scoreList, biasList) {
 
 var red_total   = [0, 0, 0];
 var black_total = [0, 0, 0];
@@ -893,6 +893,9 @@ var red_value   = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 var black_value = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 var red_max     = [0, 0, 0];
 var black_max   = [0, 0 ,0];
+
+var red_filter   = [0, 0];
+var black_filter = [0, 0];
 
 if(biasList.length > 0)
 {
@@ -1155,8 +1158,9 @@ if(biasList.length > 0)
 	else if(black_cnt[2][0] < 500) document.getElementById("black_b15_class").innerHTML  = "B";
 	else if(black_cnt[2][0] < 1000) document.getElementById("black_b15_class").innerHTML = "C";
 	else document.getElementById("black_b15_class").innerHTML = "D";
-
-	if(red_value[2][1] < 20) document.getElementById("red_a15_class").innerHTML       = "S";
+    
+    {
+    if(red_value[2][1] < 20) document.getElementById("red_a15_class").innerHTML       = "S";
 	else if(red_value[2][1] < 40) document.getElementById("red_a15_class").innerHTML  = "A";
 	else if(red_value[2][1] < 80) document.getElementById("red_a15_class").innerHTML  = "B";
 	else if(red_value[2][1] < 150) document.getElementById("red_a15_class").innerHTML = "C";
@@ -1166,6 +1170,7 @@ if(biasList.length > 0)
 	else if(black_value[2][1] < 80) document.getElementById("black_a15_class").innerHTML  = "B";
 	else if(black_value[2][1] < 150) document.getElementById("black_a15_class").innerHTML = "C";
 	else document.getElementById("black_a15_class").innerHTML = "D";
+    }
 
 	if(red_value[2][2] < 20 && red_max[2] < 100) document.getElementById("red_class").innerHTML = "S+";
 	else if(red_value[2][2] < 20 && red_max[2] < 200) document.getElementById("red_class").innerHTML = "S";
@@ -1315,7 +1320,7 @@ async function queryCloudDB() {
 		updateBadRate(calBadRate(_chessInfo.biasList));
 		$('.chartArea').addClass('opacity9');
 		drawScoreChart(_chessInfo.moveList, _chessInfo.scoreList, _chessInfo.biasList, _chessInfo.chartType);
-        evaluateChess(true, _chessInfo.biasList);
+        evaluateChess(true, _chessInfo.scoreList, _chessInfo.biasList);
 
         var eng_move_list_str = _chessInfo.engmoveList.join(",");
 	    var hash = hash2INT32(eng_move_list_str);
